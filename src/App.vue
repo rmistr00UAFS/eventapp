@@ -22,7 +22,31 @@ import { RouterLink, RouterView } from 'vue-router'
 </template>
 
 <style scoped>
-header {
+nav {
+  background: white;
+  padding: 20px;
+  box-sizing: border-box;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  border-radius: 20px 20px 0 0;
+  box-shadow: var(--shadow);
+}
+
+a {
+  margin: 10px 20px;
+  transition: 0.3s;
+  box-shadow: var(--shadow);
+}
+
+nav a.router-link-exact-active {
+  background: var(--green);
+  box-shadow: var(--inset-shadow);
+}
+
+/*header {
   line-height: 1.5;
   max-height: 100vh;
 }
@@ -87,5 +111,5 @@ nav a:first-of-type {
     padding: 1rem 0;
     margin-top: 1rem;
   }
-}
+}*/
 </style>

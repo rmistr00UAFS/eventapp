@@ -26,6 +26,7 @@ const handleSubmit = () => {
       </div>
 
       <button type="submit">Submit</button>
+      <button>reset password</button>
     </form>
   </div>
 </template>

@@ -1,41 +1,47 @@
 <template>
-  <div>
-    <h1>Event List</h1>
-      <div v-for="event in events" :key="event.USERID">
-
-      <div>{{event.USERID}}</div>
-      <div>{{event.FIRSTNAME}}</div>
-        <div>{{event.LASTNAME}}</div>
-
-      </div>
-
+  <div class="events">
+    <!--     <div class="today">{{ today }}</div> -->
+    <div v-for="event in events" :key="event.id" class="event">
+      <!-- Individual divs for each event property with their own class -->
+      <div class="title"><strong>Title:</strong> {{ event.title }}</div>
+      <div class="date"><strong>Date:</strong> {{ event.date }}</div>
+      <div class="location"><strong>Location:</strong> {{ event.location }}</div>
+      <div class="description"><strong>Description:</strong> {{ event.description }}</div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      events: [
-
-      ]
-    }
-  },
-   mounted() {
-    this.getEvents();
-  },
-  methods: {
-    getEvents() {
-      fetch('http://localhost/getEvents.php')
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          this.events = data;
-        })
-        .catch(error => {
-console.log(error);
-        });
+  props: {
+    events: {
+      type: Object,
+      required: true
     }
   }
 }
 </script>
+
+<style scoped>
+.events {
+  width: calc(100%);
+  box-shadow: var(--inset-shadow);
+  padding: 10px;
+  border-radius: 5px;
+
+  overflow: scroll;
+  height: 300px;
+}
+
+.event {
+  margin: 20px;
+  box-shadow: var(--shadow);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.today {
+  text-align: center;
+  font-size: 20px;
+}
+</style>

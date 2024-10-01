@@ -1,6 +1,57 @@
-@import './base.css';
+/* @import './base.css'; */
 
-#app {
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Montserrat:wght@300&display=swap');
+
+:root {
+  --primary-font: 'Lato', sans-serif;
+  --secondary-font: 'Montserrat', sans-serif;
+  --shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  --inset-shadow: #000 1px 1px 3px 0 inset;
+  --theme: #6b63ff;
+  --yellow: #ffee58;
+  --blue: #42a5f5;
+  --green: #66bb6a;
+  --red: #ef5350;
+  --dark: #1e1e1e;
+  --light: #f0f0f0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--light);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+body,
+button {
+  font-family: var(--primary-font);
+}
+
+a {
+  background: var(--theme);
+  border-radius: 20px;
+  padding: 5px 10px;
+  text-decoration: none;
+  color: white;
+}
+
+button {
+  background: var(--theme);
+  color: white;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+}
+
+button:active {
+  background: var(--green) !important;
+}
+
+/*#app {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -32,4 +83,4 @@ a,
     grid-template-columns: 1fr 1fr;
     padding: 0 2rem;
   }
-}
+}*/
