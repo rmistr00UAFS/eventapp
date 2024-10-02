@@ -1,9 +1,8 @@
 <?php
-
-// CORS headers
-header("Access-Control-Allow-Origin: *"); // Allow all origins
-header("Access-Control-Allow-Methods: GET, POST"); // Allow specific methods
-header("Access-Control-Allow-Headers: Content-Type"); // Allow specific headers
+// Set CORS headers
+header("Access-Control-Allow-Origin: *"); // Allow all origins (change this to a specific origin if needed)
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS"); // Allowed methods
+header("Access-Control-Allow-Headers: Content-Type"); // Allowed headers
 
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1);
@@ -18,34 +17,43 @@ $db = $database->getConnection();
 $userDAO = new UserDAO($db);
 
 
-$firstname = 'John';
-$lastname = 'Doe';
-$password = 'secret';
-$email = 'john@example.com';
-$phone = '1234567890';
-$address = '123 Main St, Springfield';
+$data = json_decode(file_get_contents('php://input'), true);
 
-#$userDAO->createUser($userid, $firstname, $lastname, $password, $email, $phone, $address);
 
-$users = $userDAO->getUsers();
 
-   // echo "<script>console.log('Debug Objects: " . json_encode($users) . "' );</script>";
+$firstname = $data['firstname']; // Changed to array notation
+$lastname = $data['lastname']; // Changed to array notation
+$password = $data['password']; // Hash this before using in production
+$email = $data['email']; // Changed to array notation
+$phone = $data['phone']; // Changed to array notation
+$address = $data['address']; // Changed to array notation
 
-echo "<h2>User Table:</h2>";
-echo "<table border='1'>";
-echo "<tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Phone</th><th>Address</th></tr>";
+$firstname = strval($firstname);
+$lastname = strval($lastname);
+$password = strval($password);
+$email = strval($email);
+$phone = strval($phone);
+$address = strval($address);
 
-foreach ($users as $user) {
-    echo "<tr>";
-    echo "<td>" . $user['USERID'] . "</td>";
-    echo "<td>" . $user['FIRSTNAME'] . "</td>";
-    echo "<td>" . $user['LASTNAME'] . "</td>";
-    echo "<td>" . $user['EMAIL'] . "</td>";
-    echo "<td>" . $user['PHONE'] . "</td>";
-    echo "<td>" . $user['ADDRESS'] . "</td>";
-    echo "</tr>";
+// $firstname = 'John';
+// $lastname = 'Doe';
+// $password = 'secret';
+// $email = 'john@example.com';
+// $phone = '1234567890';
+// $address = '123 Main St, Springfield';
+
+
+// Create the user using the UserDAO
+if($firstname!==''){
+$userDAO->createUser($firstname, $lastname, $password, $email, $phone, $address);
 }
-
-echo "</table>";
+// if ($result) {
+//     echo json_encode(['message' => 'User created successfully']);
+// } else {
+//     echo json_encode(['message' => 'Failed to create user']);
+//     http_response_code(500); // Internal server error
+// }
+//
+echo json_encode($data);
 
 ?>
