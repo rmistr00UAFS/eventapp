@@ -26,6 +26,8 @@ getData()
   <div v-for="user in test" :key="user.id" class="user">
         {{ user.USERID }}
       </div>-->
+
+  kim
 </template>
 
 <style scoped></style>
