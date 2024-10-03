@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import Events from '../components/Events.vue'
 
+//save login to localstorage
 const auth = ref(true)
 
 const router = useRouter()
@@ -13,7 +14,7 @@ onMounted(() => {
 })
 
 const goToRoute = () => {
-  router.push('/Creator')
+  router.push('/creator')
 }
 
 //
@@ -41,7 +42,7 @@ const user = ref({
 <template>
   <div v-if="auth">
     <div class="username">{{ user.name }}</div>
-    <button @click="goToRoute('/about')" class="creator">Creator</button>
+    <button @click="goToRoute()" class="creator">Creator</button>
 
     <div class="savedEvents">
       Saved Events

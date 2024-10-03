@@ -15,7 +15,7 @@ import { RouterLink, RouterView } from 'vue-router'
   <nav>
     <RouterLink to="/">Home</RouterLink>
     <RouterLink to="/user">User</RouterLink>
-    <RouterLink to="/about">About</RouterLink>
+    <RouterLink to="/test">testing area</RouterLink>
 
     <!--         <RouterLink to="/about">About</RouterLink> -->
   </nav>
@@ -26,9 +26,10 @@ import { RouterLink, RouterView } from 'vue-router'
 <style scoped>
 nav {
   background: white;
-  padding: 20px;
+
   box-sizing: border-box;
   width: 100%;
+  height: 50px;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -38,7 +39,8 @@ nav {
 }
 
 a {
-  margin: 10px 20px;
+  margin: 10px;
+  padding: 10px;
   transition: 0.3s;
   box-shadow: var(--shadow);
 }

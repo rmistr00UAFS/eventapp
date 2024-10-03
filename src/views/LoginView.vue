@@ -1,36 +1,50 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-// Reactive email and username state
-const email = ref('')
-const username = ref('')
-
-// Function to handle form submission
-const handleSubmit = () => {
-  console.log('Email:', email.value)
-  console.log('Username:', username.value)
+const form = {
+  userid: 1,
+  firstname: 'ivkjkjbkjb',
+  lastname: 'Doe',
+  password: 'secret', // Note: In practice, you should not expose passwords in JSON responses
+  email: 'john@example.com',
+  phone: '1234567890',
+  address: '123 Main St, Springfield'
 }
 
-console.log('test')
-
-async function testPost() {
-  const data = {
-    userid: 1,
-    firstname: 'wefkln',
-    lastname: 'Doe',
-    password: 'secret', // Note: In practice, you should not expose passwords in JSON responses
-    email: 'john@example.com',
-    phone: '1234567890',
-    address: '123 Main St, Springfield'
-  }
-
+async function login() {
   try {
+    console.log(form.email, form.password)
+
+    // const response = await fetch('http://localhost/CRUD.php', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(form)
+    // })
+    //
+    // // Check if the response is OK (status in the range 200-299)
+    // if (!response.ok) {
+    //   throw new Error(`HTTP error! Status: ${response.status}`)
+    // }
+    //
+    // const result = await response.json()
+    // console.log(result)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function submitForm() {
+  try {
+    console.log(form)
+
     const response = await fetch('http://localhost/CRUD.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(form)
     })
 
     // Check if the response is OK (status in the range 200-299)
@@ -39,29 +53,70 @@ async function testPost() {
     }
 
     const result = await response.json()
+
+    //go to login state
+    newUser.value = false
     console.log(result)
   } catch (error) {
     console.log(error)
   }
 }
+
+let newUser = ref(false)
+
+const createUser = () => {
+  newUser.value = true
+}
 </script>
 
 <template>
-  <div>
-    <button v-once @click="testPost">Submit</button>
-    <!--  <form @submit.prevent="handleSubmit">
+  <div v-show="!newUser">
+    <button @click="createUser">signup</button>
+    login in
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" v-model="form.password" id="password" />
+    </div>
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" v-model="form.email" id="email" />
+    </div>
+
+    <button @click="login">login</button>
+  </div>
+
+  <div v-show="newUser">
+    create user
+    <form @submit.prevent="submitForm">
+      <div>
+        <label for="userid">User ID:</label>
+        <input type="text" v-model="form.userid" id="userid" readonly />
+      </div>
+      <div>
+        <label for="firstname">First Name:</label>
+        <input type="text" v-model="form.firstname" id="firstname" />
+      </div>
+      <div>
+        <label for="lastname">Last Name:</label>
+        <input type="text" v-model="form.lastname" id="lastname" />
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" v-model="form.password" id="password" />
+      </div>
       <div>
         <label for="email">Email:</label>
-        <input type="email" id="email" v-model="email" required />
+        <input type="email" v-model="form.email" id="email" />
       </div>
-
       <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username" v-model="username" required />
+        <label for="phone">Phone:</label>
+        <input type="tel" v-model="form.phone" id="phone" />
       </div>
-
-      <button type="submit">Submit</button>
-      <button>reset password</button>
-    </form>-->
+      <div>
+        <label for="address">Address:</label>
+        <input type="text" v-model="form.address" id="address" />
+      </div>
+      <button type="submit">create user</button>
+    </form>
   </div>
 </template>

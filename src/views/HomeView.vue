@@ -37,30 +37,10 @@ const events = [
     description: 'Join industry leaders to discuss the future of technology.'
   }
 ]
-
-const test = ref({})
-
-const getEvents = () => {
-  fetch('http://localhost/getEvents.php')
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data)
-      test.value = data
-
-      console.log(test)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-}
-
-getEvents()
 </script>
 
 <template>
   <main>
-    <!--     <TheWelcome /> -->
-
     <div class="today">{{ today }}</div>
 
     <Map />
@@ -69,10 +49,6 @@ getEvents()
       Events for Today
       <Events :events="events" />
     </div>
-
-    <!--   <div v-for="user in test" :key="user.id" class="user">
-      {{ user.USERID }}
-    </div>-->
   </main>
 </template>
 
