@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $data->email;
     $password = $data->password;
 
-    $user = $userDAO->getUserByUsername($email);
+    $user = $userDAO->login($email,$password);
 
     if ($user) {
 
