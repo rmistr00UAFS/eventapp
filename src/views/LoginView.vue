@@ -4,13 +4,12 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const form = {
-  userid: 1,
-  firstname: 'john',
-  lastname: 'Doe',
-  password: 'xyz', // Note: In practice, you should not expose passwords in JSON responses
-  email: 'xyz@x.com',
-  phone: '1234567890',
-  address: '123 Main St, Springfield'
+  firstname: '',
+  lastname: '',
+  password: '', // Note: In practice, you should not expose passwords in JSON responses
+  email: '',
+  phone: '',
+  address: ''
 }
 
 async function login() {
@@ -34,7 +33,7 @@ async function login() {
     localStorage.setItem('userid', result.userid)
     router.push('/user')
 
-    console.log(result)
+    // console.log(result)
   } catch (error) {
     console.log(error)
   }
@@ -93,10 +92,6 @@ const createUser = () => {
   <div v-show="newUser">
     create user
     <form @submit.prevent="submitForm">
-      <div>
-        <label for="userid">User ID:</label>
-        <input type="text" v-model="form.userid" id="userid" readonly />
-      </div>
       <div>
         <label for="firstname">First Name:</label>
         <input type="text" v-model="form.firstname" id="firstname" />
