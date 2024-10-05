@@ -30,6 +30,4 @@ class UserDAO extends DAO{
         return $this->delete('USER', $conditions);
     }
 }
-
-}
 ?>
