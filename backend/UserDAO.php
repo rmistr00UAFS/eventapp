@@ -33,7 +33,7 @@ class UserDAO extends DAO{
 
     public function login($email, $password) {
         $query = "SELECT * FROM USER WHERE EMAIL = :EMAIL LIMIT 1";
-        $stmt = $this->db->prepare($query);
+        $stmt = $this_>conn->db->prepare($query);
         $stmt->bindParam(':email', $email);
         $stmt->execute();
 
