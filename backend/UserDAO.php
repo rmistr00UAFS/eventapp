@@ -29,23 +29,6 @@ class UserDAO extends DAO{
     public function deleteUser($conditions) {
         return $this->delete('USER', $conditions);
     }
-
-
-    public function login($email, $password) {
-        $query = "SELECT * FROM USER WHERE EMAIL = :EMAIL LIMIT 1";
-        $stmt = $this->conn->db->prepare($query);
-        $stmt->bindParam(':email', $email);
-        $stmt->execute();
-
-        if ($stmt->rowCount() > 0) {
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if (password_verify($password, $user['password'])) {
-                return $user;
-            }
-        }
-        return null;
-    }
 }
 
 }
