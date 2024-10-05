@@ -68,5 +68,6 @@ const user = ref({
   position: fixed;
   top: 20px;
   right: 20px;
+  height: 30px;
 }
 </style>
