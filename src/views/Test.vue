@@ -1,33 +1,42 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-const test = ref({})
 
-const getData = () => {
-  fetch('http://localhost/getEvents.php')
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data)
-      test.value = data
-
-      console.log(test)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+const form = {
+  userid: 1,
+  firstname: 'john',
+  lastname: 'Doe',
+  password: 'xyz', // Note: In practice, you should not expose passwords in JSON responses
+  email: 'xyz@x.com',
+  phone: '1234567890',
+  address: '123 Main St, Springfield'
 }
 
-//get data
-getData()
+async function login() {
+  console.log(form)
+  try {
+    const response = await fetch('http://localhost/examples/read.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(form)
+    })
+
+    // Check if the response is OK (status in the range 200-299)
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+
+    const result = await response.json()
+    console.log(result)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+login()
 </script>
 
-<template>
-  TESTING AREA
-  <!--
-  <div v-for="user in test" :key="user.id" class="user">
-        {{ user.USERID }}
-      </div>-->
-
-  kim
-</template>
+<template>TESTING AREA</template>
 
 <style scoped></style>

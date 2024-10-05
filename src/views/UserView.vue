@@ -4,7 +4,12 @@ import { ref, onMounted } from 'vue'
 import Events from '../components/Events.vue'
 
 //save login to localstorage
-const auth = ref(true)
+const auth = ref(false)
+let userid = localStorage.getItem('userid')
+if (userid !== null) {
+  console.log('user detected so logging in')
+  auth.value = true
+}
 
 const router = useRouter()
 onMounted(() => {

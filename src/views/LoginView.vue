@@ -1,35 +1,40 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const form = {
   userid: 1,
-  firstname: 'ivkjkjbkjb',
+  firstname: 'john',
   lastname: 'Doe',
-  password: 'secret', // Note: In practice, you should not expose passwords in JSON responses
-  email: 'john@example.com',
+  password: 'xyz', // Note: In practice, you should not expose passwords in JSON responses
+  email: 'xyz@x.com',
   phone: '1234567890',
   address: '123 Main St, Springfield'
 }
 
 async function login() {
+  console.log(form)
   try {
-    console.log(form.email, form.password)
+    const response = await fetch('http://localhost/examples/read.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(form)
+    })
 
-    // const response = await fetch('http://localhost/CRUD.php', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(form)
-    // })
-    //
-    // // Check if the response is OK (status in the range 200-299)
-    // if (!response.ok) {
-    //   throw new Error(`HTTP error! Status: ${response.status}`)
-    // }
-    //
-    // const result = await response.json()
-    // console.log(result)
+    // Check if the response is OK (status in the range 200-299)
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+
+    const result = await response.json()
+
+    localStorage.setItem('userid', result.userid)
+    router.push('/user')
+
+    console.log(result)
   } catch (error) {
     console.log(error)
   }
@@ -39,7 +44,7 @@ async function submitForm() {
   try {
     console.log(form)
 
-    const response = await fetch('http://localhost/CRUD.php', {
+    const response = await fetch('http://localhost/examples/write.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
