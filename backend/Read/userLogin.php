@@ -1,54 +1,69 @@
 <?php
 
-// CORS headers
-header("Access-Control-Allow-Origin: *"); // Allow all origins
-header("Access-Control-Allow-Methods: GET, POST"); // Allow specific methods
-header("Access-Control-Allow-Headers: Content-Type"); // Allow specific headers
+// Set CORS headers
+header("Access-Control-Allow-Origin: *"); // Allow all origins (change this to a specific origin if needed)
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS"); // Allowed methods
+header("Access-Control-Allow-Headers: Content-Type"); // Allowed headers
+header("Content-Type: application/json"); // Return JSON response
 
-require_once 'Database.php';
-require_once 'DAO.php';
-require_once 'UserDAO.php';
+// Get the JSON input
+$dataIN = json_decode(file_get_contents('php://input'), true);
 
-$database = new Database();
-$db = $database->getConnection();
+// Ensure the input is valid
+if (!isset($dataIN['email']) || !isset($dataIN['password'])) {
+    echo json_encode(["error" => "Email and password are required."]);
+    exit;
+}
 
-$userDAO = new UserDAO($db);
+$email = strval($dataIN['email']); // Use the provided email
+$password = strval($dataIN['password']); // Password input
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get JSON input
-    $data = json_decode(file_get_contents("php://input"));
+// Database connection parameters
+$host = 'localhost'; // Database host
+$username = 'pmaUser'; // Database username
+$password_db = 'pma'; // Database password
+$dbname = 'event_app_db'; // Database name
 
-    $email = $data->email;
-    $password = $data->password;
+// Create a connection to the database
+$conn = new mysqli($host, $username, $password_db, $dbname);
 
-    $conditions = ['email' => $email]
-    $user = $userDAO->getUser($conditions);
+// Check connection
+if ($conn->connect_error) {
+    die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
+}
 
-    if ($user) {
+// Prepare and execute the SQL query using a prepared statement
+$stmt = $conn->prepare("SELECT * FROM `USER` WHERE `EMAIL` = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
 
-        if (password_verify($password, $user['password'])) {
+// Prepare an array to hold the user data
+$user = null;
 
-            session_start();
-            $_SESSION['userid'] = $user['userid'];
-            $_SESSION['email'] = $user['email'];
-
-            echo json_encode([
-                'message' => 'Login successful',
-                'user' => $user
-            ]);
-        } else {
-            http_response_code(401);
-
-            echo json_encode(['message' => 'Invalid password']);
-        }
+if ($result) {
+    if ($result->num_rows > 0) {
+        // Fetch the user data
+        $user = $result->fetch_assoc();
     } else {
-
-        http_response_code(404);
-        echo json_encode(['message' => 'User not found']);
+        echo json_encode(["error" => "No user found with that email."]);
+        exit;
     }
 } else {
-
-    $users = $userDAO->getUsers();
-    echo json_encode($users);
+    echo json_encode(["error" => "SQL error: " . $conn->error]);
+    exit;
 }
+
+// Verify the provided password against the stored hashed password
+if (password_verify($password, $user['PASSWORD'])) {
+    // Password is correct
+    echo json_encode(["message" => "Login successful.", "userid" => $user['USERID']]);
+} else {
+    // Password is incorrect
+    echo json_encode(["error" => "Invalid password."]);
+}
+
+// Close the statement and connection
+$stmt->close();
+$conn->close();
 ?>
