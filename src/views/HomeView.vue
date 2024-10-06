@@ -18,12 +18,10 @@ const getAllEvents = () => {
     .then((response) => response.json())
     .then((data) => {
       data.events.map((x) => {
-        x.COORDINATES = convert(x.COORDINATES)
+        x.COORDINATES = JSON.parse(x.COORDINATES)
       })
 
       events.value = data.events
-
-      console.log(data.events)
     })
     .catch((error) => {
       console.error('Error fetching events:', error)
@@ -34,11 +32,6 @@ getAllEvents()
 
 const saveEvent = (id) => {
   console.log(id)
-}
-
-const convert = (x) => {
-  const jsonString = x.replace(/lat/g, '"lat"').replace(/lng/g, '"lng"')
-  return JSON.parse(jsonString)
 }
 </script>
 
@@ -61,7 +54,7 @@ const convert = (x) => {
           <div class="title"><strong>Title:</strong> {{ event.TITLE }}</div>
           <div class="date"><strong>Date:</strong> {{ event.DATE }}</div>
           <div class="description"><strong>Description:</strong> {{ event.INFO }}</div>
-          <button @click="saveEvent(event.id)">save</button>
+          <button @click="saveEvent(event.EVENTID)">save</button>
         </InfoWindow>
       </Marker>
     </GoogleMap>
