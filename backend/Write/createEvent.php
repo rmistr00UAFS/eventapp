@@ -10,17 +10,18 @@ header("Content-Type: application/json"); // Return JSON response
 $dataIN = json_decode(file_get_contents('php://input'), true);
 
 // Ensure the input is valid
-if (!isset($dataIN['title']) || !isset($dataIN['event_descr']) || !isset($dataIN['date']) || !isset($dataIN['time']) || !isset($dataIN['location']) || !isset($dataIN['categoryid']) || !isset($dataIN['organizerid'])) {
-    echo json_encode(["error" => "All fields (title, event_descr, date, time, location, categoryid, organizerid) are required."]);
+if (!isset($dataIN['title']) || !isset($dataIN['info']) || !isset($dataIN['date']) || !isset($dataIN['time']) || !isset($dataIN['address']) || !isset($dataIN['coordinates']) || !isset($dataIN['categoryid']) || !isset($dataIN['organizerid'])) {
+    echo json_encode(["error" => "All fields (title, info, date, time, address, coordinates, categoryid, organizerid) are required."]);
     exit;
 }
 
 
 $title = strval($dataIN['title']);
-$event_descr = strval($dataIN['event_descr']);
+$info = strval($dataIN['info']);
 $date = strval($dataIN['date']);
 $time = strval($dataIN['time']);
-$location = strval($dataIN['location']);
+$address = strval($dataIN['address']);
+$coordinates = strval($dataIN['coordinates']);
 $categoryid = intval($dataIN['categoryid']);
 $organizerid = intval($dataIN['organizerid']);
 
@@ -49,11 +50,9 @@ if ($result->num_rows > 0) {
     exit;
 }
 
-// Hash the password for security
-$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
 // Prepare and execute the insert query
-$stmt = $conn->prepare("INSERT INTO `EVENTS` (`TITLE`, `EVENT_DESCR`, `DATE`, `TIME`, `LOCATION`, `CATEGORYID`, `ORGANIZERID`) VALUES (?, ?, ?, ?, ?, ?, ?)");
+$stmt = $conn->prepare("INSERT INTO `EVENTS` (`TITLE`, `INFO`, `DATE`, `TIME`, `ADDRESS`, `COORDINATES` `CATEGORYID`, `ORGANIZERID`) VALUES (?, ?, ?, ?, ?, ?, ?)");
 $stmt->bind_param("sssssii", $title, $event_descr, $date, $time, $location, $categoryid, $organizerid);
 
 
