@@ -3,12 +3,12 @@ import { ref } from 'vue'
 import Events from '../components/Events.vue'
 
 const event = {
-  title: '',
-  date: '',
-  time: '',
+  title: 'tyjty',
+  date: '2/2/2000',
+  time: '11:11',
   info: '',
-  address: '',
-  coordinates: '',
+  address: 'fort smith, AR, 72901',
+  coordinates: '{lat: 35.395803, lng: -94.413229}',
   categoryid: '',
   organizerid: ''
 }
@@ -24,8 +24,6 @@ const getCoordinates = (address) => {
       if (data.status === 'OK') {
         const location = data.results[0].geometry.location
         event.location = location
-
-        console.log(event)
       } else {
         console.error('Error: ' + data.status)
       }
@@ -36,9 +34,12 @@ const getCoordinates = (address) => {
 let newEvent = ref(false)
 
 async function submitEvent() {
-  console.log(event)
-  // let coord = getCoordinates(form.address)
-  // console.log(coord)
+  // // console.log(event)
+  // getCoordinates(form.address).then(() => {
+  //   console.log(event)
+  // })
+  // // console.log(coord)
+
   //get creator id
 
   try {
@@ -64,7 +65,7 @@ async function submitEvent() {
     console.log(error)
   }
 
-  newEvent.value = false
+  // newEvent.value = false
 }
 
 const createEvent = () => {
