@@ -2,44 +2,70 @@
 import { ref } from 'vue'
 import Events from '../components/Events.vue'
 
-const form = {
-  name: '',
+const event = {
+  title: '',
   date: '',
-  description: ''
+  time: '',
+  info: '',
+  address: '',
+  coordinates: '',
+  categoryid: '',
+  organizerid: ''
 }
 
-async function submitForm() {
-  //get creator id
-  console.log(form)
-  //   try {
-  //
-  //
-  //     const response = await fetch('http://localhost/CRUD.php', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify(form)
-  //     })
-  //
-  //     // Check if the response is OK (status in the range 200-299)
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! Status: ${response.status}`)
-  //     }
-  //
-  //     const result = await response.json()
-  //
-  //     //go to login state
-  //     newUser.value = false
-  //     console.log(result)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
+const getCoordinates = (address) => {
+  const API = 'AIzaSyBSPsKVWUUPt6WYOXw1smq-3iiy0X3P59k'
 
-  newEvent.value = false
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${API}`
+
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status === 'OK') {
+        const location = data.results[0].geometry.location
+        event.location = location
+
+        console.log(event)
+      } else {
+        console.error('Error: ' + data.status)
+      }
+    })
+    .catch((error) => console.error('Fetch error: ' + error))
 }
 
 let newEvent = ref(false)
+
+async function submitEvent() {
+  console.log(event)
+  // let coord = getCoordinates(form.address)
+  // console.log(coord)
+  //get creator id
+
+  try {
+    const response = await fetch('http://localhost/Write/createEvent.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(event)
+    })
+
+    // Check if the response is OK (status in the range 200-299)
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+
+    const result = await response.json()
+
+    //go to login state
+    newEvent.value = false
+    console.log(result)
+  } catch (error) {
+    console.log(error)
+  }
+
+  newEvent.value = false
+}
 
 const createEvent = () => {
   newEvent.value = true
@@ -68,6 +94,7 @@ const user = ref({
 
 <template>
   <div>
+    address
     <div class="savedEvents">
       Created Events
       <Events :events="user.savedEvents" />
@@ -75,37 +102,50 @@ const user = ref({
 
     <button @click="createEvent" v-show="!newEvent">create event</button>
 
-    <div class="event-create-form" v-show="newEvent">
-      <h2>Create Event</h2>
-      <form @submit.prevent="submitForm">
-        <div>
-          <label for="eventname">Event Name:</label>
-          <input type="text" v-model="form.eventname" id="eventname" />
-        </div>
+    <button @click="getCoordinates('fort smith,AR 72901')" v-show="!newEvent">check</button>
 
-        <div>
-          <label for="date">Event Date:</label>
-          <input type="date" v-model="form.date" id="date" />
-        </div>
+    <h2>Create Event</h2>
+    <form @submit.prevent="submitEvent">
+      <label for="title">title:</label>
+      <input id="title" v-model="event.title" type="text" placeholder="Enter event title" />
 
-        <div>
-          <label for="time">Event Time:</label>
-          <input type="time" v-model="form.time" id="time" />
-        </div>
+      <label for="date">Date:</label>
+      <input id="date" v-model="event.date" type="date" />
 
-        <div>
-          <label for="location">Location:</label>
-          <input type="text" v-model="form.location" id="location" />
-        </div>
+      <label for="time">Time:</label>
+      <input id="time" v-model="event.time" type="time" />
 
-        <div>
-          <label for="description">Description:</label>
-          <textarea v-model="form.description" id="description"></textarea>
-        </div>
+      <label for="info">Info:</label>
+      <textarea id="info" v-model="event.info" placeholder="Enter event information"></textarea>
 
-        <button type="submit">submit Event</button>
-        <button @click="newEvent = false" v-show="newEvent">cancel</button>
-      </form>
-    </div>
+      <label for="address">Address:</label>
+      <input id="address" v-model="event.address" type="text" placeholder="Enter event address" />
+
+      <label for="coordinates">Coordinates:</label>
+      <input
+        id="coordinates"
+        v-model="event.coordinates"
+        type="text"
+        placeholder="Enter event coordinates (e.g., lat,long)"
+      />
+
+      <label for="categoryid">Category ID:</label>
+      <input
+        id="categoryid"
+        v-model="event.categoryid"
+        type="text"
+        placeholder="Enter category ID"
+      />
+
+      <label for="organizerid">Organizer ID:</label>
+      <input
+        id="organizerid"
+        v-model="event.organizerid"
+        type="text"
+        placeholder="Enter organizer ID"
+      />
+      <button type="submit">submit Event</button>
+      <button @click="newEvent = false" v-show="newEvent">cancel</button>
+    </form>
   </div>
 </template>

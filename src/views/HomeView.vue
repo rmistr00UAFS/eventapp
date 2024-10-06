@@ -37,7 +37,7 @@ const saveEvent = (id) => {
   <main>
     <div class="today">{{ today }}</div>
 
-    <!--    <GoogleMap
+    <GoogleMap
       class="map"
       api-key="AIzaSyBSPsKVWUUPt6WYOXw1smq-3iiy0X3P59k"
       :center="center"
@@ -53,7 +53,7 @@ const saveEvent = (id) => {
           <button @click="saveEvent(event.id)">save</button>
         </InfoWindow>
       </Marker>
-    </GoogleMap>-->
+    </GoogleMap>
 
     <!--  <div class="todaysEvents">
       Events for Today

@@ -15,7 +15,7 @@ const form = {
 async function login() {
   console.log(form)
   try {
-    const response = await fetch('http://localhost/examples/read.php', {
+    const response = await fetch('http://localhost/Read/userLogin.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -43,7 +43,7 @@ async function submitForm() {
   try {
     console.log(form)
 
-    const response = await fetch('http://localhost/examples/write.php', {
+    const response = await fetch('http://localhost/Write/createUser.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
