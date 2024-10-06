@@ -18,7 +18,14 @@ $dataIN = json_decode(file_get_contents('php://input'), true);
 // }
 
 
-$title = strval($dataIN['info']);
+$title = strval($dataIN['title']);
+$info = strval($dataIN['info']);
+$date = strval($dataIN['date']);
+$time = strval($dataIN['time']);
+$address = strval($dataIN['address']);
+$coordinates = strval($dataIN['coordinates']);
+$categoryid = intval($dataIN['categoryid']);
+$organizerid = intval($dataIN['organizerid']);
 
 
 
@@ -48,8 +55,8 @@ if ($result->num_rows > 0) {
 
 
 // Prepare and execute the insert query
-$stmt = $conn->prepare("INSERT INTO `EVENT` (`TITLE`) VALUES (?)");
-$stmt->bind_param("s", $title);
+$stmt = $conn->prepare("INSERT INTO `EVENT` (`TITLE`, `INFO`, `DATE`, `TIME`, `ADDRESS`, `COORDINATES`, `CATEGORYID`, `ORGANIZERID`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("ssssssii", $title, $info, $date, $time, $address, $coordinates, $categoryid, $organizerid);
 
 
 if ($stmt->execute()) {
