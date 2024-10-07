@@ -20,17 +20,8 @@ if ($conn->connect_error) {
     die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
 }
 
-// Get the user ID from the request (assuming it's sent as a POST request)
-$user_id = isset($_POST['user_id']) ? $_POST['user_id'] : null;
-
-if (!$user_id) {
-    echo json_encode(["error" => "User ID is required."]);
-    exit;
-}
-
-// Prepare and execute the SQL query to get saved events for the specified user
-$stmt = $conn->prepare("SELECT * FROM `SAVED_EVENT_LIST` WHERE `user_id` = ?");
-$stmt->bind_param("i", $user_id);
+// Prepare and execute the SQL query to get all saved events
+$stmt = $conn->prepare("SELECT * FROM `SAVED_EVENT_LIST`");
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -45,7 +36,7 @@ if ($result) {
     if (!empty($saved_events)) {
         echo json_encode(["message" => "Saved events retrieved successfully.", "saved_events" => $saved_events]);
     } else {
-        echo json_encode(["message" => "No saved events found for the specified user."]);
+        echo json_encode(["message" => "No saved events found."]);
     }
 } else {
     echo json_encode(["error" => "SQL error: " . $conn->error]);
