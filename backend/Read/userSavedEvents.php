@@ -9,8 +9,7 @@ header("Content-Type: application/json"); // Return JSON response
 // Get the JSON input
 $dataIN = json_decode(file_get_contents('php://input'), true);
 
-
-$userid =(int)$dataIN['userid']; // Password input
+$USERID = (int)$dataIN['userid']; // Event organizer ID
 
 
 
@@ -23,10 +22,16 @@ $dbname = 'event_app_db'; // Database name
 // Create a connection to the database
 $conn = new mysqli($host, $username, $password_db, $dbname);
 
+// Check connection
+if ($conn->connect_error) {
+    die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
+}
 
 
-$stmt = $conn->prepare("SELECT * FROM `EVENT` WHERE `USERID` = ?");
-$stmt->bind_param("i", $userid); // "i" specifies the type integer for userid
+
+// Prepare and execute the SQL query using a prepared statement
+$stmt = $conn->prepare("SELECT * FROM `SAVED_EVENT_LIST` WHERE `USERID` = ?");
+$stmt->bind_param("i", $USERID);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -41,14 +46,12 @@ if ($result) {
     if (!empty($events)) {
         echo json_encode(["message" => "Events retrieved successfully.", "events" => $events]);
     } else {
-        echo json_encode(["message" => "No events found for the specified userid."]);
+        echo json_encode(["message" => "No events found."]);
     }
 } else {
     echo json_encode(["error" => "SQL error: " . $conn->error]);
     exit;
 }
-
-
 
 // Close the statement and connection
 $stmt->close();

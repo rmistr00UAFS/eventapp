@@ -25,7 +25,7 @@ $time = strval($dataIN['time']);
 $address = strval($dataIN['address']);
 $coordinates = strval($dataIN['coordinates']);
 $categoryid = intval($dataIN['categoryid']);
-$organizerid = intval($dataIN['organizerid']);
+$userid = intval($dataIN['userid']);
 
 
 
@@ -55,8 +55,8 @@ if ($result->num_rows > 0) {
 
 
 // Prepare and execute the insert query
-$stmt = $conn->prepare("INSERT INTO `EVENT` (`TITLE`, `INFO`, `DATE`, `TIME`, `ADDRESS`, `COORDINATES`, `CATEGORYID`, `ORGANIZERID`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("ssssssii", $title, $info, $date, $time, $address, $coordinates, $categoryid, $organizerid);
+$stmt = $conn->prepare("INSERT INTO `EVENT` (`TITLE`, `INFO`, `DATE`, `TIME`, `ADDRESS`, `COORDINATES`, `CATEGORYID`, `USERID`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("ssssssii", $title, $info, $date, $time, $address, $coordinates, $categoryid, $userid);
 
 
 if ($stmt->execute()) {

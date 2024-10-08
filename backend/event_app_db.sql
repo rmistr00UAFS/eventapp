@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 08, 2024 at 02:51 AM
+-- Generation Time: Oct 08, 2024 at 05:13 AM
 -- Server version: 10.11.9-MariaDB
 -- PHP Version: 7.4.33
 
@@ -67,26 +67,19 @@ CREATE TABLE `EVENT` (
   `ADDRESS` varchar(255) DEFAULT NULL,
   `COORDINATES` varchar(255) DEFAULT NULL,
   `CATEGORYID` int(11) DEFAULT NULL,
-  `ORGANIZERID` int(11) DEFAULT NULL
+  `USERID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 --
 -- Dumping data for table `EVENT`
 --
 
-INSERT INTO `EVENT` (`EVENTID`, `TITLE`, `INFO`, `DATE`, `TIME`, `ADDRESS`, `COORDINATES`, `CATEGORYID`, `ORGANIZERID`) VALUES
-(1, 'Tech Conference 2024', 'A conference about the latest in technology.', '2024-10-10 00:00:00', '09:00:00', 'Main Hall, Tech Park', '', 1, 2),
-(2, 'Tech Conference 2024', 'A conference about the latest in technology.', '2024-10-10 00:00:00', '09:00:00', 'Main Hall, Tech Park', '', 1, 2),
-(3, 'Tech Conference 2024', 'A conference about the latest in technology.', '2024-10-10 00:00:00', '09:00:00', 'Main Hall, Tech Park', '', 1, 2),
-(4, 'Tech Conference 2024', 'A conference about the latest in technology.', '2024-10-10 00:00:00', '09:00:00', 'Main Hall, Tech Park', '', 1, 2),
-(5, 'Tech Conference 2024', 'A conference about the latest in technology.', '2024-10-10 00:00:00', '09:00:00', 'Main Hall, Tech Park', '', 1, 2),
-(6, 'Tech Conference 2024', 'A conference about the latest in technology.', '2024-10-10 00:00:00', '09:00:00', 'Main Hall, Tech Park', '', 1, 2),
-(7, 'Tech Conference 2024', 'A conference about the latest in technology.', '2024-10-10 00:00:00', '09:00:00', 'Main Hall, Tech Park', '', 1, 2),
-(8, 'Tech Conference 2024', 'A conference about the latest in technology.', '2024-10-10 00:00:00', '09:00:00', 'Main Hall, Tech Park', '', 1, 2),
-(9, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(10, 'ghalhtjskbbgh', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(11, 'asgh;soghs', 'ghalhtjskbbgh', '2024-10-15 00:00:00', '10:53:00', 'sakhsg', '', 0, 0),
-(12, 'asghs', 'ghalhtjskbbgh', '2024-10-15 00:00:00', '10:53:00', 'sakhsg', '', 0, 0);
+INSERT INTO `EVENT` (`EVENTID`, `TITLE`, `INFO`, `DATE`, `TIME`, `ADDRESS`, `COORDINATES`, `CATEGORYID`, `USERID`) VALUES
+(17, 'Art in the Park', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72901', '{\"lat\":35.3704608,\"lng\":-94.4130648}', 302, 30),
+(18, 'Art in the Park', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72901', '{\"lat\":35.3704608,\"lng\":-94.4130648}', 302, 30),
+(19, 'chris', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72901', '{\"lat\":35.3704608,\"lng\":-94.4130648}', 302, 30),
+(20, 'wefwefwefew', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72901', '{\"lat\":35.3704608,\"lng\":-94.4130648}', 302, 30),
+(21, 'Art in the Parkdfdsfsdf', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72904', '{\"lat\":35.4097046,\"lng\":-94.38735199999999}', 302, 30);
 
 -- --------------------------------------------------------
 
@@ -226,7 +219,7 @@ ALTER TABLE `CATEGORY`
 -- AUTO_INCREMENT for table `EVENT`
 --
 ALTER TABLE `EVENT`
-  MODIFY `EVENTID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `EVENTID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `SAVED_EVENT_LIST`

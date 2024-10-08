@@ -42,6 +42,32 @@ const user = ref({
     }
   ]
 })
+
+async function testing() {
+  try {
+    const response = await fetch('http://localhost/Read/userSavedEvents.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(userid)
+    })
+
+    // Check if the response is OK (status in the range 200-299)
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+
+    const result = await response.json()
+    console.log(result)
+
+    // console.log(result)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+testing()
 </script>
 
 <template>

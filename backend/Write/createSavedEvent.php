@@ -18,15 +18,15 @@ $dataIN = json_decode(file_get_contents('php://input'), true);
 // }
 
 
-$listid = strval($dataIN['listid']);
+
 $time = strval($dataIN['time']);
 $date = strval($dataIN['date']);
 $address = strval($dataIN['address']);
 $coordinates = strval($dataIN['coordinates']);
 $info = strval($dataIN['info']);
-$userid = intval($dataIN['userid']);
-$eventid = intval($dataIN['eventid']);
-$type = intval($dataIN['type']);
+$userid =(int) intval($dataIN['userid']);
+$eventid = (int) intval($dataIN['eventid']);
+$type = $dataIN['type']
 
 
 
@@ -56,8 +56,8 @@ if ($result->num_rows > 0) {
 
 
 // Prepare and execute the insert query
-$stmt = $conn->prepare("INSERT INTO `SAVED_EVENT_LIST` (`LISTID`, `TIME`, `DATE`, `ADDRESS`, `COORDINATES`, `INFO` `USERID`, `EVENTID`, `TYPE`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("isssssiis", $listid, $time, $date, $address, $coordinates, $info, $userid, $eventid, $type);
+$stmt = $conn->prepare("INSERT INTO `SAVED_EVENT_LIST` ( `TIME`, `DATE`, `ADDRESS`, `COORDINATES`, `INFO` `USERID`, `EVENTID`, `TYPE`) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("sssssiis", $time, $date, $address, $coordinates, $info, $userid, $eventid, $type);
 
 
 if ($stmt->execute()) {
