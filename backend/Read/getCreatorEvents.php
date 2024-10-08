@@ -9,14 +9,10 @@ header("Content-Type: application/json"); // Return JSON response
 // Get the JSON input
 $dataIN = json_decode(file_get_contents('php://input'), true);
 
-// Ensure the input is valid
-if (!isset($dataIN['email']) || !isset($dataIN['password'])) {
-    echo json_encode(["error" => "Email and password are required."]);
-    exit;
-}
 
-$email = strval($dataIN['email']); // Use the provided email
-$password = strval($dataIN['password']); // Password input
+$userid =(int)$dataIN['userid']; // Password input
+
+
 
 // Database connection parameters
 $host = 'localhost'; // Database host
@@ -27,41 +23,32 @@ $dbname = 'event_app_db'; // Database name
 // Create a connection to the database
 $conn = new mysqli($host, $username, $password_db, $dbname);
 
-// Check connection
-if ($conn->connect_error) {
-    die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
-}
 
-// Prepare and execute the SQL query using a prepared statement
-$stmt = $conn->prepare("SELECT * FROM `USER` WHERE `EMAIL` = ?");
-$stmt->bind_param("s", $email);
+
+$stmt = $conn->prepare("SELECT * FROM `EVENT` WHERE `USERID` = ?");
+$stmt->bind_param("i", $userid); // "i" specifies the type integer for userid
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Prepare an array to hold the user data
-$user = null;
+// Prepare an array to hold the event data
+$events = [];
 
 if ($result) {
-    if ($result->num_rows > 0) {
-        // Fetch the user data
-        $user = $result->fetch_assoc();
+    while ($row = $result->fetch_assoc()) {
+        $events[] = $row; // Add each event to the array
+    }
+
+    if (!empty($events)) {
+        echo json_encode(["message" => "Events retrieved successfully.", "events" => $events]);
     } else {
-        echo json_encode(["error" => "No user found with that email."]);
-        exit;
+        echo json_encode(["message" => "No events found for the specified userid."]);
     }
 } else {
     echo json_encode(["error" => "SQL error: " . $conn->error]);
     exit;
 }
 
-// Verify the provided password against the stored hashed password
-if (password_verify($password, $user['PASSWORD'])) {
-    // Password is correct
-    echo json_encode(["message" => "Login successful.", "userid" => $user['USERID']]);
-} else {
-    // Password is incorrect
-    echo json_encode(["error" => "Invalid password."]);
-}
+
 
 // Close the statement and connection
 $stmt->close();

@@ -3,14 +3,14 @@ import { ref } from 'vue'
 import Events from '../components/Events.vue'
 
 const event = {
-  title: 'tyjty',
-  date: '0001-01-01',
-  time: '11:11',
-  info: '',
-  address: 'fort smith, AR, 72901',
-  coordinates: '',
-  categoryid: '',
-  organizerid: ''
+  title: 'Art in the Park',
+  date: '2024-09-05',
+  time: '10:00',
+  info: 'An open-air art exhibition showcasing local artists.',
+  address: 'Fort Smith, AR, 72901',
+  coordinates: '{"lat":35.387533,"lng":-94.404191}', // Another set of coordinates for Fort Smith
+  categoryid: '302',
+  userid: '502'
 }
 
 const getCoordinates = () => {
@@ -41,6 +41,7 @@ const getCoordinates = () => {
 let newEvent = ref(false)
 
 async function submitEvent() {
+  event.userid = localStorage.getItem('userid')
   try {
     const response = await fetch('http://localhost/Write/createEvent.php', {
       method: 'POST',
@@ -60,6 +61,8 @@ async function submitEvent() {
     //go to login state
 
     console.log(result)
+
+    testing()
   } catch (error) {
     console.log(error)
   }
@@ -73,23 +76,43 @@ const createEvent = () => {
 
 const user = ref({
   name: 'john doe',
-  savedEvents: [
-    {
-      id: 1,
-      title: 'Music Concert',
-      date: '2024-10-10',
-      location: 'City Hall',
-      description: 'An evening of classical music featuring local artists.'
-    },
-    {
-      id: 2,
-      title: 'Art Exhibition',
-      date: '2024-11-05',
-      location: 'Art Gallery',
-      description: 'Showcasing contemporary art from various artists.'
-    }
-  ]
+  savedEvents: []
 })
+
+const test = {
+  userid: ''
+}
+
+async function testing() {
+  test.userid = localStorage.getItem('userid')
+
+  try {
+    const response = await fetch('http://localhost/Read/getCreatorEvents.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(test)
+    })
+
+    // Check if the response is OK (status in the range 200-299)
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+
+    const result = await response.json()
+    console.log(result)
+    user.value.savedEvents = result.events
+
+    events
+
+    // console.log(result)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+testing()
 </script>
 
 <template>
