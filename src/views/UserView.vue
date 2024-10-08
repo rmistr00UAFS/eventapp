@@ -3,7 +3,13 @@ import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import Events from '../components/Events.vue'
 
-const auth = ref(true)
+//save login to localstorage
+const auth = ref(false)
+let userid = localStorage.getItem('userid')
+if (userid !== null) {
+  console.log('user detected so logging in')
+  auth.value = true
+}
 
 const router = useRouter()
 onMounted(() => {
@@ -13,7 +19,7 @@ onMounted(() => {
 })
 
 const goToRoute = () => {
-  router.push('/Creator')
+  router.push('/creator')
 }
 
 //
@@ -36,12 +42,38 @@ const user = ref({
     }
   ]
 })
+
+async function testing() {
+  try {
+    const response = await fetch('http://localhost/Read/userSavedEvents.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(userid)
+    })
+
+    // Check if the response is OK (status in the range 200-299)
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+
+    const result = await response.json()
+    console.log(result)
+
+    // console.log(result)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+testing()
 </script>
 
 <template>
   <div v-if="auth">
     <div class="username">{{ user.name }}</div>
-    <button @click="goToRoute('/about')" class="creator">Creator</button>
+    <button @click="goToRoute()" class="creator">Creator</button>
 
     <div class="savedEvents">
       Saved Events
@@ -62,5 +94,6 @@ const user = ref({
   position: fixed;
   top: 20px;
   right: 20px;
+  height: 30px;
 }
 </style>

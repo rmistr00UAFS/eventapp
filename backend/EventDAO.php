@@ -6,13 +6,14 @@ class EventDAO extends DAO {
         parent::__construct($db);
     }
 
-    public function createEvent($title, $event_descr, $date, $time, $location, $categoryid, $organizerid) {
+    public function createEvent($title, $event_descr, $date, $time, $location, $coordinate, $categoryid, $organizerid) {
         $data = [
             'title' => $title,
             'event_descr' => $event_descr,
             'date' => $date,
             'time' => $time,
             'location' => $location,
+            'coordinate' => $coordinate,
             'categoryid' => $categoryid,
             'organizerid' => $organizerid
         ];

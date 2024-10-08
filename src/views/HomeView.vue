@@ -3,75 +3,66 @@ import { ref } from 'vue'
 import TheWelcome from '../components/TheWelcome.vue'
 import Events from '../components/Events.vue'
 
-import Map from '../components/Map.vue'
+import { GoogleMap, Marker, InfoWindow } from 'vue3-google-map'
 
 const today = 'Friday May 2'
 
-const events = [
-  {
-    id: 1,
-    title: 'Music Concert',
-    date: '2024-10-10',
-    location: 'City Hall',
-    description: 'An evening of classical music featuring local artists.'
-  },
-  {
-    id: 2,
-    title: 'Art Exhibition',
-    date: '2024-11-05',
-    location: 'Art Gallery',
-    description: 'Showcasing contemporary art from various artists.'
-  },
-  {
-    id: 3,
-    title: 'Food Festival',
-    date: '2024-09-20',
-    location: 'Downtown Park',
-    description: 'A weekend festival celebrating local cuisine.'
-  },
-  {
-    id: 4,
-    title: 'Tech Conference',
-    date: '2024-12-15',
-    location: 'Convention Center',
-    description: 'Join industry leaders to discuss the future of technology.'
-  }
-]
+const center = { lat: 35.385803, lng: -94.403229 }
 
-const test = ref({})
+let events = ref()
 
-const getEvents = () => {
-  fetch('http://localhost/getEvents.php')
+const getAllEvents = () => {
+  const url = 'http://localhost/Read/getEvents.php'
+
+  fetch(url)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data)
-      test.value = data
+      data.events.map((x) => {
+        x.COORDINATES = JSON.parse(x.COORDINATES)
+      })
 
-      console.log(test)
+      events.value = data.events
     })
     .catch((error) => {
-      console.log(error)
+      console.error('Error fetching events:', error)
     })
 }
 
-getEvents()
+getAllEvents()
+
+const saveEvent = (id) => {
+  const event = events.value.find((e) => e.EVENTID === id)
+  console.log(event)
+}
 </script>
 
 <template>
   <main>
-    <!--     <TheWelcome /> -->
-
     <div class="today">{{ today }}</div>
 
-    <Map />
+    <!--     {{ events }} -->
 
-    <div class="todaysEvents">
+    <!--     {{ getCoordinates(events) }} -->
+
+    <GoogleMap
+      class="map"
+      api-key="AIzaSyBSPsKVWUUPt6WYOXw1smq-3iiy0X3P59k"
+      :center="center"
+      :zoom="13"
+    >
+      <Marker v-for="(event, i) in events" :key="i" :options="{ position: event.COORDINATES }">
+        <InfoWindow>
+          <div class="title"><strong>Title:</strong> {{ event.TITLE }}</div>
+          <div class="date"><strong>Date:</strong> {{ event.DATE }}</div>
+          <div class="description"><strong>Description:</strong> {{ event.INFO }}</div>
+          <button @click="saveEvent(event.EVENTID)">save</button>
+        </InfoWindow>
+      </Marker>
+    </GoogleMap>
+
+    <!--  <div class="todaysEvents">
       Events for Today
       <Events :events="events" />
-    </div>
-
-    <!--   <div v-for="user in test" :key="user.id" class="user">
-      {{ user.USERID }}
     </div>-->
   </main>
 </template>
@@ -82,5 +73,10 @@ getEvents()
 }
 .today {
   margin: 20px;
+}
+
+.map {
+  height: 100vh;
+  width: 100vw;
 }
 </style>

@@ -1,12 +1,12 @@
 <template>
   <div class="events">
     <!--     <div class="today">{{ today }}</div> -->
-    <div v-for="event in events" :key="event.id" class="event">
+    <div v-for="event in events" :key="event.EVENTID" class="event">
       <!-- Individual divs for each event property with their own class -->
-      <div class="title"><strong>Title:</strong> {{ event.title }}</div>
-      <div class="date"><strong>Date:</strong> {{ event.date }}</div>
-      <div class="location"><strong>Location:</strong> {{ event.location }}</div>
-      <div class="description"><strong>Description:</strong> {{ event.description }}</div>
+      <div class="title"><strong>Title:</strong> {{ event.TITLE }}</div>
+      <div class="date"><strong>Date:</strong> {{ event.DATE }}</div>
+      <div class="location"><strong>Location:</strong> {{ event.LOCATION }}</div>
+      <div class="description"><strong>Description:</strong> {{ event.INFO }}</div>
     </div>
   </div>
 </template>
@@ -38,6 +38,10 @@ export default {
   box-shadow: var(--shadow);
   padding: 10px;
   border-radius: 5px;
+}
+
+.title {
+  color: red;
 }
 
 .today {
