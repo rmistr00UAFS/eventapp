@@ -104,8 +104,6 @@ async function testing() {
     console.log(result)
     user.value.savedEvents = result.events
 
-    events
-
     // console.log(result)
   } catch (error) {
     console.log(error)
