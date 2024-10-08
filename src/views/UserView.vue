@@ -3,6 +3,8 @@ import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import Events from '../components/Events.vue'
 
+import { read } from '..function/read'
+
 //save login to localstorage
 const auth = ref(false)
 let userid = localStorage.getItem('userid')
@@ -76,8 +78,16 @@ testing()
     <button @click="goToRoute()" class="creator">Creator</button>
 
     <div class="savedEvents">
-      Saved Events
-      <Events :events="user.savedEvents" />
+      Saved Events by user
+      <div class="events">
+        <div v-for="event in user.savedEvents" :key="event.EVENTID" class="event">
+          <!-- Individual divs for each event property with their own class -->
+          <div class="title"><strong>Title:</strong> {{ event.TITLE }}</div>
+          <div class="date"><strong>Date:</strong> {{ event.DATE }}</div>
+          <div class="location"><strong>Location:</strong> {{ event.LOCATION }}</div>
+          <div class="description"><strong>Description:</strong> {{ event.INFO }}</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -95,5 +105,30 @@ testing()
   top: 20px;
   right: 20px;
   height: 30px;
+}
+
+.events {
+  width: calc(100%);
+  box-shadow: var(--inset-shadow);
+  padding: 10px;
+  border-radius: 5px;
+
+  overflow: scroll;
+  height: 300px;
+}
+
+.event {
+  margin: 20px;
+  box-shadow: var(--shadow);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.title {
+  color: red;
+}
+
+.saved {
+  background: red;
 }
 </style>
