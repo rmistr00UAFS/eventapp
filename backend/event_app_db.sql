@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 06, 2024 at 12:36 AM
+-- Generation Time: Oct 08, 2024 at 02:51 AM
 -- Server version: 10.11.9-MariaDB
 -- PHP Version: 7.4.33
 
@@ -24,19 +24,19 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ATTENDENTEE`
+-- Table structure for table `ATTENDEE`
 --
 
-CREATE TABLE `ATTENDENTEE` (
+CREATE TABLE `ATTENDEE` (
   `AT_ID` int(11) NOT NULL,
-  `EMAIL` varchar(30) NOT NULL,
-  `PHONE` varchar(30) NOT NULL,
-  `ADDRESS` varchar(30) NOT NULL,
-  `TIME` datetime NOT NULL,
-  `DATE` date NOT NULL,
-  `LOCATION` varchar(30) NOT NULL,
-  `EVENTID` int(11) NOT NULL,
-  `USERID` int(11) NOT NULL
+  `EMAIL` varchar(30) DEFAULT NULL,
+  `PHONE` varchar(30) DEFAULT NULL,
+  `ADDRESS` varchar(30) DEFAULT NULL,
+  `COORDINATES` varchar(255) DEFAULT NULL,
+  `TIME` datetime DEFAULT NULL,
+  `DATE` date DEFAULT NULL,
+  `EVENTID` int(11) DEFAULT NULL,
+  `USERID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 -- --------------------------------------------------------
@@ -47,9 +47,9 @@ CREATE TABLE `ATTENDENTEE` (
 
 CREATE TABLE `CATEGORY` (
   `CA_ID` int(11) NOT NULL,
-  `TYPE` varchar(30) NOT NULL,
-  `NAME` varchar(30) NOT NULL,
-  `EVENTID` int(11) NOT NULL
+  `TYPE` varchar(30) DEFAULT NULL,
+  `NAME` varchar(30) DEFAULT NULL,
+  `EVENTID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 -- --------------------------------------------------------
@@ -60,14 +60,14 @@ CREATE TABLE `CATEGORY` (
 
 CREATE TABLE `EVENT` (
   `EVENTID` int(11) NOT NULL,
-  `TITLE` varchar(255) NOT NULL,
-  `INFO` varchar(255) NOT NULL,
-  `DATE` datetime NOT NULL,
-  `TIME` time NOT NULL,
-  `ADDRESS` varchar(255) NOT NULL,
-  `COORDINATES` varchar(255) NOT NULL,
-  `CATEGORYID` int(11) NOT NULL,
-  `ORGANIZERID` int(11) NOT NULL
+  `TITLE` varchar(255) DEFAULT NULL,
+  `INFO` varchar(255) DEFAULT NULL,
+  `DATE` datetime DEFAULT NULL,
+  `TIME` time DEFAULT NULL,
+  `ADDRESS` varchar(255) DEFAULT NULL,
+  `COORDINATES` varchar(255) DEFAULT NULL,
+  `CATEGORYID` int(11) DEFAULT NULL,
+  `ORGANIZERID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 --
@@ -82,7 +82,11 @@ INSERT INTO `EVENT` (`EVENTID`, `TITLE`, `INFO`, `DATE`, `TIME`, `ADDRESS`, `COO
 (5, 'Tech Conference 2024', 'A conference about the latest in technology.', '2024-10-10 00:00:00', '09:00:00', 'Main Hall, Tech Park', '', 1, 2),
 (6, 'Tech Conference 2024', 'A conference about the latest in technology.', '2024-10-10 00:00:00', '09:00:00', 'Main Hall, Tech Park', '', 1, 2),
 (7, 'Tech Conference 2024', 'A conference about the latest in technology.', '2024-10-10 00:00:00', '09:00:00', 'Main Hall, Tech Park', '', 1, 2),
-(8, 'Tech Conference 2024', 'A conference about the latest in technology.', '2024-10-10 00:00:00', '09:00:00', 'Main Hall, Tech Park', '', 1, 2);
+(8, 'Tech Conference 2024', 'A conference about the latest in technology.', '2024-10-10 00:00:00', '09:00:00', 'Main Hall, Tech Park', '', 1, 2),
+(9, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(10, 'ghalhtjskbbgh', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11, 'asgh;soghs', 'ghalhtjskbbgh', '2024-10-15 00:00:00', '10:53:00', 'sakhsg', '', 0, 0),
+(12, 'asghs', 'ghalhtjskbbgh', '2024-10-15 00:00:00', '10:53:00', 'sakhsg', '', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -92,13 +96,14 @@ INSERT INTO `EVENT` (`EVENTID`, `TITLE`, `INFO`, `DATE`, `TIME`, `ADDRESS`, `COO
 
 CREATE TABLE `SAVED_EVENT_LIST` (
   `LISTID` int(11) NOT NULL,
-  `TIME` datetime NOT NULL,
-  `DATE` date NOT NULL,
-  `LOCATION` varchar(50) NOT NULL,
-  `LIST_DESCR` varchar(50) NOT NULL,
-  `USERID` int(11) NOT NULL,
-  `EVENTID` int(11) NOT NULL,
-  `TYPE` varchar(30) NOT NULL
+  `TIME` datetime DEFAULT NULL,
+  `DATE` date DEFAULT NULL,
+  `ADDRESS` varchar(50) DEFAULT NULL,
+  `COORDINATES` varchar(255) DEFAULT NULL,
+  `INFO` varchar(50) DEFAULT NULL,
+  `USERID` int(11) DEFAULT NULL,
+  `EVENTID` int(11) DEFAULT NULL,
+  `TYPE` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 -- --------------------------------------------------------
@@ -144,13 +149,14 @@ INSERT INTO `USER` (`USERID`, `FIRSTNAME`, `LASTNAME`, `PASSWORD`, `EMAIL`, `PHO
 
 CREATE TABLE `VENUE` (
   `VENUEID` int(11) NOT NULL,
-  `NAME` varchar(30) NOT NULL,
-  `ADDRESS` varchar(30) NOT NULL,
-  `CITY` varchar(30) NOT NULL,
-  `STATE` varchar(30) NOT NULL,
-  `ZIP` varchar(30) NOT NULL,
-  `CAPACITY` int(11) NOT NULL,
-  `EVENTID` int(11) NOT NULL
+  `NAME` varchar(30) DEFAULT NULL,
+  `ADDRESS` varchar(30) DEFAULT NULL,
+  `COORDINATES` varchar(255) DEFAULT NULL,
+  `CITY` varchar(30) DEFAULT NULL,
+  `STATE` varchar(30) DEFAULT NULL,
+  `ZIP` varchar(30) DEFAULT NULL,
+  `CAPACITY` int(11) DEFAULT NULL,
+  `EVENTID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 --
@@ -158,9 +164,9 @@ CREATE TABLE `VENUE` (
 --
 
 --
--- Indexes for table `ATTENDENTEE`
+-- Indexes for table `ATTENDEE`
 --
-ALTER TABLE `ATTENDENTEE`
+ALTER TABLE `ATTENDEE`
   ADD PRIMARY KEY (`AT_ID`),
   ADD KEY `USERID` (`USERID`),
   ADD KEY `EVENTID` (`EVENTID`);
@@ -205,10 +211,28 @@ ALTER TABLE `VENUE`
 --
 
 --
+-- AUTO_INCREMENT for table `ATTENDEE`
+--
+ALTER TABLE `ATTENDEE`
+  MODIFY `AT_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `CATEGORY`
+--
+ALTER TABLE `CATEGORY`
+  MODIFY `CA_ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `EVENT`
 --
 ALTER TABLE `EVENT`
-  MODIFY `EVENTID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `EVENTID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `SAVED_EVENT_LIST`
+--
+ALTER TABLE `SAVED_EVENT_LIST`
+  MODIFY `LISTID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `USER`
@@ -217,15 +241,21 @@ ALTER TABLE `USER`
   MODIFY `USERID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
+-- AUTO_INCREMENT for table `VENUE`
+--
+ALTER TABLE `VENUE`
+  MODIFY `VENUEID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `ATTENDENTEE`
+-- Constraints for table `ATTENDEE`
 --
-ALTER TABLE `ATTENDENTEE`
-  ADD CONSTRAINT `ATTENDENTEE_ibfk_1` FOREIGN KEY (`USERID`) REFERENCES `USER` (`USERID`),
-  ADD CONSTRAINT `ATTENDENTEE_ibfk_2` FOREIGN KEY (`EVENTID`) REFERENCES `EVENT` (`EVENTID`);
+ALTER TABLE `ATTENDEE`
+  ADD CONSTRAINT `ATTENDEE_ibfk_1` FOREIGN KEY (`USERID`) REFERENCES `USER` (`USERID`),
+  ADD CONSTRAINT `ATTENDEE_ibfk_2` FOREIGN KEY (`EVENTID`) REFERENCES `EVENT` (`EVENTID`);
 
 --
 -- Constraints for table `CATEGORY`
