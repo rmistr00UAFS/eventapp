@@ -31,7 +31,8 @@ const getAllEvents = () => {
 getAllEvents()
 
 const saveEvent = (id) => {
-  console.log(id)
+  const event = events.value.find((e) => e.EVENTID === id)
+  console.log(event)
 }
 </script>
 
