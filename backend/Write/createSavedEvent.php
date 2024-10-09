@@ -52,7 +52,7 @@ if ($result->num_rows > 0) {
 
 
 // Prepare and execute the insert query
-$stmt = $conn->prepare("INSERT INTO `SAVED_EVENT_LIST` ( `ID`, `EVENTID`, `USERID`) VALUES ( ?, ?, ?)");
+$stmt = $conn->prepare("INSERT INTO `SAVED_EVENTS` ( `ID`, `EVENTID`, `USERID`) VALUES ( ?, ?, ?)");
 $stmt->bind_param("iii", $id, $eventid, $userid);
 
 
