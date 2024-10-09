@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 08, 2024 at 05:13 AM
+-- Generation Time: Oct 09, 2024 at 01:18 AM
 -- Server version: 10.11.9-MariaDB
 -- PHP Version: 7.4.33
 
@@ -75,11 +75,31 @@ CREATE TABLE `EVENT` (
 --
 
 INSERT INTO `EVENT` (`EVENTID`, `TITLE`, `INFO`, `DATE`, `TIME`, `ADDRESS`, `COORDINATES`, `CATEGORYID`, `USERID`) VALUES
-(17, 'Art in the Park', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72901', '{\"lat\":35.3704608,\"lng\":-94.4130648}', 302, 30),
-(18, 'Art in the Park', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72901', '{\"lat\":35.3704608,\"lng\":-94.4130648}', 302, 30),
-(19, 'chris', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72901', '{\"lat\":35.3704608,\"lng\":-94.4130648}', 302, 30),
-(20, 'wefwefwefew', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72901', '{\"lat\":35.3704608,\"lng\":-94.4130648}', 302, 30),
-(21, 'Art in the Parkdfdsfsdf', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72904', '{\"lat\":35.4097046,\"lng\":-94.38735199999999}', 302, 30);
+(29, 'Art in the Park', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72901', '{\"lat\":35.3704608,\"lng\":-94.4130648}', 302, 28),
+(30, 'Art in the Park', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72902', '{\"lat\":35.38455039999999,\"lng\":-94.42143759999999}', 302, 28),
+(31, 'qwdqwd', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72903', '{\"lat\":35.3447622,\"lng\":-94.3667907}', 302, 28),
+(32, 'Art in the Park', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72901', '{\"lat\":35.3704608,\"lng\":-94.4130648}', 302, 28),
+(33, 'Art ', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72907', '{\"lat\":35.3843722,\"lng\":-94.42096459999999}', 302, 28),
+(34, 'Art in the Park', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72904', '{\"lat\":35.4097046,\"lng\":-94.38735199999999}', 302, 28);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `SAVED_EVENTS`
+--
+
+CREATE TABLE `SAVED_EVENTS` (
+  `ID` int(11) NOT NULL,
+  `EVENTID` int(11) NOT NULL,
+  `USERID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- Dumping data for table `SAVED_EVENTS`
+--
+
+INSERT INTO `SAVED_EVENTS` (`ID`, `EVENTID`, `USERID`) VALUES
+(1, 30, 28);
 
 -- --------------------------------------------------------
 
@@ -132,7 +152,8 @@ INSERT INTO `USER` (`USERID`, `FIRSTNAME`, `LASTNAME`, `PASSWORD`, `EMAIL`, `PHO
 (10, 'John', 'Doe', '$2y$10$7YpFK.AH6qq7Kvt5zBriXuLLyY0Yi2PLMPpK3bUJRlYuYU7o5F/1S', 'john@example.com', '1234567890', '123 Main St, Springfield'),
 (11, 'John', 'Doe', '$2y$10$TMlQFhKWDtfF8uzcoZp0a.46CkfuLSdFi45E2qNxdlmL8KmFTQ8vi', 'john@example.com', '1234567890', '123 Main St, Springfield'),
 (26, 'ronak', 'Doe', '$2y$10$xz/vYgAywD2Ch5h13VOzoejl70kp5wXpTNIJFDyn6j2uNJW7A8dGK', 'john@example.com', '1234567890', '123 Main St, Springfield'),
-(27, 'sidhgvflsdkfvbdwd', 'sss', '$2y$10$jDCJhip76AxuiB1U7Z.oY.fH9aVX.3xUrBdkk27cfaEOylKjrpUEe', 'john@example.com', '1234567890', '123 Main St, Springfield');
+(27, 'sidhgvflsdkfvbdwd', 'sss', '$2y$10$jDCJhip76AxuiB1U7Z.oY.fH9aVX.3xUrBdkk27cfaEOylKjrpUEe', 'john@example.com', '1234567890', '123 Main St, Springfield'),
+(28, '', 'Doe', '$2y$10$gQiMaHLP8h/bozngJ8TJQ.SR.IT1BeLwpd.rGanux664htDIlclG.', 'xyz@x.com', '', '');
 
 -- --------------------------------------------------------
 
@@ -179,6 +200,12 @@ ALTER TABLE `EVENT`
   ADD KEY `CATEGORYID` (`CATEGORYID`);
 
 --
+-- Indexes for table `SAVED_EVENTS`
+--
+ALTER TABLE `SAVED_EVENTS`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Indexes for table `SAVED_EVENT_LIST`
 --
 ALTER TABLE `SAVED_EVENT_LIST`
@@ -219,7 +246,13 @@ ALTER TABLE `CATEGORY`
 -- AUTO_INCREMENT for table `EVENT`
 --
 ALTER TABLE `EVENT`
-  MODIFY `EVENTID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `EVENTID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+
+--
+-- AUTO_INCREMENT for table `SAVED_EVENTS`
+--
+ALTER TABLE `SAVED_EVENTS`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `SAVED_EVENT_LIST`
@@ -231,7 +264,7 @@ ALTER TABLE `SAVED_EVENT_LIST`
 -- AUTO_INCREMENT for table `USER`
 --
 ALTER TABLE `USER`
-  MODIFY `USERID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `USERID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `VENUE`
