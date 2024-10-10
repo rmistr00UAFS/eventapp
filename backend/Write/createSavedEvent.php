@@ -7,7 +7,7 @@ header("Access-Control-Allow-Headers: Content-Type"); // Allowed headers
 header("Content-Type: application/json"); // Return JSON response
 
 // Get the JSON input
-$dataIN = json_decode(file_get_contents('php://input'), true);
+$_POST = json_decode(file_get_contents('php://input'), true);
 
 // echo json_encode($dataIN);
 
@@ -19,7 +19,7 @@ $dataIN = json_decode(file_get_contents('php://input'), true);
 
 
 
-$id = strval($dataIN['id']);
+// $id = strval($dataIN['id']);
 $eventid = (int) intval($dataIN['eventid']);
 $userid =(int) intval($dataIN['userid']);
 
@@ -34,26 +34,15 @@ $dbname = 'event_app_db'; // Database name
 // Create a connection to the database
 $conn = new mysqli($host, $username, $password_db, $dbname);
 
-// // Check connection
-// if ($conn->connect_error) {
-//     die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
-// }
-//
-// // Check if the email already exists
-// $stmt = $conn->prepare("SELECT * FROM `EVENT` WHERE `TITLE` = ?");
-// $stmt->bind_param("s", $title);
-// $stmt->execute();
-// $result = $stmt->get_result();
-/*
-if ($result->num_rows > 0) {
-    echo json_encode(["error" => "Event already exists."]);
-    exit;
-}*/
 
+if (isset($_POST['userid'], $_POST['eventid']) && !empty($_POST['userid']) && !empty($_POST['eventid'])) {
+    // Sanitize input to prevent SQL Injection
+    $userid = intval($_POST['userid']);   // Convert to integer
+    $eventid = intval($_POST['eventid']); // Convert to integer
 
-// Prepare and execute the insert query
-$stmt = $conn->prepare("INSERT INTO `SAVED_EVENTS` ( `ID`, `EVENTID`, `USERID`) VALUES ( ?, ?, ?)");
-$stmt->bind_param("iii", $id, $eventid, $userid);
+   // Prepare and execute the insert query
+$stmt = $conn->prepare("INSERT INTO `SAVED_EVENTS` ( `EVENTID`, `USERID`) VALUES ( ?, ?)");
+$stmt->bind_param("ii", $eventid, $userid);
 
 
 if ($stmt->execute()) {
@@ -65,5 +54,11 @@ if ($stmt->execute()) {
 // Close the statement and connection
 $stmt->close();
 $conn->close();
+} else {
+    // Return an error if either 'userid' or 'eventid' is missing or empty
+    echo "Error: Both userid and eventid are required and cannot be null.";
+}
+
+
 ?>
 

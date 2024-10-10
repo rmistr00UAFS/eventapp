@@ -9,7 +9,7 @@ header("Content-Type: application/json"); // Return JSON response
 // Get the JSON input
 $dataIN = json_decode(file_get_contents('php://input'), true);
 
-$USERID = (int)$dataIN['userid']; // Event organizer ID
+$USERID = (int)$dataIN['userid'];
 
 
 
@@ -30,7 +30,7 @@ if ($conn->connect_error) {
 
 
 // Prepare and execute the SQL query using a prepared statement
-$stmt = $conn->prepare("SELECT * FROM `SAVED_EVENT_LIST` WHERE `USERID` = ?");
+$stmt = $conn->prepare("SELECT * FROM `SAVED_EVENTS` WHERE `USERID` = ?");
 $stmt->bind_param("i", $USERID);
 $stmt->execute();
 $result = $stmt->get_result();
