@@ -4,12 +4,14 @@ import TheWelcome from '../components/TheWelcome.vue'
 import Events from '../components/Events.vue'
 import { GoogleMap, Marker, InfoWindow } from 'vue3-google-map'
 import { date } from '../functions/date' // Adjust the path as necessary
+import { saveEvent } from '../functions/saveEvent' // Adjust the path as necessary
+import { getSavedEvents } from '../functions/getSavedEvents' // Adjust the path as necessary
 
 const center = { lat: 35.385803, lng: -94.403229 }
 
 let events = ref()
 
-let savedEvents = ref([17])
+let userid = localStorage.getItem('userid')
 
 const getAllEvents = () => {
   const url = 'http://localhost/Read/getEvents.php'
@@ -30,15 +32,26 @@ const getAllEvents = () => {
 
 getAllEvents()
 
-const saveEvent = (id) => {
-  if (savedEvents.value.includes(id)) {
-    // Remove the event ID if it's already in savedEvents
-    savedEvents.value = savedEvents.value.filter((EVENTID) => EVENTID !== id)
-  } else {
-    // Otherwise, add it
-    savedEvents.value.push(id)
-  }
-  console.log(savedEvents)
+let savedEvents = ref([])
+
+getSavedEvents(userid)
+  .then((events) => {
+    console.log(events)
+
+    let ids = []
+    events.events?.forEach((x) => {
+      ids.push(x.EVENTID)
+    })
+    savedEvents.value = ids
+    console.log(savedEvents)
+  })
+  .catch((error) => {
+    console.error('Error fetching saved events:', error)
+  })
+
+async function saveEventForUser(userid, eventid) {
+  savedEvents.value.push(eventid)
+  await saveEvent(userid, eventid)
 }
 
 let viewMode = ref(false)
@@ -57,7 +70,7 @@ let viewMode = ref(false)
           v-for="event in events"
           :key="event.EVENTID"
           class="event"
-          @click="saveEvent(event.EVENTID)"
+          @click="saveEventForUser(userid, event.EVENTID)"
           :class="{ saved: savedEvents.includes(event.EVENTID) }"
         >
           <!-- Individual divs for each event property with their own class -->
@@ -81,7 +94,7 @@ let viewMode = ref(false)
           <div class="title"><strong>Title:</strong> {{ event.TITLE }}</div>
           <div class="date"><strong>Date:</strong> {{ event.DATE }}</div>
           <div class="description"><strong>Description:</strong> {{ event.INFO }}</div>
-          <button @click="saveEvent(event.EVENTID)">save</button>
+          <button @click="saveEvent(userid, event.EVENTID)">save</button>
         </InfoWindow>
       </Marker>
     </GoogleMap>

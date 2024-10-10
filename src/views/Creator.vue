@@ -116,8 +116,10 @@ testing()
 <template>
   <div>
     <div class="savedEvents">
-      events created by user
-      <Events :events="user.savedEvents" />
+      events created by user .events { width: calc(100%); box-shadow: var(--inset-shadow); padding:
+      10px; border-radius: 5px; overflow: scroll; height: 300px; } .event { margin: 20px;
+      box-shadow: var(--shadow); padding: 10px; border-radius: 5px; } .title { color: red; } .today
+      { text-align: center; font-size: 20px; } .saved { background: red; }
     </div>
 
     <button @click="createEvent" v-show="!newEvent">create event</button>
