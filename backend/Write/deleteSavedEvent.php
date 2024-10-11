@@ -5,7 +5,7 @@ header("Access-Control-Allow-Methods: POST, GET, OPTIONS"); // Allowed methods
 header("Access-Control-Allow-Headers: Content-Type"); // Allowed headers
 header("Content-Type: application/json"); // Return JSON response
 
-$_POST = json_decode(file_get_contents('php://input'), true);
+$dataIN = json_decode(file_get_contents('php://input'), true);
 
 // echo json_encode($dataIN);
 
@@ -32,11 +32,6 @@ $dbname = 'event_app_db';
 
 $conn = new mysqli($host, $username, $password_db, $dbname);
 
-
-if (isset($_POST['userid'], $_POST['eventid']) && !empty($_POST['userid']) && !empty($_POST['eventid'])) {
-
-    $userid = intval($_POST['userid']);
-    $eventid = intval($_POST['eventid']);
 
 
 $stmt = $conn->prepare("DELETE FROM `SAVED_EVENTS` WHERE `EVENTID` = ? AND `USERID` = ?");
