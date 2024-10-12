@@ -117,12 +117,4 @@ async function deleteSavedButton(userid, eventid) {
   padding: 10px;
   border-radius: 5px;
 }
-
-.title {
-  color: red;
-}
-
-.saved {
-  background: red;
-}
 </style>

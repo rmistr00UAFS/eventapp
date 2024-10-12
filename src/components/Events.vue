@@ -40,10 +40,6 @@ export default {
   border-radius: 5px;
 }
 
-.title {
-  color: red;
-}
-
 .today {
   text-align: center;
   font-size: 20px;
