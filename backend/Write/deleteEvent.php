@@ -47,9 +47,7 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
-} else {
-    echo "Error: Eventid is required and cannot be null.";
-}
+
 
 
 ?>
