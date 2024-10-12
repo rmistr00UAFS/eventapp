@@ -9,12 +9,6 @@ $dataIN = json_decode(file_get_contents('php://input'), true);
 
 // echo json_encode($dataIN);
 
-// // Ensure the input is valid
-// if (!isset($dataIN['title']) || !isset($dataIN['info']) || !isset($dataIN['date']) || !isset($dataIN['time']) || !isset($dataIN['address']) || !isset($dataIN['coordinates']) || !isset($dataIN['categoryid']) || !isset($dataIN['organizerid'])) {
-//     echo json_encode(["error" => "All fields (title, info, date, time, address, coordinates, categoryid, organizerid) are required."]);
-//     exit;
-// }
-
 
 
 // $id = strval($dataIN['id']);
@@ -46,10 +40,6 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
-} else {
-    echo "Error: Both userid and eventid are required and cannot be null.";
-}
-
 
 ?>
 

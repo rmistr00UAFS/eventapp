@@ -1,16 +1,26 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import TheWelcome from '../components/TheWelcome.vue'
-import Events from '../components/Events.vue'
-import { GoogleMap, Marker, InfoWindow } from 'vue3-google-map'
-import { date } from '../functions/date' // Adjust the path as necessary
-import { saveEvent } from '../functions/saveEvent' // Adjust the path as necessary
-import { getSavedEvents } from '../functions/getSavedEvents' // Adjust the path as necessary
+import { GoogleMap, Marker, CustomMarker, InfoWindow } from 'vue3-google-map'
+import { date } from '../functions/date'
+import { saveEvent } from '../functions/saveEvent'
+import { getSavedEvents } from '../functions/getSavedEvents'
 
-const center = { lat: 35.385803, lng: -94.403229 }
+let center = ref({ lat: 35.385803, lng: -94.403229 })
+let recenter = (event) => {
+  center.value = event.COORDINATES
+  selectedEvent.value = event.EVENTID
+
+  const eventElement = document.getElementById(`event-${event.EVENTID}`)
+  if (eventElement) {
+    eventElement.scrollIntoView({ behavior: 'smooth', block: 'center' }) // Smooth scrolling to the event
+  } else {
+    console.error(`Event with ID ${event.EVENTID} not found`) // Log if event is not found
+  }
+}
+
+let selectedEvent = ref()
 
 let events = ref()
-
 let userid = localStorage.getItem('userid')
 
 const getAllEvents = () => {
@@ -54,49 +64,81 @@ async function saveEventForUser(userid, eventid) {
   await saveEvent(userid, eventid)
 }
 
-let viewMode = ref(false)
+let enableMap = ref(true)
+
+let date = ref()
+
+let selectDate = () => {
+  console.log(date.value)
+}
+
+let getTodayDate = () => {
+  const today = new Date()
+  date.value = today.toISOString().split('T')[0]
+}
+getTodayDate()
 </script>
 
 <template>
   <main>
-    <button class="today">{{ date() }}</button>
+    <input type="date" class="date" value="date" v-model="date" @click="selectDate" />
 
-    <button @click="viewMode = !viewMode">view mode {{ viewMode ? 'map' : 'list' }}</button>
-
-    <div class="todaysEvents" v-show="!viewMode">
-      all events for today
-      <div class="events">
+    <div class="eventsContainer">
+      All events for today
+      <div class="allEvents">
         <div
+          :id="'event-' + event.EVENTID"
           v-for="event in events"
           :key="event.EVENTID"
+          @click="recenter(event)"
           class="event"
-          @click="saveEventForUser(userid, event.EVENTID)"
-          :class="{ saved: savedEvents.includes(event.EVENTID) }"
+          :class="{ selectedEvent: selectedEvent === event.EVENTID }"
         >
           <!-- Individual divs for each event property with their own class -->
-          <div class="title"><strong>Title:</strong> {{ event.TITLE }}</div>
-          <div class="date"><strong>Date:</strong> {{ event.DATE }}</div>
-          <div class="location"><strong>Location:</strong> {{ event.LOCATION }}</div>
-          <div class="description"><strong>Description:</strong> {{ event.INFO }}</div>
+          <div class="title">{{ event.TITLE }}</div>
+          <div class="location">{{ event.LOCATION }}</div>
+          <div class="description">{{ event.INFO }}</div>
+
+          <span
+            class="material-icons md-48 bookmarkEvent"
+            @click="saveEventForUser(userid, event.EVENTID)"
+            :style="{ color: savedEvents.includes(event.EVENTID) ? 'var(--green)' : 'black' }"
+          >
+            bookmark
+          </span>
         </div>
       </div>
     </div>
 
     <GoogleMap
-      v-show="viewMode"
       class="map"
       api-key="AIzaSyBSPsKVWUUPt6WYOXw1smq-3iiy0X3P59k"
       :center="center"
       :zoom="13"
+      v-show="enableMap"
     >
-      <Marker v-for="(event, i) in events" :key="i" :options="{ position: event.COORDINATES }">
-        <InfoWindow>
-          <div class="title"><strong>Title:</strong> {{ event.TITLE }}</div>
-          <div class="date"><strong>Date:</strong> {{ event.DATE }}</div>
-          <div class="description"><strong>Description:</strong> {{ event.INFO }}</div>
-          <button @click="saveEvent(userid, event.EVENTID)">save</button>
-        </InfoWindow>
-      </Marker>
+      <CustomMarker
+        v-for="(event, i) in events"
+        :key="i"
+        :options="{ position: event.COORDINATES, anchorPoint: 'BOTTOM_CENTER' }"
+      >
+        <div>
+          <div
+            style="text-align: center"
+            class="eventMarker"
+            :class="{ selectedEventMarker: selectedEvent === event.EVENTID }"
+          >
+            <span class="material-icons" @click="recenter(event)"> star </span>
+            <!--  <img
+
+              src="https://vuejs.org/images/logo.png"
+              width="50"
+              height="50"
+              style="margin-top: 8px"
+            />-->
+          </div>
+        </div>
+      </CustomMarker>
     </GoogleMap>
   </main>
 </template>
@@ -105,23 +147,46 @@ let viewMode = ref(false)
 .todaysEvents {
   margin: 20px;
 }
-.today {
+.date {
   margin: 20px;
+  background: var(--theme);
+  border: none;
+  outline: none;
+  color: white;
+  padding: 10px;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  font-size: 20px;
 }
 
 .map {
   height: 100vh;
   width: 100vw;
+  position: fixed;
+  z-index: -100;
+  top: 0;
+  left: 0;
+  transform: scale(1.1);
 }
-
-.events {
-  width: calc(100%);
+.eventsContainer {
+  font-size: 25px;
   box-shadow: var(--inset-shadow);
   padding: 10px;
-  border-radius: 5px;
-
+  border-radius: 20px;
+  height: 400px;
+  width: 400px;
+  position: fixed;
+  z-index: 10;
+  background: var(--light);
+  left: 50px;
+}
+.allEvents {
+  font-size: 15px;
+  height: calc(100% - 30px);
   overflow: scroll;
-  height: 300px;
+  margin: 10px 0;
+  box-shadow: var(--inset-shadow);
+  border-radius: 20px;
 }
 
 .event {
@@ -129,10 +194,17 @@ let viewMode = ref(false)
   box-shadow: var(--shadow);
   padding: 10px;
   border-radius: 5px;
+  position: relative;
 }
-
-.title {
-  color: red;
+.event .title {
+  font-weight: bold;
+  font-size: 20px;
+}
+.bookmarkEvent {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
 }
 
 .today {
@@ -140,7 +212,29 @@ let viewMode = ref(false)
   font-size: 20px;
 }
 
-.saved {
-  background: red;
+.eventMarker {
+  display: block;
+  width: 50px;
+  height: 50px;
+}
+.eventMarker span {
+  color: var(--blue);
+  font-size: 30px;
+  margin: 10px;
+}
+.selectedEvent {
+  background: var(--theme);
+  color: white;
+  transition: 0.3s;
+}
+.selectedEventMarker {
+  background: var(--theme);
+  color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+.selectedEventMarker span {
+  margin: 10px;
+  color: white;
 }
 </style>

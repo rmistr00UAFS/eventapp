@@ -1,3 +1,4 @@
+
 <?php
 
 // Set CORS headers
@@ -5,6 +6,17 @@ header("Access-Control-Allow-Origin: *"); // Allow all origins (change this to a
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS"); // Allowed methods
 header("Access-Control-Allow-Headers: Content-Type"); // Allowed headers
 header("Content-Type: application/json"); // Return JSON response
+
+// Get the JSON input
+$dataIN = json_decode(file_get_contents('php://input'), true);
+
+// echo json_encode($dataIN);
+
+
+$USERID = (int)$dataIN['userid'];
+
+
+
 
 // Database connection parameters
 $host = 'localhost'; // Database host
@@ -20,23 +32,32 @@ if ($conn->connect_error) {
     die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
 }
 
-// Prepare and execute the SQL query to get all saved events
-$stmt = $conn->prepare("SELECT * FROM `SAVED_EVENT_LIST`");
+
+
+$stmt = $conn->prepare("
+    SELECT e.*
+    FROM `EVENT` e
+    INNER JOIN `SAVED_EVENTS` se ON e.EVENTID = se.EVENTID
+    WHERE se.USERID = ?
+");
+
+
+$stmt->bind_param("i", $USERID);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Prepare an array to hold the saved event data
-$saved_events = [];
+
+$events = [];
 
 if ($result) {
     while ($row = $result->fetch_assoc()) {
-        $saved_events[] = $row; // Add each saved event to the array
+        $events[] = $row; // Add each event to the array
     }
 
-    if (!empty($saved_events)) {
-        echo json_encode(["message" => "Saved events retrieved successfully.", "saved_events" => $saved_events]);
+    if (!empty($events)) {
+        echo json_encode(["message" => "Events retrieved successfully.", "events" => $events]);
     } else {
-        echo json_encode(["message" => "No saved events found."]);
+        echo json_encode(["message" => "No events found."]);
     }
 } else {
     echo json_encode(["error" => "SQL error: " . $conn->error]);

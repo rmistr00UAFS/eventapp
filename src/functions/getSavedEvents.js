@@ -1,6 +1,6 @@
 export async function getSavedEvents(userid) {
   try {
-    const response = await fetch('http://localhost/Read/userSavedEvents.php', {
+    const response = await fetch('http://localhost/Read/getSavedEvents.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

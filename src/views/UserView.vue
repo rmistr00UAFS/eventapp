@@ -4,6 +4,7 @@ import { ref, onMounted } from 'vue'
 import Events from '../components/Events.vue'
 
 import { read } from '..function/read'
+import { getSavedEvents } from '../functions/getSavedEvents' // Adjust the path as necessary
 
 //save login to localstorage
 const auth = ref(false)
@@ -27,32 +28,26 @@ const goToRoute = () => {
 //
 const user = ref({
   name: 'john doe',
-  savedEvents: [
-    {
-      id: 1,
-      title: 'Music Concert',
-      date: '2024-10-10',
-      location: 'City Hall',
-      description: 'An evening of classical music featuring local artists.'
-    },
-    {
-      id: 2,
-      title: 'Art Exhibition',
-      date: '2024-11-05',
-      location: 'Art Gallery',
-      description: 'Showcasing contemporary art from various artists.'
-    }
-  ]
+  savedEvents: []
 })
 
-async function testing() {
+getSavedEvents(userid)
+  .then((data) => {
+    user.value.savedEvents = data.events
+  })
+  .catch((error) => {
+    console.error('Error fetching saved events:', error)
+  })
+
+async function deleteSavedButton(userid, eventid) {
+  user.value.savedEvents = user.value.savedEvents.filter((event) => event.EVENTID != eventid)
   try {
-    const response = await fetch('http://localhost/Read/userSavedEvents.php', {
+    const response = await fetch('http://localhost/Write/deleteSavedEvent.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(userid)
+      body: JSON.stringify({ userid, eventid })
     })
 
     // Check if the response is OK (status in the range 200-299)
@@ -68,8 +63,6 @@ async function testing() {
     console.log(error)
   }
 }
-
-testing()
 </script>
 
 <template>
@@ -86,6 +79,7 @@ testing()
           <div class="date"><strong>Date:</strong> {{ event.DATE }}</div>
           <div class="location"><strong>Location:</strong> {{ event.LOCATION }}</div>
           <div class="description"><strong>Description:</strong> {{ event.INFO }}</div>
+          <button @click="deleteSavedButton(userid, event.EVENTID)">delete</button>
         </div>
       </div>
     </div>
@@ -122,13 +116,5 @@ testing()
   box-shadow: var(--shadow);
   padding: 10px;
   border-radius: 5px;
-}
-
-.title {
-  color: red;
-}
-
-.saved {
-  background: red;
 }
 </style>
