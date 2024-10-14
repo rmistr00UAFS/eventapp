@@ -29,7 +29,7 @@ const getAllEvents = () => {
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
-      data.events.map((x) => {
+      data.events?.map((x) => {
         x.COORDINATES = JSON.parse(x.COORDINATES)
       })
 
@@ -60,8 +60,14 @@ getSavedEvents(userid)
   })
 
 async function saveEventForUser(userid, eventid) {
-  savedEvents.value.push(eventid)
-  await saveEvent(userid, eventid)
+  // Check if the eventid already exists in savedEvents.value
+  if (!savedEvents.value.includes(eventid)) {
+    // Only push the eventid if it's not already in the array
+    savedEvents.value.push(eventid)
+    await saveEvent(userid, eventid)
+  } else {
+    console.log(`Event ${eventid} is already saved for this user.`)
+  }
 }
 
 let enableMap = ref(true)
@@ -81,10 +87,10 @@ getTodayDate()
 
 <template>
   <main>
-    <input type="date" class="date" value="date" v-model="date" @click="selectDate" />
-
     <div class="eventsContainer">
       All events for today
+      <input type="date" class="date" value="date" v-model="date" @click="selectDate" />
+
       <div class="allEvents">
         <div
           :id="'event-' + event.EVENTID"
@@ -148,7 +154,6 @@ getTodayDate()
   margin: 20px;
 }
 .date {
-  margin: 20px;
   background: var(--theme);
   border: none;
   outline: none;
@@ -157,6 +162,9 @@ getTodayDate()
   border-radius: 20px;
   box-shadow: var(--shadow);
   font-size: 20px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
 .map {
@@ -170,21 +178,23 @@ getTodayDate()
 }
 .eventsContainer {
   font-size: 25px;
-  box-shadow: var(--inset-shadow);
+  box-shadow: var(--shadow);
   padding: 10px;
   border-radius: 20px;
   height: 400px;
-  width: 400px;
+  width: 500px;
   position: fixed;
   z-index: 10;
   background: var(--light);
-  left: 50px;
+  left: 20px;
+  top: 100px;
 }
 .allEvents {
   font-size: 15px;
-  height: calc(100% - 30px);
+  height: calc(100% - 70px);
   overflow: scroll;
   margin: 10px 0;
+  margin-top: 30px;
   box-shadow: var(--inset-shadow);
   border-radius: 20px;
 }

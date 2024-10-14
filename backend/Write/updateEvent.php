@@ -11,13 +11,9 @@ $dataIN = json_decode(file_get_contents('php://input'), true);
 
 // echo json_encode($dataIN);
 
-// // Ensure the input is valid
-// if (!isset($dataIN['title']) || !isset($dataIN['info']) || !isset($dataIN['date']) || !isset($dataIN['time']) || !isset($dataIN['address']) || !isset($dataIN['coordinates']) || !isset($dataIN['categoryid']) || !isset($dataIN['organizerid'])) {
-//     echo json_encode(["error" => "All fields (title, info, date, time, address, coordinates, categoryid, organizerid) are required."]);
-//     exit;
-// }
 
-$eventid = strval($dataIN['eventid']);
+
+$eventid = intval($dataIN['eventid']);
 $title = strval($dataIN['title']);
 $info = strval($dataIN['info']);
 $date = strval($dataIN['date']);
@@ -54,8 +50,8 @@ if ($result->num_rows > 0) {
 }*/
 
 
-$stmt = $conn->prepare("UPDATE `EVENT` SET `TITLE` = ?, `INFO` = ?, `DATE` = ?, `TIME` = ?, `ADDRESS` = ?, `COORDINATES` = ?, `CATEGORYID` = ?, `ORGANIZERID` = ? WHERE `EVENTID` = ?");
-$stmt->bind_param("ssssssiii", $title, $info, $date, $time, $address, $coordinates, $categoryid, $organizerid, $eventid);
+$stmt = $conn->prepare("UPDATE `EVENT` SET `TITLE` = ?, `INFO` = ?, `DATE` = ?, `TIME` = ?, `ADDRESS` = ?, `COORDINATES` = ?, `CATEGORYID` = ?, `USERID` = ? WHERE `EVENTID` = ?");
+$stmt->bind_param("ssssssiii", $title, $info, $date, $time, $address, $coordinates, $categoryid, $userid, $eventid);
 
 
 if ($stmt->execute()) {
