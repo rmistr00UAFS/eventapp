@@ -7,13 +7,16 @@ import { read } from '..function/read'
 import { getSavedEvents } from '../functions/getSavedEvents'
 
 import { api } from '../functions/api'
+import Login from './LoginView.vue'
 
-//save login to localstorage
-let auth = ref(false)
+import { globalState } from '../functions/data.js'
+
+import Cats from '../components/cats.vue'
+
 let userid = localStorage.getItem('userid')
 if (userid !== null) {
   console.log('user detected so logging in')
-  auth.value = true
+  globalState.auth = true
 }
 
 const user = ref({
@@ -237,14 +240,16 @@ let cancel = () => {
 }
 let logout = () => {
   localStorage.removeItem('userid')
-  auth.value = false
+  globalState.auth = false
 }
 </script>
 
 <template>
-  <div v-if="!auth">login</div>
-  <div v-if="auth">
-    <button @click="logout">logout</button>
+  <div v-if="!globalState.auth">
+    <Login />
+  </div>
+  <div v-if="globalState.auth">
+    <button class="logout" @click="logout">logout</button>
 
     <div class="username">{{ user.name }}</div>
     <div class="savedEvents">
@@ -280,6 +285,7 @@ let logout = () => {
 
     <div v-show="eventForm" class="eventForm">
       <h2>Create Event</h2>
+      <Cats />
       <div>
         <label for="title">title:</label>
         <input id="title" v-model="event.title" type="text" placeholder="Enter event title" />
@@ -364,5 +370,12 @@ let logout = () => {
   border-radius: 20px;
   box-shadow: var(--shadow);
   padding: 20px;
+}
+
+.logout {
+  position: fixed;
+  right: 0;
+  top: 0;
+  margin: 20px;
 }
 </style>

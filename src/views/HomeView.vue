@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { watch, ref } from 'vue'
 import { GoogleMap, Marker, CustomMarker, InfoWindow } from 'vue3-google-map'
 import { date } from '../functions/date'
 import { saveEvent } from '../functions/saveEvent'
 import { getSavedEvents } from '../functions/getSavedEvents'
 import { getAllEventsByDay } from '../functions/getAllEventsByDay'
+import { getCats } from '../functions/getCats'
+
+import Cats from '../components/cats.vue'
+import { globalState } from '../functions/data.js'
 
 let center = ref({ lat: 35.385803, lng: -94.403229 })
 let recenter = (event) => {
@@ -70,6 +74,10 @@ async function saveEventForUser(userid, eventid) {
 }
 
 let enableMap = ref(true)
+
+watch(globalState, (newValue, oldValue) => {
+  console.log('Global value changed from', oldValue, 'to', newValue)
+})
 </script>
 
 <template>
@@ -77,6 +85,8 @@ let enableMap = ref(true)
     <div class="eventsContainer">
       All events for today
       <input type="date" class="date" value="date" v-model="selectedDay" @input="selectDate()" />
+
+      <Cats />
 
       <div class="allEvents">
         <div
