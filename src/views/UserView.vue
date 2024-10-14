@@ -150,7 +150,7 @@ const createEventButton = () => {
 }
 let event = {
   title: 'Art in the Park',
-  date: '2024-09-05',
+  date: '2024-10-15',
   time: '10:00',
   info: 'An open-air art exhibition showcasing local artists.',
   address: 'Fort Smith, AR, 72901',

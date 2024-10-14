@@ -4,6 +4,7 @@ import { GoogleMap, Marker, CustomMarker, InfoWindow } from 'vue3-google-map'
 import { date } from '../functions/date'
 import { saveEvent } from '../functions/saveEvent'
 import { getSavedEvents } from '../functions/getSavedEvents'
+import { getAllEventsByDay } from '../functions/getAllEventsByDay'
 
 let center = ref({ lat: 35.385803, lng: -94.403229 })
 let recenter = (event) => {
@@ -23,37 +24,35 @@ let selectedEvent = ref()
 let events = ref()
 let userid = localStorage.getItem('userid')
 
-const getAllEvents = () => {
-  const url = 'http://localhost/Read/getEvents.php'
+let selectedDay = ref()
 
-  fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      data.events?.map((x) => {
-        x.COORDINATES = JSON.parse(x.COORDINATES)
-      })
-
-      events.value = data.events
-    })
-    .catch((error) => {
-      console.error('Error fetching events:', error)
-    })
+let selectDate = () => {
+  console.log(selectedDay)
+  getAllEventsByDay(selectedDay.value).then((res) => {
+    events.value = res.events
+  })
 }
 
-getAllEvents()
+let getTodayDate = () => {
+  const today = new Date()
+  selectedDay.value = today.toISOString().split('T')[0]
+  console.log(selectedDay)
+
+  getAllEventsByDay(selectedDay.value).then((res) => {
+    events.value = res.events
+  })
+}
+getTodayDate()
 
 let savedEvents = ref([])
 
 getSavedEvents(userid)
   .then((events) => {
-    console.log(events)
-
     let ids = []
     events.events?.forEach((x) => {
       ids.push(x.EVENTID)
     })
     savedEvents.value = ids
-    console.log(savedEvents)
   })
   .catch((error) => {
     console.error('Error fetching saved events:', error)
@@ -71,25 +70,13 @@ async function saveEventForUser(userid, eventid) {
 }
 
 let enableMap = ref(true)
-
-let date = ref()
-
-let selectDate = () => {
-  console.log(date.value)
-}
-
-let getTodayDate = () => {
-  const today = new Date()
-  date.value = today.toISOString().split('T')[0]
-}
-getTodayDate()
 </script>
 
 <template>
   <main>
     <div class="eventsContainer">
       All events for today
-      <input type="date" class="date" value="date" v-model="date" @click="selectDate" />
+      <input type="date" class="date" value="date" v-model="selectedDay" @input="selectDate()" />
 
       <div class="allEvents">
         <div
@@ -135,13 +122,6 @@ getTodayDate()
             :class="{ selectedEventMarker: selectedEvent === event.EVENTID }"
           >
             <span class="material-icons" @click="recenter(event)"> star </span>
-            <!--  <img
-
-              src="https://vuejs.org/images/logo.png"
-              width="50"
-              height="50"
-              style="margin-top: 8px"
-            />-->
           </div>
         </div>
       </CustomMarker>
@@ -224,12 +204,12 @@ getTodayDate()
 
 .eventMarker {
   display: block;
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
 }
 .eventMarker span {
-  color: var(--blue);
-  font-size: 30px;
+  color: var(--red);
+  font-size: 50px;
   margin: 10px;
 }
 .selectedEvent {

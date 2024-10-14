@@ -8,7 +8,7 @@ import { RouterLink, RouterView } from 'vue-router'
     <header>Event.io</header>
     <RouterLink to="/">Home</RouterLink>
     <RouterLink to="/user">User</RouterLink>
-    <!--     <RouterLink to="/test">testing area</RouterLink> -->
+    <RouterLink to="/test">testing area</RouterLink>
 
     <!--         <RouterLink to="/about">About</RouterLink> -->
   </nav>
