@@ -15,13 +15,19 @@ $dbname = 'event_app_db'; // Database name
 // Create a connection to the database
 $conn = new mysqli($host, $username, $password_db, $dbname);
 
+$dataIN = json_decode(file_get_contents('php://input'), true);
+
+
+
 // Check connection
 if ($conn->connect_error) {
     die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
 }
 
 // Get the date from the request
-$date = isset($_GET['date']) ? $_GET['date'] : null;
+$date = isset($dataIN['date']) ? $dataIN['date'] : null;
+
+// echo json_encode($date);
 
 if (!$date) {
     echo json_encode(["error" => "No date provided."]);
@@ -29,7 +35,7 @@ if (!$date) {
 }
 
 // Prepare and execute the SQL query to get events for the specific date
-$stmt = $conn->prepare("SELECT * FROM `EVENT` WHERE DATE(`event_date`) = ?");
+$stmt = $conn->prepare("SELECT * FROM `EVENT` WHERE `DATE` = ?");
 $stmt->bind_param('s', $date);
 $stmt->execute();
 $result = $stmt->get_result();

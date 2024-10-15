@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-const router = useRouter()
+
+import { globalState } from '../functions/data.js'
 
 const form = {
   firstname: '',
   lastname: '',
-  password: '', // Note: In practice, you should not expose passwords in JSON responses
+  password: '',
   email: '',
   phone: '',
   address: ''
 }
 
 async function login() {
-  console.log(form)
   try {
     const response = await fetch('http://localhost/Read/userLogin.php', {
       method: 'POST',
@@ -30,10 +30,12 @@ async function login() {
 
     const result = await response.json()
 
-    localStorage.setItem('userid', result.userid)
-    router.push('/user')
+    if (result.userid) {
+      localStorage.setItem('userid', result.userid)
+      globalState.auth = true
+    }
 
-    // console.log(result)
+    console.log(result)
   } catch (error) {
     console.log(error)
   }
@@ -70,6 +72,10 @@ let newUser = ref(false)
 
 const createUser = () => {
   newUser.value = true
+}
+
+let cancel = () => {
+  newUser.value = false
 }
 </script>
 
@@ -117,6 +123,7 @@ const createUser = () => {
         <input type="text" v-model="form.address" id="address" />
       </div>
       <button type="submit">create user</button>
+      <button @click="cancel">cancel</button>
     </form>
   </div>
 </template>

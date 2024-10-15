@@ -26,15 +26,15 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 // Prepare an array to hold the attendee data
-$attendees = [];
+$cats = [];
 
 if ($result) {
     while ($row = $result->fetch_assoc()) {
-        $attendees[] = $row; // Add each attendee to the array
+        $cats[] = $row; // Add each attendee to the array
     }
 
-    if (!empty($attendees)) {
-        echo json_encode(["message" => "Categoryies retrieved successfully.", "attendees" => $attendees]);
+    if (!empty($cats)) {
+        echo json_encode(["message" => "Categoryies retrieved successfully.", "cats" => $cats]);
     } else {
         echo json_encode(["message" => "No category found."]);
     }
