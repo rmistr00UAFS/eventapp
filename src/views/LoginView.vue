@@ -33,6 +33,7 @@ async function login() {
     if (result.userid) {
       localStorage.setItem('userid', result.userid)
       globalState.auth = true
+      globalState.userid = result.userid
     }
 
     console.log(result)

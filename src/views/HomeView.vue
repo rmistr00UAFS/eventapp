@@ -111,6 +111,7 @@ let enableMap = ref(true)
           <div class="description">{{ event.INFO }}</div>
 
           <span
+            v-show="globalState.auth"
             class="material-icons md-48 bookmarkEvent"
             @click="saveEventForUser(userid, event.EVENTID)"
             :style="{ color: savedEvents.includes(event.EVENTID) ? 'var(--green)' : 'black' }"
