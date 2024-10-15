@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import Events from '../components/Events.vue'
 
 import { read } from '..function/read'
@@ -158,7 +158,7 @@ let event = {
   info: 'An open-air art exhibition showcasing local artists.',
   address: 'Fort Smith, AR, 72901',
   coordinates: '{"lat":35.387533,"lng":-94.404191}',
-  categoryid: '302',
+  categoryid: '1',
   userid: '502'
 }
 
@@ -230,6 +230,7 @@ let editForm = (eventid) => {
   currentEventID.value = eventid
 
   let eventFormUpdate = user.value.createdEvents.find((event) => event.EVENTID === eventid)
+
   for (const key in eventFormUpdate) {
     event[key.toLowerCase()] = eventFormUpdate[key]
   }
@@ -242,6 +243,11 @@ let logout = () => {
   localStorage.removeItem('userid')
   globalState.auth = false
 }
+
+watch(globalState, (newValue, oldValue) => {
+  let id = newValue.selectedCat.CA_ID
+  event.categoryid = id
+})
 </script>
 
 <template>
