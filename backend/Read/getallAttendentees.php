@@ -10,7 +10,7 @@ header("Content-Type: application/json"); // Return JSON response
 $dataIN = json_decode(file_get_contents('php://input'), true);
 
 // Extract the USERID from the input data
-$USERID = (int)$dataIN['userid'];
+$EVENTID = (int)$dataIN['eventid'];
 
 // Database connection parameters
 $host = 'localhost'; // Database host
@@ -31,10 +31,10 @@ $stmt = $conn->prepare("
     SELECT a.*
     FROM `ATTENDENTEE` a
     INNER JOIN `SAVED_EVENTS` se ON a.EVENTID = se.EVENTID
-    WHERE se.USERID = ?
+    WHERE se.EVENTID = ?
 ");
 
-$stmt->bind_param("i", $USERID);
+$stmt->bind_param("i", $EVENTID);
 $stmt->execute();
 $result = $stmt->get_result();
 
