@@ -10,6 +10,10 @@ import { getCats } from '../functions/getCats'
 import Cats from '../components/cats.vue'
 import { globalState } from '../functions/data.js'
 
+import attenders from '../components/attenders.vue'
+
+import { getAllAttenders } from '../functions/getAllAttenders'
+
 let center = ref({ lat: 35.385803, lng: -94.403229 })
 let recenter = (event) => {
   center.value = event.COORDINATES
@@ -88,12 +92,24 @@ async function saveEventForUser(userid, eventid) {
 }
 
 let enableMap = ref(true)
+
+let getAtt = (eventid) => {
+  let count = ref(0)
+  getAllAttenders(eventid).then((data) => {
+    let n = data.attendees?.length
+
+    if (n) {
+      count.value = n
+    }
+  })
+  return count
+}
 </script>
 
 <template>
   <main>
     <div class="eventsContainer">
-      All events for today
+      <div class="allEventsTitle">All events for today</div>
       <input type="date" class="date" value="date" v-model="selectedDay" @input="selectDate()" />
 
       <Cats />
@@ -122,6 +138,8 @@ let enableMap = ref(true)
           >
             bookmark
           </span>
+
+          <attenders :count="getAtt(event.EVENTID)" />
         </div>
       </div>
     </div>
@@ -153,6 +171,11 @@ let enableMap = ref(true)
 </template>
 
 <style scoped>
+.allEventsTitle {
+  color: var(--theme);
+  font-size: 25px;
+  text-transform: uppercase;
+}
 .todaysEvents {
   margin: 20px;
 }
@@ -194,7 +217,7 @@ let enableMap = ref(true)
 }
 .allEvents {
   font-size: 15px;
-  height: calc(100% - 120px);
+  height: calc(100% - 140px);
   overflow: scroll;
   margin: 10px 0;
   margin-top: 30px;

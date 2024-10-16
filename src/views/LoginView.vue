@@ -83,14 +83,15 @@ let cancel = () => {
 <template>
   <div v-show="!newUser">
     <button @click="createUser">signup</button>
-    login in
-    <div>
-      <label for="password">Password:</label>
-      <input type="password" v-model="form.password" id="password" />
-    </div>
-    <div>
-      <label for="email">Email:</label>
-      <input type="email" v-model="form.email" id="email" />
+    <div class="login">
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" v-model="form.password" id="password" />
+      </div>
+      <div>
+        <label for="email">Email:</label>
+        <input type="email" v-model="form.email" id="email" />
+      </div>
     </div>
 
     <button @click="login">login</button>
@@ -128,3 +129,11 @@ let cancel = () => {
     </form>
   </div>
 </template>
+
+<style scoped>
+.login {
+  margin: 20px;
+  box-shadow: var(--shadow);
+  max-width: 300px;
+}
+</style>

@@ -20,7 +20,7 @@ let selectCat = () => {
 
 <template>
   <div class="cats">
-    filter by category
+    Filter by category
     <select v-model="cat" class="catTypes" @change="selectCat">
       <option :value="null" selected></option>
 
@@ -33,7 +33,8 @@ let selectCat = () => {
 
 <style scoped>
 .cats {
-  margin: 20px;
+  margin-top: 30px;
+  color: var(--theme);
 }
 .catType {
   display: inline-block;
