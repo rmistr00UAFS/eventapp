@@ -223,8 +223,9 @@ let getAtt = (eventid) => {
   z-index: 10;
   background: var(--light);
   left: 20px;
-  top: 100px;
+  top: 80px;
   bottom: 20px;
+  height: calc(100% - 160px);
   border: 5px solid var(--theme);
 }
 .allEvents {

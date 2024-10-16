@@ -272,20 +272,21 @@ watch(globalState, (newValue, oldValue) => {
     <div class="savedEvents">
       <div class="events">
         <div class="events-title">Upcoming events</div>
+        <div class="eventsContainer">
+          <div v-for="event in user.savedEvents" :key="event.EVENTID" class="event">
+            <div class="title">{{ event.TITLE }}</div>
+            <div class="location">{{ event.LOCATION }}</div>
+            <div class="description">{{ event.INFO }}</div>
+            <div class="time">TIME: {{ event.TIME }}</div>
+            <div class="address">{{ event.ADDRESS }}</div>
 
-        <div v-for="event in user.savedEvents" :key="event.EVENTID" class="event">
-          <div class="title">{{ event.TITLE }}</div>
-          <div class="location">{{ event.LOCATION }}</div>
-          <div class="description">{{ event.INFO }}</div>
-          <div class="time">TIME: {{ event.TIME }}</div>
-          <div class="address">{{ event.ADDRESS }}</div>
-
-          <button
-            class="delete-button"
-            @click="deleteSavedEvent(globalState.userid, event.EVENTID)"
-          >
-            delete
-          </button>
+            <button
+              class="delete-button"
+              @click="deleteSavedEvent(globalState.userid, event.EVENTID)"
+            >
+              delete
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -294,54 +295,70 @@ watch(globalState, (newValue, oldValue) => {
       <div class="events">
         <div class="events-title">Created events</div>
         <button class="creator" @click="createEventButton" v-show="!eventForm">Create</button>
+        <div class="eventsContainer">
+          <div v-for="event in user.createdEvents" :key="event.EVENTID" class="event">
+            <div class="title">{{ event.TITLE }}</div>
+            <div class="location">{{ event.LOCATION }}</div>
+            <div class="description">{{ event.INFO }}</div>
+            <div class="time">TIME: {{ event.TIME }}</div>
+            <div class="address">{{ event.ADDRESS }}</div>
 
-        <div v-for="event in user.createdEvents" :key="event.EVENTID" class="event">
-          <!-- Individual divs for each event property with their own class -->
-          <div class="title"><strong>Title:</strong> {{ event.TITLE }}</div>
-          <div class="date"><strong>Date:</strong> {{ event.DATE }}</div>
-          <div class="location"><strong>Location:</strong> {{ event.LOCATION }}</div>
-          <div class="description"><strong>Description:</strong> {{ event.INFO }}</div>
-          <button class="edit-button" @click="editForm(event.EVENTID)">edit</button>
+            <button class="edit-button" @click="editForm(event.EVENTID)">edit</button>
+          </div>
         </div>
       </div>
     </div>
 
     <div v-show="eventForm" class="eventForm">
-      <h2>Create Event</h2>
       <Cats />
       <div>
-        <label for="title">title:</label>
+        <label for="title">title</label>
         <input id="title" v-model="event.title" type="text" placeholder="Enter event title" />
 
-        <label for="date">Date:</label>
+        <label for="date">Date</label>
         <input id="date" v-model="event.date" type="date" />
 
-        <label for="time">Time:</label>
+        <label for="time">Time</label>
         <input id="time" v-model="event.time" type="time" />
 
-        <label for="info">Info:</label>
+        <label for="info">Info</label>
         <textarea id="info" v-model="event.info" placeholder="Enter event information"></textarea>
 
-        <label for="address">Address:</label>
+        <label for="address">Address</label>
         <input id="address" v-model="event.address" type="text" placeholder="Enter event address" />
 
         <div v-show="!editFormState">
-          <button @click="createEvent">submit Event</button>
+          <button class="submit-button" @click="createEvent">submit Event</button>
         </div>
 
         <div v-show="editFormState">
-          <button @click="updateCreatedEvent">update Event</button>
+          <button class="update-button" @click="updateCreatedEvent">update Event</button>
 
           <button class="delete-button" @click="deleteCreatedEvent">delete</button>
         </div>
       </div>
 
-      <button @click="cancel" v-show="eventForm">cancel</button>
+      <button class="cancel-button" @click="cancel" v-show="eventForm">cancel</button>
     </div>
   </div>
 </template>
 
 <style>
+input {
+  border-radius: 10px;
+}
+label {
+  display: block;
+  margin: 10px 0 10px 0;
+  text-transform: uppercase;
+}
+
+.update-button {
+  margin-top: 20px;
+}
+.submit-button {
+  margin-top: 20px;
+}
 .edit-button {
   background: var(--blue);
   position: absolute;
@@ -375,14 +392,14 @@ watch(globalState, (newValue, oldValue) => {
   position: absolute;
   top: 80px;
 
-  width: 300px;
+  width: 400px;
 }
 .createdEvents {
   margin: 20px;
   position: absolute;
   top: 80px;
   right: 50px;
-  width: 300px;
+  width: 400px;
 }
 .creator {
   position: absolute;
@@ -408,10 +425,12 @@ watch(globalState, (newValue, oldValue) => {
   border-radius: 20px;
   position: relative;
   padding-bottom: 30px;
+  background: #d1c4e9;
 }
 .eventForm {
   transition: 0.3s;
   position: fixed;
+  top: 100px;
   left: 0;
   right: 0;
   margin: auto;
@@ -424,8 +443,33 @@ watch(globalState, (newValue, oldValue) => {
 
 .logout {
   position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: 20px auto;
+  background: var(--yellow);
+  color: black;
+}
+
+.eventsContainer {
+  box-shadow: var(--inset-shadow);
+  padding: 10px;
+  border-radius: 20px;
+
+  overflow: scroll;
+  height: calc(100% - 80px);
+  margin-top: 20px;
+}
+
+label {
+  display: block;
+}
+.cancel-button {
+  position: absolute;
   right: 0;
   top: 0;
-  margin: 20px;
+  margin: 10px;
+  background: var(--yellow);
+  color: black;
 }
 </style>
