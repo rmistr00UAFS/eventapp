@@ -10,6 +10,10 @@ import { getCats } from '../functions/getCats'
 import Cats from '../components/cats.vue'
 import { globalState } from '../functions/data.js'
 
+import attenders from '../components/attenders.vue'
+
+import { getAllAttenders } from '../functions/getAllAttenders'
+
 let center = ref({ lat: 35.385803, lng: -94.403229 })
 let recenter = (event) => {
   center.value = event.COORDINATES
@@ -52,8 +56,8 @@ let selectDate = () => {
 
 let getTodayDate = () => {
   const today = new Date()
+  today.setMinutes(today.getMinutes() - today.getTimezoneOffset())
   selectedDay.value = today.toISOString().split('T')[0]
-  console.log(selectedDay)
 
   getAllEventsByDay(selectedDay.value).then((res) => {
     events.value = res.events
@@ -88,17 +92,32 @@ async function saveEventForUser(userid, eventid) {
 }
 
 let enableMap = ref(true)
+
+let getAtt = (eventid) => {
+  let count = ref(0)
+  getAllAttenders(eventid).then((data) => {
+    let n = data.attendees?.length
+
+    if (n) {
+      count.value = n
+    }
+  })
+  return count
+}
 </script>
 
 <template>
   <main>
     <div class="eventsContainer">
-      All events for today
+      <div class="allEventsTitle">All events for today</div>
       <input type="date" class="date" value="date" v-model="selectedDay" @input="selectDate()" />
 
       <Cats />
 
       <div class="allEvents">
+        <div class="no-events" v-if="!filteredEvents || filteredEvents.length === 0">
+          No events for this date...
+        </div>
         <div
           :id="'event-' + event.EVENTID"
           v-for="event in filteredEvents"
@@ -107,11 +126,10 @@ let enableMap = ref(true)
           class="event"
           :class="{ selectedEvent: selectedEvent === event.EVENTID }"
         >
-          <!-- Individual divs for each event property with their own class -->
           <div class="title">{{ event.TITLE }}</div>
           <div class="location">{{ event.LOCATION }}</div>
           <div class="description">{{ event.INFO }}</div>
-          <div class="time">{{ event.TIME }}</div>
+          <div class="time">TIME: {{ event.TIME }}</div>
           <div class="address">{{ event.ADDRESS }}</div>
 
           <span
@@ -122,6 +140,8 @@ let enableMap = ref(true)
           >
             bookmark
           </span>
+
+          <attenders class="counter" :count="getAtt(event.EVENTID)" />
         </div>
       </div>
     </div>
@@ -153,6 +173,20 @@ let enableMap = ref(true)
 </template>
 
 <style scoped>
+.no-events {
+  margin: 20px;
+  font-size: 25px;
+}
+.counter {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.allEventsTitle {
+  color: var(--theme);
+  font-size: 25px;
+  text-transform: uppercase;
+}
 .todaysEvents {
   margin: 20px;
 }
@@ -189,12 +223,14 @@ let enableMap = ref(true)
   z-index: 10;
   background: var(--light);
   left: 20px;
-  top: 100px;
+  top: 80px;
   bottom: 20px;
+  height: calc(100% - 160px);
+  border: 5px solid var(--theme);
 }
 .allEvents {
   font-size: 15px;
-  height: calc(100% - 120px);
+  height: calc(100% - 140px);
   overflow: scroll;
   margin: 10px 0;
   margin-top: 30px;
@@ -206,8 +242,9 @@ let enableMap = ref(true)
   margin: 20px;
   box-shadow: var(--shadow);
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 20px;
   position: relative;
+  padding-bottom: 30px;
 }
 .event .title {
   font-weight: bold;

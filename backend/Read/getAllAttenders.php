@@ -6,6 +6,12 @@ header("Access-Control-Allow-Methods: POST, GET, OPTIONS"); // Allowed methods
 header("Access-Control-Allow-Headers: Content-Type"); // Allowed headers
 header("Content-Type: application/json"); // Return JSON response
 
+// Get the JSON input
+$dataIN = json_decode(file_get_contents('php://input'), true);
+
+// Extract the USERID from the input data
+$EVENTID = (int)$dataIN['eventid'];
+
 // Database connection parameters
 $host = 'localhost'; // Database host
 $username = 'pmaUser'; // Database username
@@ -20,8 +26,12 @@ if ($conn->connect_error) {
     die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
 }
 
-// Prepare and execute the SQL query to get all attendees
-$stmt = $conn->prepare("SELECT * FROM `ATTENDENTEE`");
+// Prepare and execute the SQL query to get attendees based on the user's saved events
+$stmt = $conn->prepare("
+    SELECT * FROM `SAVED_EVENTS` WHERE `EVENTID` = ?
+");
+
+$stmt->bind_param("i", $EVENTID);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -36,7 +46,7 @@ if ($result) {
     if (!empty($attendees)) {
         echo json_encode(["message" => "Attendees retrieved successfully.", "attendees" => $attendees]);
     } else {
-        echo json_encode(["message" => "No attendees found."]);
+        echo json_encode(["message" => "No attendees found for the given user ID."]);
     }
 } else {
     echo json_encode(["error" => "SQL error: " . $conn->error]);
@@ -46,4 +56,5 @@ if ($result) {
 // Close the statement and connection
 $stmt->close();
 $conn->close();
+
 ?>

@@ -82,49 +82,83 @@ let cancel = () => {
 
 <template>
   <div v-show="!newUser">
-    <button @click="createUser">signup</button>
-    login in
-    <div>
-      <label for="password">Password:</label>
-      <input type="password" v-model="form.password" id="password" />
-    </div>
-    <div>
-      <label for="email">Email:</label>
-      <input type="email" v-model="form.email" id="email" />
-    </div>
-
-    <button @click="login">login</button>
-  </div>
-
-  <div v-show="newUser">
-    create user
-    <form @submit.prevent="submitForm">
+    <div class="login">
       <div>
-        <label for="firstname">First Name:</label>
-        <input type="text" v-model="form.firstname" id="firstname" />
-      </div>
-      <div>
-        <label for="lastname">Last Name:</label>
-        <input type="text" v-model="form.lastname" id="lastname" />
-      </div>
-      <div>
-        <label for="password">Password:</label>
-        <input type="password" v-model="form.password" id="password" />
-      </div>
-      <div>
-        <label for="email">Email:</label>
+        <label for="email">Email</label>
         <input type="email" v-model="form.email" id="email" />
       </div>
       <div>
-        <label for="phone">Phone:</label>
+        <label for="password">Password</label>
+        <input type="password" v-model="form.password" id="password" />
+      </div>
+
+      <button class="login-button" @click="login">login</button>
+      <button @click="createUser">signup</button>
+    </div>
+  </div>
+
+  <div v-show="newUser" class="signup">
+    <form @submit.prevent="submitForm">
+      <div>
+        <label for="firstname">First Name</label>
+        <input type="text" v-model="form.firstname" id="firstname" />
+      </div>
+      <div>
+        <label for="lastname">Last Name</label>
+        <input type="text" v-model="form.lastname" id="lastname" />
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input type="password" v-model="form.password" id="password" />
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input type="email" v-model="form.email" id="email" />
+      </div>
+      <div>
+        <label for="phone">Phone</label>
         <input type="tel" v-model="form.phone" id="phone" />
       </div>
       <div>
-        <label for="address">Address:</label>
+        <label for="address">Address</label>
         <input type="text" v-model="form.address" id="address" />
       </div>
-      <button type="submit">create user</button>
+      <button class="create-button" type="submit">create user</button>
       <button @click="cancel">cancel</button>
     </form>
   </div>
 </template>
+
+<style scoped>
+.signup {
+  padding: 20px;
+  border-radius: 20px;
+  margin: 20px;
+  box-shadow: var(--shadow);
+  max-width: 300px;
+}
+input {
+  border-radius: 10px;
+}
+.create-button {
+  margin-top: 20px;
+  margin-right: 20px;
+}
+
+.login-button {
+  margin-top: 20px;
+  margin-right: 20px;
+}
+label {
+  display: block;
+  margin: 10px 0 10px 0;
+  text-transform: uppercase;
+}
+.login {
+  padding: 20px;
+  border-radius: 20px;
+  margin: 20px;
+  box-shadow: var(--shadow);
+  max-width: 300px;
+}
+</style>

@@ -1,9 +1,7 @@
-<script setup lang="ts">
-import Home from './Home.vue'
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <Home />
+  <attenders :count="45" />
 </template>
 
 <style scoped></style>
