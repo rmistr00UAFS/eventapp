@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { getCats } from '../functions/getCats'
-
-getCats()
+import Home from './Home.vue'
 </script>
 
-<template></template>
+<template>
+  <Home />
+</template>
 
 <style scoped></style>

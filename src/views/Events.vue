@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { watch, ref, computed } from 'vue'
-import { GoogleMap, Marker, CustomMarker, InfoWindow } from 'vue3-google-map'
 import { date } from '../functions/date'
 import { saveEvent } from '../functions/saveEvent'
 import { getSavedEvents } from '../functions/getSavedEvents'
@@ -10,84 +9,35 @@ import { getCats } from '../functions/getCats'
 import Cats from '../components/cats.vue'
 import { globalState } from '../functions/data.js'
 
-let center = ref({ lat: 35.385803, lng: -94.403229 })
-let recenter = (event) => {
-  center.value = event.COORDINATES
-  selectedEvent.value = event.EVENTID
-
-  const eventElement = document.getElementById(`event-${event.EVENTID}`)
-  if (eventElement) {
-    eventElement.scrollIntoView({ behavior: 'smooth', block: 'center' }) // Smooth scrolling to the event
-  } else {
-    console.error(`Event with ID ${event.EVENTID} not found`) // Log if event is not found
-  }
-}
-
-let selectedEvent = ref()
-
-let filteredEvents = ref()
-
-watch(globalState, (newValue, oldValue) => {
-  let cat = newValue.selectedCat?.CA_ID
-
-  if (cat) {
-    filteredEvents.value = events.value.filter((event) => event.CATEGORYID == cat)
-  } else {
-    filteredEvents.value = events.value
-  }
-})
-let events = ref()
 let userid = localStorage.getItem('userid')
+
+let eventsSavedByUser = ref([])
+if (userid) {
+  getSavedEvents(userid)
+    .then((events) => {
+      let ids = []
+      events.events?.forEach((x) => {
+        ids.push(x.EVENTID)
+      })
+      eventsSavedByUser.value = ids
+      console.log(eventsSavedByUser)
+    })
+    .catch((error) => {
+      console.error('Error fetching saved events:', error)
+    })
+}
 
 let selectedDay = ref()
 
-let selectDate = () => {
-  console.log(selectedDay)
-  getAllEventsByDay(selectedDay.value).then((res) => {
-    events.value = res.events
-    filteredEvents.value = res.events
-    globalState.selectedCat = null
-  })
-}
-
+let filteredEvents = ref()
 let getTodayDate = () => {
   const today = new Date()
   selectedDay.value = today.toISOString().split('T')[0]
-  console.log(selectedDay)
-
   getAllEventsByDay(selectedDay.value).then((res) => {
-    events.value = res.events
     filteredEvents.value = res.events
   })
 }
 getTodayDate()
-
-let savedEvents = ref([])
-
-getSavedEvents(userid)
-  .then((events) => {
-    let ids = []
-    events.events?.forEach((x) => {
-      ids.push(x.EVENTID)
-    })
-    savedEvents.value = ids
-  })
-  .catch((error) => {
-    console.error('Error fetching saved events:', error)
-  })
-
-async function saveEventForUser(userid, eventid) {
-  // Check if the eventid already exists in savedEvents.value
-  if (!savedEvents.value.includes(eventid)) {
-    // Only push the eventid if it's not already in the array
-    savedEvents.value.push(eventid)
-    await saveEvent(userid, eventid)
-  } else {
-    console.log(`Event ${eventid} is already saved for this user.`)
-  }
-}
-
-let enableMap = ref(true)
 </script>
 
 <template>
@@ -125,30 +75,6 @@ let enableMap = ref(true)
         </div>
       </div>
     </div>
-
-    <GoogleMap
-      class="map"
-      api-key="AIzaSyBSPsKVWUUPt6WYOXw1smq-3iiy0X3P59k"
-      :center="center"
-      :zoom="13"
-      v-show="enableMap"
-    >
-      <CustomMarker
-        v-for="(event, i) in filteredEvents"
-        :key="i"
-        :options="{ position: event.COORDINATES, anchorPoint: 'BOTTOM_CENTER' }"
-      >
-        <div>
-          <div
-            style="text-align: center"
-            class="eventMarker"
-            :class="{ selectedEventMarker: selectedEvent === event.EVENTID }"
-          >
-            <span class="material-icons" @click="recenter(event)"> star </span>
-          </div>
-        </div>
-      </CustomMarker>
-    </GoogleMap>
   </main>
 </template>
 
@@ -170,15 +96,6 @@ let enableMap = ref(true)
   right: 10px;
 }
 
-.map {
-  height: 100vh;
-  width: 100vw;
-  position: fixed;
-  z-index: -100;
-  top: 0;
-  left: 0;
-  transform: scale(1.1);
-}
 .eventsContainer {
   font-size: 25px;
   box-shadow: var(--shadow);
@@ -225,29 +142,9 @@ let enableMap = ref(true)
   font-size: 20px;
 }
 
-.eventMarker {
-  display: block;
-  width: 70px;
-  height: 70px;
-}
-.eventMarker span {
-  color: var(--red);
-  font-size: 50px;
-  margin: 10px;
-}
 .selectedEvent {
   background: var(--theme);
   color: white;
   transition: 0.3s;
-}
-.selectedEventMarker {
-  background: var(--theme);
-  color: white;
-  transition: 0.3s;
-  border-radius: 50%;
-}
-.selectedEventMarker span {
-  margin: 10px;
-  color: white;
 }
 </style>
