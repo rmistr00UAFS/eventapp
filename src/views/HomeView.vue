@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch, ref } from 'vue'
+import { watch, ref, computed } from 'vue'
 import { GoogleMap, Marker, CustomMarker, InfoWindow } from 'vue3-google-map'
 import { date } from '../functions/date'
 import { saveEvent } from '../functions/saveEvent'
@@ -25,6 +25,17 @@ let recenter = (event) => {
 
 let selectedEvent = ref()
 
+let filteredEvents = ref()
+
+watch(globalState, (newValue, oldValue) => {
+  let cat = newValue.selectedCat?.CA_ID
+
+  if (cat) {
+    filteredEvents.value = events.value.filter((event) => event.CATEGORYID == cat)
+  } else {
+    filteredEvents.value = events.value
+  }
+})
 let events = ref()
 let userid = localStorage.getItem('userid')
 
@@ -44,6 +55,7 @@ let getTodayDate = () => {
 
   getAllEventsByDay(selectedDay.value).then((res) => {
     events.value = res.events
+    filteredEvents.value = res.events
   })
 }
 getTodayDate()
@@ -74,10 +86,6 @@ async function saveEventForUser(userid, eventid) {
 }
 
 let enableMap = ref(true)
-
-watch(globalState, (newValue, oldValue) => {
-  console.log('Global value changed from', oldValue, 'to', newValue)
-})
 </script>
 
 <template>
@@ -91,7 +99,7 @@ watch(globalState, (newValue, oldValue) => {
       <div class="allEvents">
         <div
           :id="'event-' + event.EVENTID"
-          v-for="event in events"
+          v-for="event in filteredEvents"
           :key="event.EVENTID"
           @click="recenter(event)"
           class="event"
@@ -103,6 +111,7 @@ watch(globalState, (newValue, oldValue) => {
           <div class="description">{{ event.INFO }}</div>
 
           <span
+            v-show="globalState.auth"
             class="material-icons md-48 bookmarkEvent"
             @click="saveEventForUser(userid, event.EVENTID)"
             :style="{ color: savedEvents.includes(event.EVENTID) ? 'var(--green)' : 'black' }"
@@ -121,7 +130,7 @@ watch(globalState, (newValue, oldValue) => {
       v-show="enableMap"
     >
       <CustomMarker
-        v-for="(event, i) in events"
+        v-for="(event, i) in filteredEvents"
         :key="i"
         :options="{ position: event.COORDINATES, anchorPoint: 'BOTTOM_CENTER' }"
       >

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import Events from '../components/Events.vue'
 
 import { read } from '..function/read'
@@ -13,11 +13,15 @@ import { globalState } from '../functions/data.js'
 
 import Cats from '../components/cats.vue'
 
-let userid = localStorage.getItem('userid')
-if (userid !== null) {
-  console.log('user detected so logging in')
-  globalState.auth = true
+let autoLogin = () => {
+  let userid = localStorage.getItem('userid')
+  if (userid !== null) {
+    console.log('user detected so logging in')
+    globalState.auth = true
+    globalState.userid = userid
+  }
 }
+autoLogin()
 
 const user = ref({
   name: 'john doe',
@@ -25,13 +29,18 @@ const user = ref({
   createdEvents: []
 })
 
-getSavedEvents(userid)
-  .then((data) => {
-    user.value.savedEvents = data.events
+let loadUserEvents = () => {
+  getSavedEvents(globalState.userid)
+    .then((data) => {
+      user.value.savedEvents = data.events
+    })
+    .catch((error) => {
+      console.error('Error fetching saved events:', error)
+    })
+  api(globalState.userid, 'http://localhost/Read/getCreatorEvents.php').then((events) => {
+    user.value.createdEvents = events.events
   })
-  .catch((error) => {
-    console.error('Error fetching saved events:', error)
-  })
+}
 
 async function deleteSavedEvent(userid, eventid) {
   user.value.savedEvents = user.value.savedEvents.filter((event) => event.EVENTID != eventid)
@@ -75,13 +84,13 @@ async function deleteCreatedEvent() {
 
     const result = await response.json()
 
-    api(userid, 'http://localhost/Read/getCreatorEvents.php').then((events) => {
+    api(globalState.userid, 'http://localhost/Read/getCreatorEvents.php').then((events) => {
       user.value.createdEvents = events.events
       editFormState.value = false
       eventForm.value = false
     })
 
-    getSavedEvents(userid)
+    getSavedEvents(globalState.userid)
       .then((data) => {
         user.value.savedEvents = data.events
       })
@@ -96,7 +105,7 @@ async function deleteCreatedEvent() {
 async function updateCreatedEvent() {
   // Set the event ID and user ID
   event.eventid = currentEventID.value
-  event.userid = userid
+  event.userid = globalState.userid
 
   try {
     // Wait for the coordinates to be retrieved
@@ -104,7 +113,7 @@ async function updateCreatedEvent() {
     // Then submit the updated event
     await submitUpdatedEvent()
 
-    getSavedEvents(userid)
+    getSavedEvents(globalState.userid)
       .then((data) => {
         user.value.savedEvents = data.events
       })
@@ -133,7 +142,7 @@ async function submitUpdatedEvent() {
 
     const result = await response.json()
 
-    api(userid, 'http://localhost/Read/getCreatorEvents.php').then((events) => {
+    api(globalState.userid, 'http://localhost/Read/getCreatorEvents.php').then((events) => {
       user.value.createdEvents = events.events
       editFormState.value = false
       eventForm.value = false
@@ -142,10 +151,6 @@ async function submitUpdatedEvent() {
     console.log(error)
   }
 }
-
-api(userid, 'http://localhost/Read/getCreatorEvents.php').then((events) => {
-  user.value.createdEvents = events.events
-})
 
 let eventForm = ref(false)
 const createEventButton = () => {
@@ -158,7 +163,7 @@ let event = {
   info: 'An open-air art exhibition showcasing local artists.',
   address: 'Fort Smith, AR, 72901',
   coordinates: '{"lat":35.387533,"lng":-94.404191}',
-  categoryid: '302',
+  categoryid: '1',
   userid: '502'
 }
 
@@ -177,7 +182,7 @@ async function getCoordinates() {
       event.coordinates = JSON.stringify(location)
 
       // Set the user ID for the event
-      event.userid = userid
+      event.userid = globalState.userid
 
       console.log('Coordinates successfully retrieved:', location)
     } else {
@@ -197,7 +202,7 @@ let createEvent = async () => {
   }
 }
 async function submitEvent() {
-  event.userid = userid
+  event.userid = globalState.userid
 
   try {
     const response = await fetch('http://localhost/Write/createEvent.php', {
@@ -211,7 +216,7 @@ async function submitEvent() {
     const result = await response.json()
 
     if (result) {
-      api(userid, 'http://localhost/Read/getCreatorEvents.php').then((events) => {
+      api(globalState.userid, 'http://localhost/Read/getCreatorEvents.php').then((events) => {
         user.value.createdEvents = events.events
       })
     }
@@ -230,6 +235,7 @@ let editForm = (eventid) => {
   currentEventID.value = eventid
 
   let eventFormUpdate = user.value.createdEvents.find((event) => event.EVENTID === eventid)
+
   for (const key in eventFormUpdate) {
     event[key.toLowerCase()] = eventFormUpdate[key]
   }
@@ -241,7 +247,18 @@ let cancel = () => {
 let logout = () => {
   localStorage.removeItem('userid')
   globalState.auth = false
+  globalState.userid = null
 }
+loadUserEvents()
+watch(globalState, (newValue, oldValue) => {
+  let catID = newValue.selectedCat?.CA_ID
+  let auth = newValue.auth
+  console.log(auth)
+  event.categoryid = catID
+  if (auth) {
+    loadUserEvents()
+  }
+})
 </script>
 
 <template>
@@ -262,7 +279,7 @@ let logout = () => {
           <div class="date"><strong>Date:</strong> {{ event.DATE }}</div>
           <div class="location"><strong>Location:</strong> {{ event.LOCATION }}</div>
           <div class="description"><strong>Description:</strong> {{ event.INFO }}</div>
-          <button @click="deleteSavedEvent(userid, event.EVENTID)">delete</button>
+          <button @click="deleteSavedEvent(globalState.userid, event.EVENTID)">delete</button>
         </div>
       </div>
     </div>
