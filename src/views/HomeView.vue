@@ -56,8 +56,8 @@ let selectDate = () => {
 
 let getTodayDate = () => {
   const today = new Date()
+  today.setMinutes(today.getMinutes() - today.getTimezoneOffset())
   selectedDay.value = today.toISOString().split('T')[0]
-  console.log(selectedDay)
 
   getAllEventsByDay(selectedDay.value).then((res) => {
     events.value = res.events
@@ -115,6 +115,9 @@ let getAtt = (eventid) => {
       <Cats />
 
       <div class="allEvents">
+        <div class="no-events" v-if="!filteredEvents || filteredEvents.length === 0">
+          No events for this date...
+        </div>
         <div
           :id="'event-' + event.EVENTID"
           v-for="event in filteredEvents"
@@ -123,11 +126,10 @@ let getAtt = (eventid) => {
           class="event"
           :class="{ selectedEvent: selectedEvent === event.EVENTID }"
         >
-          <!-- Individual divs for each event property with their own class -->
           <div class="title">{{ event.TITLE }}</div>
           <div class="location">{{ event.LOCATION }}</div>
           <div class="description">{{ event.INFO }}</div>
-          <div class="time">{{ event.TIME }}</div>
+          <div class="time">TIME: {{ event.TIME }}</div>
           <div class="address">{{ event.ADDRESS }}</div>
 
           <span
@@ -139,7 +141,7 @@ let getAtt = (eventid) => {
             bookmark
           </span>
 
-          <attenders :count="getAtt(event.EVENTID)" />
+          <attenders class="counter" :count="getAtt(event.EVENTID)" />
         </div>
       </div>
     </div>
@@ -171,6 +173,15 @@ let getAtt = (eventid) => {
 </template>
 
 <style scoped>
+.no-events {
+  margin: 20px;
+  font-size: 25px;
+}
+.counter {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
 .allEventsTitle {
   color: var(--theme);
   font-size: 25px;
@@ -214,6 +225,7 @@ let getAtt = (eventid) => {
   left: 20px;
   top: 100px;
   bottom: 20px;
+  border: 5px solid var(--theme);
 }
 .allEvents {
   font-size: 15px;
@@ -229,8 +241,9 @@ let getAtt = (eventid) => {
   margin: 20px;
   box-shadow: var(--shadow);
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 20px;
   position: relative;
+  padding-bottom: 30px;
 }
 .event .title {
   font-weight: bold;

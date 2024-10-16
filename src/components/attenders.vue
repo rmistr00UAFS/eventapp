@@ -22,10 +22,9 @@ export default {
 
 <style scoped>
 .counter {
-  box-shadow: var(--shadow);
   display: inline-block;
-  margin: 20px;
-  padding: 10px;
+  margin: 10px;
+
   border-radius: 50%;
 }
 </style>

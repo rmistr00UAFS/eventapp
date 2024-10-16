@@ -267,26 +267,32 @@ watch(globalState, (newValue, oldValue) => {
   </div>
   <div v-if="globalState.auth">
     <button class="logout" @click="logout">logout</button>
-
-    <div class="username">{{ user.name }}</div>
+    <!--
+    <div class="username">{{ user.name }}</div>-->
     <div class="savedEvents">
       <div class="events">
-        Upcoming events
+        <div class="events-title">Upcoming events</div>
 
         <div v-for="event in user.savedEvents" :key="event.EVENTID" class="event">
-          <!-- Individual divs for each event property with their own class -->
-          <div class="title"><strong>Title:</strong> {{ event.TITLE }}</div>
-          <div class="date"><strong>Date:</strong> {{ event.DATE }}</div>
-          <div class="location"><strong>Location:</strong> {{ event.LOCATION }}</div>
-          <div class="description"><strong>Description:</strong> {{ event.INFO }}</div>
-          <button @click="deleteSavedEvent(globalState.userid, event.EVENTID)">delete</button>
+          <div class="title">{{ event.TITLE }}</div>
+          <div class="location">{{ event.LOCATION }}</div>
+          <div class="description">{{ event.INFO }}</div>
+          <div class="time">TIME: {{ event.TIME }}</div>
+          <div class="address">{{ event.ADDRESS }}</div>
+
+          <button
+            class="delete-button"
+            @click="deleteSavedEvent(globalState.userid, event.EVENTID)"
+          >
+            delete
+          </button>
         </div>
       </div>
     </div>
 
     <div class="createdEvents">
       <div class="events">
-        Events created by you
+        <div class="events-title">Created events</div>
         <button class="creator" @click="createEventButton" v-show="!eventForm">Create</button>
 
         <div v-for="event in user.createdEvents" :key="event.EVENTID" class="event">
@@ -295,7 +301,7 @@ watch(globalState, (newValue, oldValue) => {
           <div class="date"><strong>Date:</strong> {{ event.DATE }}</div>
           <div class="location"><strong>Location:</strong> {{ event.LOCATION }}</div>
           <div class="description"><strong>Description:</strong> {{ event.INFO }}</div>
-          <button @click="editForm(event.EVENTID)">edit</button>
+          <button class="edit-button" @click="editForm(event.EVENTID)">edit</button>
         </div>
       </div>
     </div>
@@ -326,7 +332,7 @@ watch(globalState, (newValue, oldValue) => {
         <div v-show="editFormState">
           <button @click="updateCreatedEvent">update Event</button>
 
-          <button @click="deleteCreatedEvent">delete</button>
+          <button class="delete-button" @click="deleteCreatedEvent">delete</button>
         </div>
       </div>
 
@@ -336,6 +342,30 @@ watch(globalState, (newValue, oldValue) => {
 </template>
 
 <style>
+.edit-button {
+  background: var(--blue);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 10px;
+}
+.delete-button {
+  background: var(--red);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 10px;
+}
+.events-title {
+  color: var(--theme);
+  font-size: 25px;
+  text-transform: uppercase;
+}
+
+.event .title {
+  font-weight: bold;
+  font-size: 20px;
+}
 .username {
   margin: 20px;
   text-transform: uppercase;
@@ -343,15 +373,15 @@ watch(globalState, (newValue, oldValue) => {
 .savedEvents {
   margin: 20px;
   position: absolute;
-  top: 100px;
+  top: 80px;
 
   width: 300px;
 }
 .createdEvents {
   margin: 20px;
   position: absolute;
-  top: 100px;
-  right: 40px;
+  top: 80px;
+  right: 50px;
   width: 300px;
 }
 .creator {
@@ -362,6 +392,7 @@ watch(globalState, (newValue, oldValue) => {
 }
 
 .events {
+  border: 5px solid var(--theme);
   width: calc(100%);
   box-shadow: var(--inset-shadow);
   padding: 20px;
@@ -374,7 +405,9 @@ watch(globalState, (newValue, oldValue) => {
   margin: 20px;
   box-shadow: var(--shadow);
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 20px;
+  position: relative;
+  padding-bottom: 30px;
 }
 .eventForm {
   transition: 0.3s;

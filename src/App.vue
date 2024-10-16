@@ -8,7 +8,7 @@ import { RouterLink, RouterView } from 'vue-router'
     <header>Event.io</header>
     <RouterLink to="/">Home</RouterLink>
     <RouterLink to="/user">User</RouterLink>
-    <RouterLink to="/test">testing area</RouterLink>
+    <!--     <RouterLink to="/test">testing area</RouterLink> -->
 
     <!--         <RouterLink to="/about">About</RouterLink> -->
   </nav>
@@ -33,6 +33,7 @@ a {
   padding: 10px;
   transition: 0.3s;
   box-shadow: var(--shadow);
+  text-transform: uppercase;
 }
 
 nav a.router-link-exact-active {
@@ -51,5 +52,6 @@ header {
   left: 0;
   right: 0;
   width: 200px;
+  font-size: 25px;
 }
 </style>
