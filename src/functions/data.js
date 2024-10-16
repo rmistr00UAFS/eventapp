@@ -5,5 +5,7 @@ export const globalState = reactive({
   selectedCat: null,
   userid: null,
   eventid: null,
-  savedEvents: []
+  savedEvents: [],
+  selectedEvent: null,
+  filteredEvents: []
 })
