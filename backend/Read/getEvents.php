@@ -25,12 +25,12 @@ $stmt = $conn->prepare("SELECT * FROM `EVENT`");
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Prepare an array to hold the event data
+
 $events = [];
 
 if ($result) {
     while ($row = $result->fetch_assoc()) {
-        $events[] = $row; // Add each event to the array
+        $events[] = $row;
     }
 
     if (!empty($events)) {
@@ -43,7 +43,6 @@ if ($result) {
     exit;
 }
 
-// Close the statement and connection
 $stmt->close();
 $conn->close();
 ?>

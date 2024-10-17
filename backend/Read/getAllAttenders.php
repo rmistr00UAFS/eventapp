@@ -8,46 +8,45 @@ header("Content-Type: application/json"); // Return JSON response
 
 $dataIN = json_decode(file_get_contents('php://input'), true);
 
-
-$userid =(int)$dataIN['userid'];
-
-
+$EVENTID = (int)$dataIN['eventid'];
 
 $host = 'localhost';
 $username = 'pmaUser';
 $password_db = 'pma';
 $dbname = 'event_app_db';
 
-
 $conn = new mysqli($host, $username, $password_db, $dbname);
 
+if ($conn->connect_error) {
+    die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
+}
 
+$stmt = $conn->prepare("
+    SELECT * FROM `SAVED_EVENTS` WHERE `EVENTID` = ?
+");
 
-$stmt = $conn->prepare("SELECT * FROM `EVENT` WHERE `USERID` = ?");
-$stmt->bind_param("i", $userid);
+$stmt->bind_param("i", $EVENTID);
 $stmt->execute();
 $result = $stmt->get_result();
 
-
-$events = [];
+$attendees = [];
 
 if ($result) {
     while ($row = $result->fetch_assoc()) {
-        $events[] = $row;
+        $attendees[] = $row;
     }
 
-    if (!empty($events)) {
-        echo json_encode(["message" => "Events retrieved successfully.", "events" => $events]);
+    if (!empty($attendees)) {
+        echo json_encode(["message" => "Attendees retrieved successfully.", "attendees" => $attendees]);
     } else {
-        echo json_encode(["message" => "No events found for the specified userid."]);
+        echo json_encode(["message" => "No attendees found for the given user ID."]);
     }
 } else {
     echo json_encode(["error" => "SQL error: " . $conn->error]);
     exit;
 }
 
-
-
 $stmt->close();
 $conn->close();
+
 ?>

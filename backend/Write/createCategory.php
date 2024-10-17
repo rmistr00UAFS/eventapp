@@ -6,7 +6,7 @@ header("Access-Control-Allow-Methods: POST, GET, OPTIONS"); // Allowed methods
 header("Access-Control-Allow-Headers: Content-Type"); // Allowed headers
 header("Content-Type: application/json"); // Return JSON response
 
-// Get the JSON input
+
 $dataIN = json_decode(file_get_contents('php://input'), true);
 
 // echo json_encode($dataIN);
@@ -19,12 +19,11 @@ $eventid = strval($dataIN['eventid']);
 
 
 
-$host = 'localhost'; // Database host
-$username = 'pmaUser'; // Database username
-$password_db = 'pma'; // Database password
-$dbname = 'event_app_db'; // Database name
+$host = 'localhost';
+$username = 'pmaUser';
+$password_db = 'pma';
+$dbname = 'event_app_db';
 
-// Create a connection to the database
 $conn = new mysqli($host, $username, $password_db, $dbname);
 
 $categories = [
@@ -35,7 +34,7 @@ $categories = [
     ['type' => 'Technology', 'name' => 'Tech Conferences', 'eventid' => 5]
 ];
 
-// Loop through the categories and insert each one
+
 foreach ($categories as $category) {
     $stmt = $conn->prepare("INSERT INTO `CATEGORY` (`TYPE`, `NAME`, `EVENTID`) VALUES (?, ?, ?)");
     $stmt->bind_param("ssi", $category['type'], $category['name'], $category['eventid']);
@@ -48,7 +47,6 @@ foreach ($categories as $category) {
 }
 
 
-// Close the statement and connection
 $stmt->close();
 $conn->close();
 ?>

@@ -6,24 +6,22 @@ header("Access-Control-Allow-Methods: POST, GET, OPTIONS"); // Allowed methods
 header("Access-Control-Allow-Headers: Content-Type"); // Allowed headers
 header("Content-Type: application/json"); // Return JSON response
 
-
+// Get the JSON input
 $dataIN = json_decode(file_get_contents('php://input'), true);
 
 // echo json_encode($dataIN);
 
 
 
-
-$at_id = strval($dataIN['at_id']);
-$email = strval($dataIN['email']);
-$phone = strval($dataIN['phone']);
+$eventid = intval($dataIN['eventid']);
+$title = strval($dataIN['title']);
+$info = strval($dataIN['info']);
+$date = strval($dataIN['date']);
+$time = strval($dataIN['time']);
 $address = strval($dataIN['address']);
 $coordinates = strval($dataIN['coordinates']);
-$time = strval($dataIN['time']);
-$date = intval($dataIN['date']);
-$eventid = intval($dataIN['eventid']);
+$categoryid = intval($dataIN['categoryid']);
 $userid = intval($dataIN['userid']);
-
 
 
 
@@ -32,20 +30,22 @@ $username = 'pmaUser';
 $password_db = 'pma';
 $dbname = 'event_app_db';
 
-// Create a connection to the database
 $conn = new mysqli($host, $username, $password_db, $dbname);
 
 
-$stmt = $conn->prepare("INSERT INTO `ATTENDEE` (`AT_ID`, `EMAIL`, `PHONE`, `ADDRESS`, `COORDINATES`, `TIME`, `DATE`, `EVENTID`, `USERID`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("issssssii", $at_id, $email, $phone, $address, $coordinates, $time, $date, $eventid, $userid);
+
+$stmt = $conn->prepare("UPDATE `EVENT` SET `TITLE` = ?, `INFO` = ?, `DATE` = ?, `TIME` = ?, `ADDRESS` = ?, `COORDINATES` = ?, `CATEGORYID` = ?, `USERID` = ? WHERE `EVENTID` = ?");
+$stmt->bind_param("ssssssiii", $title, $info, $date, $time, $address, $coordinates, $categoryid, $userid, $eventid);
 
 
 if ($stmt->execute()) {
-    echo json_encode(["message" => "Attendee created successfully."]);
+    echo json_encode(["message" => "Event updated successfully."]);
 } else {
-    echo json_encode(["error" => "Error creating attendee: " . $stmt->error]);
+    echo json_encode(["error" => "Error updating event: " . $stmt->error]);
 }
+
 
 $stmt->close();
 $conn->close();
 ?>
+

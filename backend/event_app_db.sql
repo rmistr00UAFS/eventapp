@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 08, 2024 at 05:13 AM
+-- Generation Time: Oct 17, 2024 at 04:25 AM
 -- Server version: 10.11.9-MariaDB
 -- PHP Version: 7.4.33
 
@@ -24,24 +24,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ATTENDEE`
---
-
-CREATE TABLE `ATTENDEE` (
-  `AT_ID` int(11) NOT NULL,
-  `EMAIL` varchar(30) DEFAULT NULL,
-  `PHONE` varchar(30) DEFAULT NULL,
-  `ADDRESS` varchar(30) DEFAULT NULL,
-  `COORDINATES` varchar(255) DEFAULT NULL,
-  `TIME` datetime DEFAULT NULL,
-  `DATE` date DEFAULT NULL,
-  `EVENTID` int(11) DEFAULT NULL,
-  `USERID` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `CATEGORY`
 --
 
@@ -51,6 +33,17 @@ CREATE TABLE `CATEGORY` (
   `NAME` varchar(30) DEFAULT NULL,
   `EVENTID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- Dumping data for table `CATEGORY`
+--
+
+INSERT INTO `CATEGORY` (`CA_ID`, `TYPE`, `NAME`, `EVENTID`) VALUES
+(1, 'Conference', 'Tech Conference', 101),
+(2, 'Workshop', 'Coding Bootcamp', 102),
+(3, 'Seminar', 'AI Seminar', 103),
+(4, 'Meetup', 'Developer Meetup', 104),
+(5, 'Webinar', 'Cloud Computing Webinar', 105);
 
 -- --------------------------------------------------------
 
@@ -75,29 +68,32 @@ CREATE TABLE `EVENT` (
 --
 
 INSERT INTO `EVENT` (`EVENTID`, `TITLE`, `INFO`, `DATE`, `TIME`, `ADDRESS`, `COORDINATES`, `CATEGORYID`, `USERID`) VALUES
-(17, 'Art in the Park', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72901', '{\"lat\":35.3704608,\"lng\":-94.4130648}', 302, 30),
-(18, 'Art in the Park', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72901', '{\"lat\":35.3704608,\"lng\":-94.4130648}', 302, 30),
-(19, 'chris', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72901', '{\"lat\":35.3704608,\"lng\":-94.4130648}', 302, 30),
-(20, 'wefwefwefew', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72901', '{\"lat\":35.3704608,\"lng\":-94.4130648}', 302, 30),
-(21, 'Art in the Parkdfdsfsdf', 'An open-air art exhibition showcasing local artists.', '2024-09-05 00:00:00', '10:00:00', 'Fort Smith, AR, 72904', '{\"lat\":35.4097046,\"lng\":-94.38735199999999}', 302, 30);
+(39, 'Art in the Park', 'An open-air art exhibition showcasing local artists.', '2024-10-16 00:00:00', '10:00:00', 'Fort Smith, AR, 72901', '{\"lat\":35.3704608,\"lng\":-94.4130648}', 3, 29),
+(40, 'Art in the Park', 'An open-air art exhibition showcasing local artists.', '2024-10-15 00:00:00', '10:00:00', 'Fort Smith, AR, 72901', '{\"lat\":35.3704608,\"lng\":-94.4130648}', 0, 29),
+(41, 'Art', 'An open-air art exhibition showcasing local artists.', '2024-10-15 00:00:00', '10:00:00', 'Fort Smith, AR, 72901', '{\"lat\":35.3704608,\"lng\":-94.4130648}', 1, 29),
+(42, 'CS Webinar', 'An open-air exhibition showcasing local artists.', '2024-10-17 00:00:00', '10:00:00', 'Fort Smith, AR, 72907', '{\"lat\":35.3843722,\"lng\":-94.42096459999999}', 5, 29);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `SAVED_EVENT_LIST`
+-- Table structure for table `SAVED_EVENTS`
 --
 
-CREATE TABLE `SAVED_EVENT_LIST` (
-  `LISTID` int(11) NOT NULL,
-  `TIME` datetime DEFAULT NULL,
-  `DATE` date DEFAULT NULL,
-  `ADDRESS` varchar(50) DEFAULT NULL,
-  `COORDINATES` varchar(255) DEFAULT NULL,
-  `INFO` varchar(50) DEFAULT NULL,
-  `USERID` int(11) DEFAULT NULL,
-  `EVENTID` int(11) DEFAULT NULL,
-  `TYPE` varchar(30) DEFAULT NULL
+CREATE TABLE `SAVED_EVENTS` (
+  `ID` int(11) NOT NULL,
+  `EVENTID` int(11) NOT NULL,
+  `USERID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+--
+-- Dumping data for table `SAVED_EVENTS`
+--
+
+INSERT INTO `SAVED_EVENTS` (`ID`, `EVENTID`, `USERID`) VALUES
+(1, 30, 28),
+(6, 38, 29),
+(9, 41, 29),
+(13, 42, 29);
 
 -- --------------------------------------------------------
 
@@ -132,37 +128,13 @@ INSERT INTO `USER` (`USERID`, `FIRSTNAME`, `LASTNAME`, `PASSWORD`, `EMAIL`, `PHO
 (10, 'John', 'Doe', '$2y$10$7YpFK.AH6qq7Kvt5zBriXuLLyY0Yi2PLMPpK3bUJRlYuYU7o5F/1S', 'john@example.com', '1234567890', '123 Main St, Springfield'),
 (11, 'John', 'Doe', '$2y$10$TMlQFhKWDtfF8uzcoZp0a.46CkfuLSdFi45E2qNxdlmL8KmFTQ8vi', 'john@example.com', '1234567890', '123 Main St, Springfield'),
 (26, 'ronak', 'Doe', '$2y$10$xz/vYgAywD2Ch5h13VOzoejl70kp5wXpTNIJFDyn6j2uNJW7A8dGK', 'john@example.com', '1234567890', '123 Main St, Springfield'),
-(27, 'sidhgvflsdkfvbdwd', 'sss', '$2y$10$jDCJhip76AxuiB1U7Z.oY.fH9aVX.3xUrBdkk27cfaEOylKjrpUEe', 'john@example.com', '1234567890', '123 Main St, Springfield');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `VENUE`
---
-
-CREATE TABLE `VENUE` (
-  `VENUEID` int(11) NOT NULL,
-  `NAME` varchar(30) DEFAULT NULL,
-  `ADDRESS` varchar(30) DEFAULT NULL,
-  `COORDINATES` varchar(255) DEFAULT NULL,
-  `CITY` varchar(30) DEFAULT NULL,
-  `STATE` varchar(30) DEFAULT NULL,
-  `ZIP` varchar(30) DEFAULT NULL,
-  `CAPACITY` int(11) DEFAULT NULL,
-  `EVENTID` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+(27, 'sidhgvflsdkfvbdwd', 'sss', '$2y$10$jDCJhip76AxuiB1U7Z.oY.fH9aVX.3xUrBdkk27cfaEOylKjrpUEe', 'john@example.com', '1234567890', '123 Main St, Springfield'),
+(28, '', 'Doe', '$2y$10$gQiMaHLP8h/bozngJ8TJQ.SR.IT1BeLwpd.rGanux664htDIlclG.', 'xyz@x.com', '', ''),
+(29, '', 'Doe', '$2y$10$jQcIy2lyv1gKMVGJ3U9NBemIIfcy2lpdWlkV8bVHgx.9./guV/hzO', 'sqs@wdww.com', '', '');
 
 --
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `ATTENDEE`
---
-ALTER TABLE `ATTENDEE`
-  ADD PRIMARY KEY (`AT_ID`),
-  ADD KEY `USERID` (`USERID`),
-  ADD KEY `EVENTID` (`EVENTID`);
 
 --
 -- Indexes for table `CATEGORY`
@@ -179,12 +151,10 @@ ALTER TABLE `EVENT`
   ADD KEY `CATEGORYID` (`CATEGORYID`);
 
 --
--- Indexes for table `SAVED_EVENT_LIST`
+-- Indexes for table `SAVED_EVENTS`
 --
-ALTER TABLE `SAVED_EVENT_LIST`
-  ADD PRIMARY KEY (`LISTID`),
-  ADD KEY `USERID` (`USERID`),
-  ADD KEY `EVENTID` (`EVENTID`);
+ALTER TABLE `SAVED_EVENTS`
+  ADD PRIMARY KEY (`ID`);
 
 --
 -- Indexes for table `USER`
@@ -193,62 +163,36 @@ ALTER TABLE `USER`
   ADD PRIMARY KEY (`USERID`);
 
 --
--- Indexes for table `VENUE`
---
-ALTER TABLE `VENUE`
-  ADD PRIMARY KEY (`VENUEID`),
-  ADD KEY `EVENTID` (`EVENTID`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
-
---
--- AUTO_INCREMENT for table `ATTENDEE`
---
-ALTER TABLE `ATTENDEE`
-  MODIFY `AT_ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `CATEGORY`
 --
 ALTER TABLE `CATEGORY`
-  MODIFY `CA_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `CA_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `EVENT`
 --
 ALTER TABLE `EVENT`
-  MODIFY `EVENTID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `EVENTID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
--- AUTO_INCREMENT for table `SAVED_EVENT_LIST`
+-- AUTO_INCREMENT for table `SAVED_EVENTS`
 --
-ALTER TABLE `SAVED_EVENT_LIST`
-  MODIFY `LISTID` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `SAVED_EVENTS`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `USER`
 --
 ALTER TABLE `USER`
-  MODIFY `USERID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
-
---
--- AUTO_INCREMENT for table `VENUE`
---
-ALTER TABLE `VENUE`
-  MODIFY `VENUEID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `USERID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `ATTENDEE`
---
-ALTER TABLE `ATTENDEE`
-  ADD CONSTRAINT `ATTENDEE_ibfk_1` FOREIGN KEY (`USERID`) REFERENCES `USER` (`USERID`),
-  ADD CONSTRAINT `ATTENDEE_ibfk_2` FOREIGN KEY (`EVENTID`) REFERENCES `EVENT` (`EVENTID`);
 
 --
 -- Constraints for table `CATEGORY`
