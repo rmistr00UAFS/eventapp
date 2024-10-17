@@ -81,6 +81,9 @@ let cancel = () => {
 </script>
 
 <template>
+  <img v-show="!newUser" class="cover-img" src="/login.svg" />
+  <img v-show="newUser" class="cover-img" src="/events.svg" />
+
   <div v-show="!newUser">
     <div class="login">
       <div>
@@ -130,6 +133,13 @@ let cancel = () => {
 </template>
 
 <style scoped>
+.cover-img {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 100px;
+  width: 500px;
+}
 .signup {
   padding: 20px;
   border-radius: 20px;

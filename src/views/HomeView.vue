@@ -129,6 +129,7 @@ let getAtt = (eventid) => {
           <div class="title">{{ event.TITLE }}</div>
           <div class="location">{{ event.LOCATION }}</div>
           <div class="description">{{ event.INFO }}</div>
+          <div class="dateTime">DATE: {{ event.DATE }}</div>
           <div class="time">TIME: {{ event.TIME }}</div>
           <div class="address">{{ event.ADDRESS }}</div>
 

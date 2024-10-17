@@ -244,11 +244,7 @@ let cancel = () => {
   eventForm.value = false
   editFormState.value = false
 }
-let logout = () => {
-  localStorage.removeItem('userid')
-  globalState.auth = false
-  globalState.userid = null
-}
+
 loadUserEvents()
 watch(globalState, (newValue, oldValue) => {
   let catID = newValue.selectedCat?.CA_ID
@@ -266,17 +262,17 @@ watch(globalState, (newValue, oldValue) => {
     <Login />
   </div>
   <div v-if="globalState.auth">
-    <button class="logout" @click="logout">logout</button>
     <!--
     <div class="username">{{ user.name }}</div>-->
     <div class="savedEvents">
       <div class="events">
-        <div class="events-title">Upcoming events</div>
+        <div class="events-title">Saved events</div>
         <div class="eventsContainer">
           <div v-for="event in user.savedEvents" :key="event.EVENTID" class="event">
             <div class="title">{{ event.TITLE }}</div>
             <div class="location">{{ event.LOCATION }}</div>
             <div class="description">{{ event.INFO }}</div>
+            <div class="date">DATE: {{ event.DATE }}</div>
             <div class="time">TIME: {{ event.TIME }}</div>
             <div class="address">{{ event.ADDRESS }}</div>
 
@@ -284,7 +280,7 @@ watch(globalState, (newValue, oldValue) => {
               class="delete-button"
               @click="deleteSavedEvent(globalState.userid, event.EVENTID)"
             >
-              delete
+              remove
             </button>
           </div>
         </div>
@@ -293,13 +289,15 @@ watch(globalState, (newValue, oldValue) => {
 
     <div class="createdEvents">
       <div class="events">
-        <div class="events-title">Created events</div>
+        <div class="events-title">Your created events</div>
         <button class="creator" @click="createEventButton" v-show="!eventForm">Create</button>
         <div class="eventsContainer">
           <div v-for="event in user.createdEvents" :key="event.EVENTID" class="event">
             <div class="title">{{ event.TITLE }}</div>
             <div class="location">{{ event.LOCATION }}</div>
             <div class="description">{{ event.INFO }}</div>
+            <div class="date">DATE: {{ event.DATE }}</div>
+
             <div class="time">TIME: {{ event.TIME }}</div>
             <div class="address">{{ event.ADDRESS }}</div>
 
@@ -411,7 +409,7 @@ label {
 .events {
   border: 5px solid var(--theme);
   width: calc(100%);
-  box-shadow: var(--inset-shadow);
+  box-shadow: var(--shadow);
   padding: 20px;
   border-radius: 20px;
   overflow: scroll;
@@ -439,16 +437,6 @@ label {
   border-radius: 20px;
   box-shadow: var(--shadow);
   padding: 20px;
-}
-
-.logout {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  margin: 20px auto;
-  background: var(--yellow);
-  color: black;
 }
 
 .eventsContainer {
