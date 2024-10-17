@@ -6,27 +6,21 @@ header("Access-Control-Allow-Methods: POST, GET, OPTIONS"); // Allowed methods
 header("Access-Control-Allow-Headers: Content-Type"); // Allowed headers
 header("Content-Type: application/json"); // Return JSON response
 
-// Get the JSON input
 $dataIN = json_decode(file_get_contents('php://input'), true);
 
-// Extract the USERID from the input data
 $EVENTID = (int)$dataIN['eventid'];
 
-// Database connection parameters
-$host = 'localhost'; // Database host
-$username = 'pmaUser'; // Database username
-$password_db = 'pma'; // Database password
-$dbname = 'event_app_db'; // Database name
+$host = 'localhost';
+$username = 'pmaUser';
+$password_db = 'pma';
+$dbname = 'event_app_db';
 
-// Create a connection to the database
 $conn = new mysqli($host, $username, $password_db, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
 }
 
-// Prepare and execute the SQL query to get attendees based on the user's saved events
 $stmt = $conn->prepare("
     SELECT * FROM `SAVED_EVENTS` WHERE `EVENTID` = ?
 ");
@@ -35,12 +29,11 @@ $stmt->bind_param("i", $EVENTID);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Prepare an array to hold the attendee data
 $attendees = [];
 
 if ($result) {
     while ($row = $result->fetch_assoc()) {
-        $attendees[] = $row; // Add each attendee to the array
+        $attendees[] = $row;
     }
 
     if (!empty($attendees)) {
@@ -53,7 +46,6 @@ if ($result) {
     exit;
 }
 
-// Close the statement and connection
 $stmt->close();
 $conn->close();
 
