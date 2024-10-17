@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-// import HelloWorld from './components/HelloWorld.vue'
+import { globalState } from './functions/data.js'
+
+let logout = () => {
+  localStorage.removeItem('userid')
+  globalState.auth = false
+  globalState.userid = null
+}
 </script>
 
 <template>
@@ -8,6 +14,9 @@ import { RouterLink, RouterView } from 'vue-router'
     <header>Event.io</header>
     <RouterLink to="/">Home</RouterLink>
     <RouterLink to="/user">User</RouterLink>
+
+    <button v-if="globalState.auth" class="logout" @click="logout">logout</button>
+
     <!--     <RouterLink to="/test">testing area</RouterLink> -->
 
     <!--         <RouterLink to="/about">About</RouterLink> -->
@@ -17,6 +26,10 @@ import { RouterLink, RouterView } from 'vue-router'
 </template>
 
 <style scoped>
+.logout {
+  background: var(--yellow);
+  color: black;
+}
 nav {
   background: var(--theme);
   box-sizing: border-box;
