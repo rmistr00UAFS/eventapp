@@ -1,5 +1,3 @@
-// utils/dateUtils.js
-
 export function date() {
   const today = new Date()
 

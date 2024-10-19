@@ -34,7 +34,7 @@ let selectCat = () => {
 <style scoped>
 .cats {
   margin-top: 30px;
-  color: var(--theme);
+  /*   color: var(--theme); */
 }
 .catType {
   display: inline-block;

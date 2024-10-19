@@ -27,4 +27,8 @@ export default {
 
   border-radius: 50%;
 }
+
+.counter span {
+  font-size: 30px ;
+}
 </style>

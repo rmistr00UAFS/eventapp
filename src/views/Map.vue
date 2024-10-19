@@ -4,21 +4,26 @@ import { GoogleMap, Marker, CustomMarker, InfoWindow } from 'vue3-google-map'
 
 import { globalState } from '../functions/data.js'
 
+let selectedEvent = ref() //id
+
 let center = ref({ lat: 35.385803, lng: -94.403229 })
 let recenter = (event) => {
-  console.log(event)
-  globalState.selectedEvent = event
-
   center.value = event.COORDINATES
   selectedEvent.value = event.EVENTID
 
-  // const eventElement = document.getElementById(`event-${event.EVENTID}`)
-  // if (eventElement) {
-  //   eventElement.scrollIntoView({ behavior: 'smooth', block: 'center' }) // Smooth scrolling to the event
-  // } else {
-  //   console.error(`Event with ID ${event.EVENTID} not found`) // Log if event is not found
-  // }
+  globalState.selectedEvent = event
+
+  const eventElement = document.getElementById(`event-${event.EVENTID}`)
+  if (eventElement) {
+    eventElement.scrollIntoView({ behavior: 'smooth', block: 'center' }) // Smooth scrolling to the event
+  } else {
+    console.error(`Event with ID ${event.EVENTID} not found`) // Log if event is not found
+  }
 }
+
+watch(globalState, (newValue, oldValue) => {
+  center.value = newValue.selectedEvent.COORDINATES
+})
 
 let enableMap = ref(true)
 </script>
@@ -32,7 +37,7 @@ let enableMap = ref(true)
     v-show="enableMap"
   >
     <CustomMarker
-      v-for="(event, i) in filteredEvents"
+      v-for="(event, i) in globalState.filteredEvents.value"
       :key="i"
       :options="{ position: event.COORDINATES, anchorPoint: 'BOTTOM_CENTER' }"
     >
@@ -40,7 +45,7 @@ let enableMap = ref(true)
         <div
           style="text-align: center"
           class="eventMarker"
-          :class="{ selectedEventMarker: selectedEvent === event.EVENTID }"
+          :class="{ selectedEventMarker: selectedEvent.value === event.EVENTID }"
         >
           <span class="material-icons" @click="recenter(event)"> star </span>
         </div>

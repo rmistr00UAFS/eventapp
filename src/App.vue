@@ -2,6 +2,16 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { globalState } from './functions/data.js'
 
+let autoLogin = () => {
+  let userid = localStorage.getItem('userid')
+  if (userid !== null) {
+    console.log('user detected so logging in')
+    globalState.auth = true
+    globalState.userid = userid
+  }
+}
+autoLogin()
+
 let logout = () => {
   localStorage.removeItem('userid')
   globalState.auth = false
@@ -27,6 +37,14 @@ let logout = () => {
 
 <style scoped>
 .logout {
+  position: absolute;
+  right: 0;
+  display: inline-block;
+  margin: 15px;
+  padding: 10px;
+  transition: 0.3s;
+  box-shadow: var(--shadow);
+  text-transform: uppercase;
   background: var(--yellow);
   color: black;
 }
@@ -44,20 +62,25 @@ a {
   display: inline-block;
   margin: 10px;
   padding: 10px;
+  font-size: 20px;
   transition: 0.3s;
-  box-shadow: var(--shadow);
+  /*   box-shadow: var(--shadow); */
   text-transform: uppercase;
-  background: var(--green);
+  /*   background: var(--green); */
+  color: white;
+  cursor: pointer;
 }
 
 nav a.router-link-exact-active {
-  background: var(--theme);
-  box-shadow: var(--inset-shadow);
+  /*background: var(--theme);
+  box-shadow: var(--inset-shadow);*/
+  color: black;
 }
 
 header {
-  text-align: right;
-  margin: 20px;
+  left: 0;
+  right: 0;
+  margin: 20px auto;
   position: absolute;
   text-transform: uppercase;
   font-size: 20px;
