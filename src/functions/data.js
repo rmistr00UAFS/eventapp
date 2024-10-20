@@ -2,10 +2,19 @@ import { reactive } from 'vue'
 
 export const globalState = reactive({
   auth: false,
+  event: {
+    title: 'Art in the Park',
+    date: '2024-10-20',
+    time: '10:00',
+    info: 'An open-air art exhibition showcasing local artists.',
+    address: 'Fort Smith, AR, 72901',
+    coordinates: '{"lat":35.387533,"lng":-94.404191}',
+    categoryid: '1',
+    userid: '502'
+  },
   selectedCat: null,
   userid: null,
   eventid: null,
-  createdEventID: null,
   savedEvents: [],
   selectedEvent: null,
   createdEvents: [],

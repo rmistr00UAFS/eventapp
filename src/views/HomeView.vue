@@ -131,6 +131,7 @@ let getCatName = (id) => {
       <input type="date" class="date" value="date" v-model="selectedDay" @input="selectDate()" />
 
       <Cats />
+      Filter by Category
 
       <div class="allEvents">
         <div class="no-events" v-if="!filteredEvents || filteredEvents.length === 0">
@@ -166,7 +167,7 @@ let getCatName = (id) => {
 
           <span
             v-show="globalState.auth"
-            class="material-icons md-48 bookmarkEvent"
+            class="material-icons md-48 saveEvent"
             @click="saveEventForUser(userid, event.EVENTID)"
             :style="{ color: savedEvents.includes(event.EVENTID) ? 'var(--red)' : 'black' }"
           >
@@ -258,7 +259,7 @@ let getCatName = (id) => {
 }
 .allEvents {
   font-size: 15px;
-  height: calc(100% - 160px);
+  height: calc(100% - 190px);
   overflow: scroll;
   margin: 10px 0;
   margin-top: 10px;
@@ -278,9 +279,9 @@ let getCatName = (id) => {
   font-weight: bold;
   font-size: 20px;
 }
-.bookmarkEvent {
+.saveEvent {
   position: absolute;
-  top: 10px;
+  top: 5px;
   right: 10px;
   cursor: pointer;
   font-size: 30px;

@@ -37,8 +37,6 @@ getSavedEvents()
           {{ event.ADDRESS }}
         </div>
 
-        <span v-show="globalState.auth" class="material-icons md-48 bookmarkEvent"> favorite </span>
-
         <button class="delete-button" @click="deleteSavedEvent(globalState.userid, event.EVENTID)">
           remove
         </button>

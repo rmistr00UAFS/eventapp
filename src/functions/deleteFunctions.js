@@ -15,38 +15,39 @@ export async function deleteSavedEvent(userid, eventid) {
     }
 
     const result = await response.json()
+    console.log(result)
     getSavedEvents()
-    // console.log(result)
   } catch (error) {
     console.log(error)
   }
 }
 
 export async function deleteCreatedEvent(eventid) {
-  try {
-    const response = await fetch('http://localhost/Write/deleteEvent.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ eventid })
-    })
+  let result = window.confirm('Are you sure you want to delete?')
+  if (result) {
+    try {
+      const response = await fetch('http://localhost/Write/deleteEvent.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ eventid })
+      })
 
-    // Check if the response is OK (status in the range 200-299)
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`)
+      // Check if the response is OK (status in the range 200-299)
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
+
+      const result = await response.json()
+      console.log(result)
+
+      getCreatedEvents()
+    } catch (error) {
+      console.log(error)
     }
-
-    const result = await response.json()
-
-    api(globalState.userid, 'http://localhost/Read/getCreatorEvents.php').then((events) => {
-      user.value.createdEvents = events.events
-      editFormState.value = false
-      eventForm.value = false
-    })
-
-    getCreatedEvents()
-  } catch (error) {
-    console.log(error)
+  } else {
+    // User clicked Cancel
+    console.log('Action cancelled.')
   }
 }

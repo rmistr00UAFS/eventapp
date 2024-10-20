@@ -7,8 +7,6 @@ import { globalState } from '../functions/data.js'
 let catTypes = ref()
 getCats().then((res) => {
   catTypes.value = res.cats
-
-  console.log(catTypes)
 })
 
 let cat = ref(null)
@@ -20,7 +18,6 @@ let selectCat = () => {
 
 <template>
   <div class="cats">
-    Filter by category
     <select v-model="cat" class="catTypes" @change="selectCat">
       <option :value="null" selected></option>
 
