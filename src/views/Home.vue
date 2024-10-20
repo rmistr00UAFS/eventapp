@@ -5,7 +5,7 @@ import Events from './Events.vue'
 
 <template>
   <Events />
-  <!--   <Map /> -->
+  <Map />
 </template>
 
 <style scoped></style>

@@ -1,7 +1,5 @@
 <script setup lang="ts"></script>
 
-<template>
-  <attenders :count="45" />
-</template>
+<template></template>
 
 <style scoped></style>
