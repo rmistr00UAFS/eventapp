@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { globalState } from '../functions/data.js'
+import SavedEvents from '../components/SavedEvents.vue'
 import Login from './LoginView.vue'
-import CreatedEvents from '../components/CreatedEvents.vue'
-import EventForm from '../components/EventForm.vue'
 </script>
 
 <template>
@@ -10,8 +9,7 @@ import EventForm from '../components/EventForm.vue'
     <Login />
   </div>
   <div v-if="globalState.auth">
-    <!--     <CreatedEvents /> -->
-    <EventForm />
+    <SavedEvents />
   </div>
 </template>
 

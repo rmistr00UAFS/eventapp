@@ -231,7 +231,7 @@ let getCatName = (id) => {
   outline: none;
   background: none;
   border-radius: 10px;
-  font-size: 20px;
+  font-size: 25px;
 }
 
 .map {
@@ -252,8 +252,9 @@ let getCatName = (id) => {
   z-index: 10;
   background: var(--light);
   left: 0;
-  top: 50px;
+  top: 70px;
   bottom: 200px;
+  height: calc(100% - 90px);
 }
 .allEvents {
   font-size: 15px;

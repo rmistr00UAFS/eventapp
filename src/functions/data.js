@@ -5,8 +5,10 @@ export const globalState = reactive({
   selectedCat: null,
   userid: null,
   eventid: null,
+  createdEventID: null,
   savedEvents: [],
   selectedEvent: null,
+  createdEvents: [],
   filteredEvents: [],
   center: { lat: 35.385803, lng: -94.403229 },
   cats: [

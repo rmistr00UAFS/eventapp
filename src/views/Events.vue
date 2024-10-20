@@ -150,7 +150,7 @@ let getAtt = (eventid) => {
 </template>
 
 <style scoped>
-.no-events {
+/*.no-events {
   margin: 20px;
   font-size: 25px;
 }
@@ -240,5 +240,5 @@ let getAtt = (eventid) => {
   background: var(--theme);
   color: white;
   transition: 0.3s;
-}
+}*/
 </style>

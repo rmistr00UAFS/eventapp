@@ -16,6 +16,7 @@ let logout = () => {
   localStorage.removeItem('userid')
   globalState.auth = false
   globalState.userid = null
+  window.alert('Have a nice day!')
 }
 </script>
 
@@ -24,6 +25,7 @@ let logout = () => {
     <header>Event.io</header>
     <RouterLink to="/">Home</RouterLink>
     <RouterLink to="/user">User</RouterLink>
+    <RouterLink to="/creator">Creator</RouterLink>
 
     <button v-if="globalState.auth" class="logout" @click="logout">logout</button>
 
