@@ -129,9 +129,9 @@ let getCatName = (id) => {
     <div class="eventsContainer">
       <div class="allEventsTitle">Today's events</div>
       <input type="date" class="date" value="date" v-model="selectedDay" @input="selectDate()" />
+      Filter by Category
 
       <Cats />
-      Filter by Category
 
       <div class="allEvents">
         <div class="no-events" v-if="!filteredEvents || filteredEvents.length === 0">
@@ -233,6 +233,8 @@ let getCatName = (id) => {
   background: none;
   border-radius: 10px;
   font-size: 25px;
+  display: block;
+  margin: 10px 0 10px 0;
 }
 
 .map {
@@ -270,10 +272,11 @@ let getCatName = (id) => {
 .event {
   margin: 20px;
   box-shadow: var(--shadow);
-  padding: 10px;
+  padding: 20px;
   border-radius: 20px;
   position: relative;
   padding-bottom: 30px;
+  background: white;
 }
 .event .title {
   font-weight: bold;

@@ -30,7 +30,6 @@ let selectCat = () => {
 
 <style scoped>
 .cats {
-  margin-top: 30px;
   /*   color: var(--theme); */
 }
 .catType {
