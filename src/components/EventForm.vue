@@ -41,4 +41,24 @@ import Cats from './cats.vue'
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+input {
+  border-radius: 10px;
+  font-size: 20px;
+}
+textarea {
+  font-size: 20px;
+}
+label {
+  display: block;
+  margin: 10px 0 10px 0;
+  text-transform: uppercase;
+}
+#info {
+  height: 200px;
+  border-radius: 20px;
+  padding: 10px;
+  width: 250px;
+  resize: none;
+}
+</style>

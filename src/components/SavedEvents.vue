@@ -41,25 +41,43 @@ getSavedEvents()
           remove
         </button>
       </div>
+      <img v-if="!globalState.savedEvents" class="no-events-img" src="/no-event.svg" />
     </div>
   </div>
 </template>
 
 <style scoped>
+.description {
+  min-height: 50px;
+  max-height: 50px;
+  overflow: scroll;
+  box-shadow: var(--inset-shadow);
+  padding: 10px;
+  margin: 10px 0 10px 0;
+}
+.no-events-img {
+  height: 400px;
+  margin: auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 200px;
+}
 .savedEvents {
   padding: 20px;
+  margin-top: 70px;
+  background: var(--theme);
 }
 
 .events-title {
-  color: var(--theme);
-  font-size: 40px;
+  color: white;
+  font-size: 30px;
   text-transform: uppercase;
 }
 
 .title {
-  color: var(--theme);
-  font-size: 23px;
-  padding: 3px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .description,
@@ -72,30 +90,29 @@ getSavedEvents()
 }
 
 .event {
-  width: 619px;
-  min-height: 250px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  width: 300px;
+  min-height: 300px;
+  background: white;
   border: 1px solid black;
   margin: 20px;
   box-shadow: var(--shadow);
   padding: 20px;
   border-radius: 20px;
   position: relative;
-  display: inline-block;
+  display: inline-table;
 }
 
 .delete-button {
   margin-top: 15px;
   font-size: 18px;
-  background-color: red;
+  background-color: var(--red);
   position: absolute;
   bottom: 10px;
   right: 10px;
 }
 
 .eventsContainer {
+  background: var(--light);
   font-size: 15px;
   height: calc(100vh - 170px);
   overflow: scroll;

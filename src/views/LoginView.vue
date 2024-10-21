@@ -81,58 +81,63 @@ let cancel = () => {
 </script>
 
 <template>
-  <img v-show="!newUser" class="cover-img" src="/login.svg" />
-  <img v-show="newUser" class="cover-img" src="/events.svg" />
+  <div class="login-container">
+    <img v-show="!newUser" class="cover-img" src="/login.svg" />
+    <img v-show="newUser" class="cover-img" src="/events.svg" />
 
-  <div v-show="!newUser">
-    <div class="login">
-      <div>
-        <label for="email">Email</label>
-        <input type="email" v-model="form.email" id="email" />
-      </div>
-      <div>
-        <label for="password">Password</label>
-        <input type="password" v-model="form.password" id="password" />
-      </div>
+    <div v-show="!newUser">
+      <div class="login">
+        <div>
+          <label for="email">Email</label>
+          <input type="email" v-model="form.email" id="email" />
+        </div>
+        <div>
+          <label for="password">Password</label>
+          <input type="password" v-model="form.password" id="password" />
+        </div>
 
-      <button class="login-button" @click="login">login</button>
-      <button @click="createUser">signup</button>
+        <button class="login-button" @click="login">login</button>
+        <button @click="createUser">signup</button>
+      </div>
     </div>
-  </div>
 
-  <div v-show="newUser" class="signup">
-    <form @submit.prevent="submitForm">
-      <div>
-        <label for="firstname">First Name</label>
-        <input type="text" v-model="form.firstname" id="firstname" />
-      </div>
-      <div>
-        <label for="lastname">Last Name</label>
-        <input type="text" v-model="form.lastname" id="lastname" />
-      </div>
-      <div>
-        <label for="password">Password</label>
-        <input type="password" v-model="form.password" id="password" />
-      </div>
-      <div>
-        <label for="email">Email</label>
-        <input type="email" v-model="form.email" id="email" />
-      </div>
-      <div>
-        <label for="phone">Phone</label>
-        <input type="tel" v-model="form.phone" id="phone" />
-      </div>
-      <div>
-        <label for="address">Address</label>
-        <input type="text" v-model="form.address" id="address" />
-      </div>
-      <button class="create-button" type="submit">create user</button>
-      <button @click="cancel">cancel</button>
-    </form>
+    <div v-show="newUser" class="signup">
+      <form @submit.prevent="submitForm">
+        <div>
+          <label for="firstname">First Name</label>
+          <input type="text" v-model="form.firstname" id="firstname" />
+        </div>
+        <div>
+          <label for="lastname">Last Name</label>
+          <input type="text" v-model="form.lastname" id="lastname" />
+        </div>
+        <div>
+          <label for="password">Password</label>
+          <input type="password" v-model="form.password" id="password" />
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input type="email" v-model="form.email" id="email" />
+        </div>
+        <div>
+          <label for="phone">Phone</label>
+          <input type="tel" v-model="form.phone" id="phone" />
+        </div>
+        <div>
+          <label for="address">Address</label>
+          <input type="text" v-model="form.address" id="address" />
+        </div>
+        <button class="create-button" type="submit">create user</button>
+        <button @click="cancel">cancel</button>
+      </form>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.login-container {
+  margin-top: 100px;
+}
 .cover-img {
   position: absolute;
   bottom: 0;
