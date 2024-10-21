@@ -49,9 +49,47 @@ getSavedEvents()
 .savedEvents {
   padding: 20px;
 }
+
+.events-title {
+  color: var(--theme);
+  font-size: 30px;
+  text-transform: uppercase;
+}
+
+.title {
+  color: var(--theme);
+  font-size: 23px;
+  padding: 3px;
+}
+
+.description,
+.category,
+.date,
+.time,
+.address {
+  padding: 5px;
+  font-size: 20px;
+}
+
 .event {
-  display: inline-block;
-  width: 200px;
+  width: 600px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  border: 1px solid black;
+  margin: 20px;
   box-shadow: var(--shadow);
+  padding: 20px;
+  border-radius: 20px;
+  position: relative;
+  display: inline-block;
+  /*   padding-bottom: 30px; */
+}
+
+.delete-button {
+  margin-top: 15px;
+  font-size: 18px;
+  background-color: red;
+  right: 0;
 }
 </style>
