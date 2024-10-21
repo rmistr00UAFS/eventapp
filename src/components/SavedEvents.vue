@@ -52,7 +52,7 @@ getSavedEvents()
 
 .events-title {
   color: var(--theme);
-  font-size: 30px;
+  font-size: 40px;
   text-transform: uppercase;
 }
 
@@ -73,6 +73,7 @@ getSavedEvents()
 
 .event {
   width: 600px;
+  min-height: 250px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -90,6 +91,8 @@ getSavedEvents()
   margin-top: 15px;
   font-size: 18px;
   background-color: red;
-  right: 0;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 </style>
