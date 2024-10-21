@@ -72,7 +72,7 @@ getSavedEvents()
 }
 
 .event {
-  width: 600px;
+  width: 619px;
   min-height: 250px;
   overflow: hidden;
   white-space: nowrap;
@@ -84,7 +84,6 @@ getSavedEvents()
   border-radius: 20px;
   position: relative;
   display: inline-block;
-  /*   padding-bottom: 30px; */
 }
 
 .delete-button {
@@ -94,5 +93,15 @@ getSavedEvents()
   position: absolute;
   bottom: 10px;
   right: 10px;
+}
+
+.eventsContainer {
+  font-size: 15px;
+  height: calc(100% - 190px);
+  overflow: scroll;
+  margin: 10px 0;
+  margin-top: 10px;
+  box-shadow: var(--inset-shadow);
+  border-radius: 0px;
 }
 </style>
