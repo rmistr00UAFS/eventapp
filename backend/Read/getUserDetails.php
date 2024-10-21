@@ -38,6 +38,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 
+
 $user = [];
 
 if ($result) {
@@ -45,10 +46,10 @@ if ($result) {
         $user[] = $row;
     }
 
-    if (!empty($saved_events)) {
-        echo json_encode(["message" => "User data retrieved successfully.", "saved_events" => $user]);
+    if (!empty($user)) {
+        echo json_encode(["message" => "Users retrieved successfully.", "events" => $user]);
     } else {
-        echo json_encode(["message" => "No data found for the specified user."]);
+        echo json_encode(["message" => "No user found."]);
     }
 } else {
     echo json_encode(["error" => "SQL error: " . $conn->error]);
