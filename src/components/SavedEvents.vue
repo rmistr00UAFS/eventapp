@@ -97,7 +97,7 @@ getSavedEvents()
 
 .eventsContainer {
   font-size: 15px;
-  height: calc(100% - 190px);
+  height: calc(100vh - 170px);
   overflow: scroll;
   margin: 10px 0;
   margin-top: 10px;
