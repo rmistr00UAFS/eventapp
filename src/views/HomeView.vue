@@ -122,11 +122,9 @@ let getCatName = (id) => {
       <div class="allEventsTitle">Today's events</div>
       <input type="date" class="date" value="date" v-model="selectedDay" @input="selectDate()" />
 
-      <div v-if="globalState.events">
-        Filter by Category
+      Filter by Category
 
-        <Cats />
-      </div>
+      <Cats />
 
       <div class="allEvents">
         <div
@@ -174,7 +172,7 @@ let getCatName = (id) => {
 
           <attenders class="counter" :count="getAtt(event.EVENTID)" />
         </div>
-        <img v-if="!globalState.createdEvents" class="no-events-img" src="/no-event.svg" />
+        <img class="no-events-img" src="/no-event.svg" />
       </div>
     </div>
 

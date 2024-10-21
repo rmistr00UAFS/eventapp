@@ -108,9 +108,8 @@ let update = (eventid) => {
   text-transform: uppercase;
 }
 .creator {
-  padding: 20px;
   background: var(--theme);
-  margin-top: 70px;
+
   height: 100vh;
 }
 .created-events {
@@ -138,7 +137,9 @@ let update = (eventid) => {
   border-radius: 20px;
   box-shadow: var(--shadow);
   padding: 20px;
-  margin-top: 20px;
+  position: absolute;
+  top: 100px;
+  left: 20px;
 }
 .event {
   width: 300px;

@@ -151,6 +151,7 @@ let cancel = () => {
   margin: 20px;
   box-shadow: var(--shadow);
   max-width: 300px;
+  border: 1px solid black;
 }
 input {
   border-radius: 10px;
@@ -175,5 +176,6 @@ label {
   margin: 20px;
   box-shadow: var(--shadow);
   max-width: 300px;
+  border: 1px solid black;
 }
 </style>
