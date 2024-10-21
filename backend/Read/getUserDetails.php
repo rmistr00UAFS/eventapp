@@ -38,15 +38,17 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 
-$user = null;
+$user = [];
 
 if ($result) {
-    if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $user[] = $row;
+    }
 
-        $user = $result->fetch_assoc();
+    if (!empty($saved_events)) {
+        echo json_encode(["message" => "User data retrieved successfully.", "saved_events" => $user]);
     } else {
-        echo json_encode(["error" => "No user found with that ID."]);
-        exit;
+        echo json_encode(["message" => "No data found for the specified user."]);
     }
 } else {
     echo json_encode(["error" => "SQL error: " . $conn->error]);
@@ -54,12 +56,6 @@ if ($result) {
 }
 
 
-if (password_verify($userID, $user['USERID'])) {
-    echo json_encode(["message" => "User data retrieved successful.", "userid" => $user['USERID']]);
-
-} else {
-    echo json_encode(["error" => "User data not retrieved."]);
-}
 
 
 $stmt->close();
