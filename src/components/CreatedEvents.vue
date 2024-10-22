@@ -124,6 +124,7 @@ let update = (eventid) => {
   box-shadow: var(--inset-shadow);
   height: calc(100% - 160px);
   overflow: scroll;
+  border-radius: 20px;
 }
 .event {
   display: inline-block;
@@ -168,7 +169,7 @@ let update = (eventid) => {
   font-size: 18px;
   background-color: var(--blue);
   position: absolute;
-  bottom: 10px;
+  bottom: 20px;
   right: 10px;
 }
 .title {
@@ -189,10 +190,18 @@ let update = (eventid) => {
   box-shadow: var(--inset-shadow);
   padding: 10px;
   margin: 10px 0 10px 0;
+  border-radius: 10px;
 }
 button {
-  margin-top: 10px;
+  margin-top: 20px;
   margin-right: 10px;
+}
+.submit-button {
+  margin: auto;
+  position: absolute;
+  right: 0;
+  bottom: 20px;
+  left: 0;
 }
 .delete-button {
   background: var(--red);
@@ -200,5 +209,9 @@ button {
 .cancel-button {
   color: black;
   background: var(--yellow);
+}
+.eventForm {
+  position: relative;
+  padding-bottom: 40px;
 }
 </style>

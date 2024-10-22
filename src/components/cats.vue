@@ -10,9 +10,8 @@ let selectCat = (cat) => {
     globalState.selectedCatID = cat.CA_ID
 
     let id = globalState.selectedCatID
-    if (id & (globalState.filteredEvents != null)) {
-      globalState.filteredEvents = globalState.events.filter((event) => event.CATEGORYID == id)
-    }
+
+    globalState.filteredEvents = globalState.events.filter((event) => event.CATEGORYID == id)
   } else {
     globalState.filteredEvents = globalState.events
   }

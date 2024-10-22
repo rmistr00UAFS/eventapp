@@ -5,6 +5,7 @@ let user = ref()
 
 getUserDetails().then((data) => {
   user.value = data
+  console.log(user)
 })
 </script>
 

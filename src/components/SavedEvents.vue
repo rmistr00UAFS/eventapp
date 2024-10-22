@@ -3,12 +3,10 @@ import { globalState } from '../functions/data.js'
 import { timeConvert, getCatName } from '../functions/f.js'
 import { deleteSavedEvent } from '../functions/deleteFunctions.js'
 import { getSavedEvents } from '../functions/readFunctions.js'
-<<<<<<< Updated upstream
+
 import UserName from './UserName.vue'
-=======
 import { date } from '../functions/date.js'
 
->>>>>>> Stashed changes
 getSavedEvents()
 </script>
 
@@ -61,6 +59,7 @@ getSavedEvents()
   box-shadow: var(--inset-shadow);
   padding: 10px;
   margin: 10px 0 10px 0;
+  border-radius: 10px;
 }
 .no-events-img {
   height: 400px;
@@ -126,6 +125,6 @@ getSavedEvents()
   margin: 10px 0;
   margin-top: 10px;
   box-shadow: var(--inset-shadow);
-  border-radius: 0px;
+  border-radius: 20px;
 }
 </style>
