@@ -62,9 +62,9 @@ export async function getUserDetails() {
       throw new Error(`HTTP error! Status: ${response.status}`)
     }
     const result = await response.json()
-    console.log(result)
 
-    globalState.createdEvents = result.events
+    //console.log(result.events[0])
+    return result.events[0]
   } catch (error) {
     console.log(error)
   }
