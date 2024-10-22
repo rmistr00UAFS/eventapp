@@ -3,12 +3,14 @@ import { globalState } from '../functions/data.js'
 import { timeConvert, getCatName } from '../functions/f.js'
 import { deleteSavedEvent } from '../functions/deleteFunctions.js'
 import { getSavedEvents } from '../functions/readFunctions.js'
-
+import UserName from './UserName.vue'
 getSavedEvents()
 </script>
 
 <template>
   <div class="savedEvents">
+    <UserName />
+
     <div class="events-title">Saved events</div>
     <div class="eventsContainer">
       <div v-for="event in globalState.savedEvents" :key="event.EVENTID" class="event">
