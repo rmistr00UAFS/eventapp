@@ -106,6 +106,7 @@ getSavedEvents()
   border-radius: 20px;
   position: relative;
   display: inline-table;
+  padding-bottom: 50px;
 }
 
 .delete-button {
@@ -113,8 +114,8 @@ getSavedEvents()
   font-size: 18px;
   background-color: var(--red);
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  bottom: 20px;
+  right: 20px;
 }
 
 .eventsContainer {

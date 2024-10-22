@@ -153,6 +153,8 @@ let update = (eventid) => {
   padding: 20px;
   border-radius: 20px;
   position: relative;
+  padding-bottom: 50px;
+
   display: inline-table;
 }
 
