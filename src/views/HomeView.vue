@@ -271,7 +271,7 @@ let getCatName = (id) => {
   margin-top: 10px;
   box-shadow: var(--inset-shadow);
   background: var(--light);
-  border-radius: 0px;
+  border-radius: 20px;
 }
 
 .event {
