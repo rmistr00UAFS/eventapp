@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { ref, onMounted, watch } from 'vue'
-import Events from '../components/Events.vue'
+// import Events from '../components/Events.vue'
 
 import { read } from '..function/read'
 import { getSavedEvents } from '../functions/getSavedEvents'
@@ -12,16 +12,6 @@ import Login from './LoginView.vue'
 import { globalState } from '../functions/data.js'
 
 import Cats from '../components/cats.vue'
-
-let autoLogin = () => {
-  let userid = localStorage.getItem('userid')
-  if (userid !== null) {
-    console.log('user detected so logging in')
-    globalState.auth = true
-    globalState.userid = userid
-  }
-}
-autoLogin()
 
 const user = ref({
   name: 'john doe',
@@ -342,6 +332,13 @@ watch(globalState, (newValue, oldValue) => {
 </template>
 
 <style>
+#info {
+  height: 300px;
+  border-radius: 20px;
+  padding: 10px;
+  width: 250px;
+  resize: none;
+}
 input {
   border-radius: 10px;
 }
@@ -423,7 +420,7 @@ label {
   border-radius: 20px;
   position: relative;
   padding-bottom: 30px;
-  background: #d1c4e9;
+  /*   background: #d1c4e9; */
 }
 .eventForm {
   transition: 0.3s;
@@ -442,8 +439,6 @@ label {
 .eventsContainer {
   box-shadow: var(--inset-shadow);
   padding: 10px;
-  border-radius: 20px;
-
   overflow: scroll;
   height: calc(100% - 80px);
   margin-top: 20px;

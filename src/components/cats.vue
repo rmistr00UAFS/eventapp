@@ -4,28 +4,32 @@ import { getCats } from '../functions/getCats'
 
 import { globalState } from '../functions/data.js'
 
-let catTypes = ref()
-getCats().then((res) => {
-  catTypes.value = res.cats
+let selectCat = (cat) => {
+  if (cat) {
+    console.log(cat.TYPE)
+    globalState.selectedCatID = cat.CA_ID
 
-  console.log(catTypes)
-})
+    let id = globalState.selectedCatID
 
-let cat = ref(null)
-
-let selectCat = () => {
-  globalState.selectedCat = cat
+    globalState.filteredEvents = globalState.events.filter((event) => event.CATEGORYID == id)
+  } else {
+    globalState.filteredEvents = globalState.events
+  }
 }
 </script>
 
 <template>
   <div class="cats">
-    Filter by category
-    <select v-model="cat" class="catTypes" @change="selectCat">
-      <option :value="null" selected></option>
+    <select v-model="cat" class="catTypes">
+      <option selected @click="selectCat()"></option>
 
-      <option v-for="catType in catTypes" :key="catType" :value="catType">
-        {{ catType.TYPE }}
+      <option
+        v-for="cat in globalState.cats"
+        :key="cat.TYPE"
+        :value="cat.TYPE"
+        @click="selectCat(cat)"
+      >
+        {{ cat.TYPE }}
       </option>
     </select>
   </div>
@@ -33,8 +37,7 @@ let selectCat = () => {
 
 <style scoped>
 .cats {
-  margin-top: 30px;
-  color: var(--theme);
+  /*   color: var(--theme); */
 }
 .catType {
   display: inline-block;

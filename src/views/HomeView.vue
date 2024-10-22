@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { watch, ref, computed } from 'vue'
 import { GoogleMap, Marker, CustomMarker, InfoWindow } from 'vue3-google-map'
-import { date } from '../functions/date'
 import { saveEvent } from '../functions/saveEvent'
 import { getSavedEvents } from '../functions/getSavedEvents'
 import { getAllEventsByDay } from '../functions/getAllEventsByDay'
@@ -29,17 +28,6 @@ let recenter = (event) => {
 
 let selectedEvent = ref()
 
-let filteredEvents = ref()
-
-watch(globalState, (newValue, oldValue) => {
-  let cat = newValue.selectedCat?.CA_ID
-
-  if (cat) {
-    filteredEvents.value = events.value.filter((event) => event.CATEGORYID == cat)
-  } else {
-    filteredEvents.value = events.value
-  }
-})
 let events = ref()
 let userid = localStorage.getItem('userid')
 
@@ -49,7 +37,9 @@ let selectDate = () => {
   console.log(selectedDay)
   getAllEventsByDay(selectedDay.value).then((res) => {
     events.value = res.events
-    filteredEvents.value = res.events
+    globalState.events = res.events
+    globalState.filteredEvents = res.events
+
     globalState.selectedCat = null
   })
 }
@@ -61,7 +51,8 @@ let getTodayDate = () => {
 
   getAllEventsByDay(selectedDay.value).then((res) => {
     events.value = res.events
-    filteredEvents.value = res.events
+    globalState.events = res.events
+    globalState.filteredEvents = res.events
   })
 }
 getTodayDate()
@@ -104,23 +95,47 @@ let getAtt = (eventid) => {
   })
   return count
 }
+
+let timeConvert = (time) => {
+  const [hours, minutes, seconds] = time.split(':')
+  const date = new Date()
+  date.setHours(hours, minutes, seconds)
+
+  return date
+    .toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true
+    })
+    .toUpperCase() // Convert to "AM" or "PM"
+}
+
+let getCatName = (id) => {
+  const cat = globalState.cats.find((x) => x.CA_ID == id)
+  return cat ? cat.NAME : '?'
+}
 </script>
 
 <template>
   <main>
     <div class="eventsContainer">
-      <div class="allEventsTitle">All events for today</div>
+      <div class="allEventsTitle">Today's events</div>
       <input type="date" class="date" value="date" v-model="selectedDay" @input="selectDate()" />
+
+      Filter by Category
 
       <Cats />
 
       <div class="allEvents">
-        <div class="no-events" v-if="!filteredEvents || filteredEvents.length === 0">
+        <div
+          class="no-events"
+          v-if="!globalState.filteredEvents || globalState.filteredEvents.length === 0"
+        >
           No events for this date...
         </div>
         <div
           :id="'event-' + event.EVENTID"
-          v-for="event in filteredEvents"
+          v-for="event in globalState.filteredEvents"
           :key="event.EVENTID"
           @click="recenter(event)"
           class="event"
@@ -129,21 +144,35 @@ let getAtt = (eventid) => {
           <div class="title">{{ event.TITLE }}</div>
           <div class="location">{{ event.LOCATION }}</div>
           <div class="description">{{ event.INFO }}</div>
-          <div class="dateTime">DATE: {{ event.DATE }}</div>
-          <div class="time">TIME: {{ event.TIME }}</div>
-          <div class="address">{{ event.ADDRESS }}</div>
+
+          <div class="category" v-if="event.CATEGORYID !== 0">
+            <span class="material-icons md-48"> info </span>
+
+            {{ getCatName(event.CATEGORYID) }}
+          </div>
+          <div class="time">
+            <span class="material-icons md-48"> schedule </span>
+
+            {{ timeConvert(event.TIME) }}
+          </div>
+          <div class="address">
+            <span class="material-icons md-48"> public </span>
+
+            {{ event.ADDRESS }}
+          </div>
 
           <span
             v-show="globalState.auth"
-            class="material-icons md-48 bookmarkEvent"
+            class="material-icons md-48 saveEvent"
             @click="saveEventForUser(userid, event.EVENTID)"
-            :style="{ color: savedEvents.includes(event.EVENTID) ? 'var(--green)' : 'black' }"
+            :style="{ color: savedEvents.includes(event.EVENTID) ? 'var(--red)' : 'black' }"
           >
-            bookmark
+            favorite
           </span>
 
           <attenders class="counter" :count="getAtt(event.EVENTID)" />
         </div>
+        <img class="no-events-img" src="/no-event.svg" />
       </div>
     </div>
 
@@ -155,7 +184,7 @@ let getAtt = (eventid) => {
       v-show="enableMap"
     >
       <CustomMarker
-        v-for="(event, i) in filteredEvents"
+        v-for="(event, i) in globalState.filteredEvents"
         :key="i"
         :options="{ position: event.COORDINATES, anchorPoint: 'BOTTOM_CENTER' }"
       >
@@ -174,6 +203,14 @@ let getAtt = (eventid) => {
 </template>
 
 <style scoped>
+.no-events-img {
+  width: calc(100% - 100px);
+  margin: 50px;
+}
+.material-icons {
+  margin-top: 10px;
+  font-size: 30px;
+}
 .no-events {
   margin: 20px;
   font-size: 25px;
@@ -184,25 +221,22 @@ let getAtt = (eventid) => {
   right: 0;
 }
 .allEventsTitle {
-  color: var(--theme);
-  font-size: 25px;
+  font-size: 30px;
   text-transform: uppercase;
+  margin-top: 10px;
 }
 .todaysEvents {
   margin: 20px;
 }
 .date {
-  background: var(--theme);
+  color: white;
   border: none;
   outline: none;
-  color: white;
-  padding: 10px;
-  border-radius: 20px;
-  box-shadow: var(--shadow);
-  font-size: 20px;
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  background: none;
+  border-radius: 10px;
+  font-size: 25px;
+  display: block;
+  margin: 10px 0 10px 0;
 }
 
 .map {
@@ -215,47 +249,51 @@ let getAtt = (eventid) => {
   transform: scale(1.1);
 }
 .eventsContainer {
+  color: white;
   font-size: 25px;
   box-shadow: var(--shadow);
   padding: 10px;
-  border-radius: 20px;
-  width: 500px;
+  width: 400px;
   position: fixed;
   z-index: 10;
-  background: var(--light);
-  left: 20px;
-  top: 80px;
-  bottom: 20px;
-  height: calc(100% - 160px);
-  border: 5px solid var(--theme);
+  background: var(--theme);
+  left: 0;
+  top: 70px;
+  bottom: 200px;
+  height: calc(100% - 90px);
 }
 .allEvents {
+  color: black;
   font-size: 15px;
-  height: calc(100% - 140px);
+  height: calc(100% - 190px);
   overflow: scroll;
   margin: 10px 0;
-  margin-top: 30px;
+  margin-top: 10px;
   box-shadow: var(--inset-shadow);
+  background: var(--light);
   border-radius: 20px;
 }
 
 .event {
   margin: 20px;
   box-shadow: var(--shadow);
-  padding: 10px;
+  border: 1px solid black;
+  padding: 20px;
   border-radius: 20px;
   position: relative;
   padding-bottom: 30px;
+  background: white;
 }
 .event .title {
   font-weight: bold;
   font-size: 20px;
 }
-.bookmarkEvent {
+.saveEvent {
   position: absolute;
-  top: 10px;
+  top: 5px;
   right: 10px;
   cursor: pointer;
+  font-size: 30px;
 }
 
 .today {
@@ -269,7 +307,7 @@ let getAtt = (eventid) => {
   height: 70px;
 }
 .eventMarker span {
-  color: var(--red);
+  color: var(--theme);
   font-size: 50px;
   margin: 10px;
 }
@@ -287,5 +325,8 @@ let getAtt = (eventid) => {
 .selectedEventMarker span {
   margin: 10px;
   color: white;
+}
+.description {
+  max-width: 300px;
 }
 </style>
