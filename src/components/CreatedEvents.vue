@@ -4,6 +4,7 @@ import { timeConvert, getCatName } from '../functions/f.js'
 import { getCreatedEvents } from '../functions/readFunctions.js'
 import { deleteCreatedEvent } from '../functions/deleteFunctions.js'
 import { updateCreatedEvent, submitEvent } from '../functions/writeFunctions.js'
+import { date } from '../functions/date.js'
 
 import { ref } from 'vue'
 
@@ -76,7 +77,7 @@ let update = (eventid) => {
           <div class="date">
             <span class="material-icons md-48"> event </span>
 
-            {{ event.DATE }}
+            {{ date(event.DATE) }}
           </div>
           <div class="time">
             <span class="material-icons md-48"> schedule </span>

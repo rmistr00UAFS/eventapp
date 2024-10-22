@@ -3,7 +3,12 @@ import { globalState } from '../functions/data.js'
 import { timeConvert, getCatName } from '../functions/f.js'
 import { deleteSavedEvent } from '../functions/deleteFunctions.js'
 import { getSavedEvents } from '../functions/readFunctions.js'
+<<<<<<< Updated upstream
 import UserName from './UserName.vue'
+=======
+import { date } from '../functions/date.js'
+
+>>>>>>> Stashed changes
 getSavedEvents()
 </script>
 
@@ -26,7 +31,7 @@ getSavedEvents()
         <div class="date">
           <span class="material-icons md-48"> event </span>
 
-          {{ event.DATE }}
+          {{ date(event.DATE) }}
         </div>
         <div class="time">
           <span class="material-icons md-48"> schedule </span>
