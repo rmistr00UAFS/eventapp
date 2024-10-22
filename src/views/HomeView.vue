@@ -28,17 +28,6 @@ let recenter = (event) => {
 
 let selectedEvent = ref()
 
-let filteredEvents = ref()
-
-watch(globalState, (newValue, oldValue) => {
-  let cat = newValue.selectedCat?.CA_ID
-
-  if (cat) {
-    filteredEvents.value = events.value.filter((event) => event.CATEGORYID == cat)
-  } else {
-    filteredEvents.value = events.value
-  }
-})
 let events = ref()
 let userid = localStorage.getItem('userid')
 
@@ -48,7 +37,9 @@ let selectDate = () => {
   console.log(selectedDay)
   getAllEventsByDay(selectedDay.value).then((res) => {
     events.value = res.events
-    filteredEvents.value = res.events
+    globalState.events = res.events
+    globalState.filteredEvents = res.events
+
     globalState.selectedCat = null
   })
 }
@@ -60,7 +51,8 @@ let getTodayDate = () => {
 
   getAllEventsByDay(selectedDay.value).then((res) => {
     events.value = res.events
-    filteredEvents.value = res.events
+    globalState.events = res.events
+    globalState.filteredEvents = res.events
   })
 }
 getTodayDate()
@@ -129,17 +121,21 @@ let getCatName = (id) => {
     <div class="eventsContainer">
       <div class="allEventsTitle">Today's events</div>
       <input type="date" class="date" value="date" v-model="selectedDay" @input="selectDate()" />
+
       Filter by Category
 
       <Cats />
 
       <div class="allEvents">
-        <div class="no-events" v-if="!filteredEvents || filteredEvents.length === 0">
+        <div
+          class="no-events"
+          v-if="!globalState.filteredEvents || globalState.filteredEvents.length === 0"
+        >
           No events for this date...
         </div>
         <div
           :id="'event-' + event.EVENTID"
-          v-for="event in filteredEvents"
+          v-for="event in globalState.filteredEvents"
           :key="event.EVENTID"
           @click="recenter(event)"
           class="event"
@@ -176,6 +172,7 @@ let getCatName = (id) => {
 
           <attenders class="counter" :count="getAtt(event.EVENTID)" />
         </div>
+        <img class="no-events-img" src="/no-event.svg" />
       </div>
     </div>
 
@@ -187,7 +184,7 @@ let getCatName = (id) => {
       v-show="enableMap"
     >
       <CustomMarker
-        v-for="(event, i) in filteredEvents"
+        v-for="(event, i) in globalState.filteredEvents"
         :key="i"
         :options="{ position: event.COORDINATES, anchorPoint: 'BOTTOM_CENTER' }"
       >
@@ -206,6 +203,10 @@ let getCatName = (id) => {
 </template>
 
 <style scoped>
+.no-events-img {
+  width: calc(100% - 100px);
+  margin: 50px;
+}
 .material-icons {
   margin-top: 10px;
   font-size: 30px;
@@ -220,14 +221,15 @@ let getCatName = (id) => {
   right: 0;
 }
 .allEventsTitle {
-  color: var(--theme);
   font-size: 30px;
   text-transform: uppercase;
+  margin-top: 10px;
 }
 .todaysEvents {
   margin: 20px;
 }
 .date {
+  color: white;
   border: none;
   outline: none;
   background: none;
@@ -247,25 +249,28 @@ let getCatName = (id) => {
   transform: scale(1.1);
 }
 .eventsContainer {
+  color: white;
   font-size: 25px;
   box-shadow: var(--shadow);
   padding: 10px;
   width: 400px;
   position: fixed;
   z-index: 10;
-  background: var(--light);
+  background: var(--theme);
   left: 0;
   top: 70px;
   bottom: 200px;
   height: calc(100% - 90px);
 }
 .allEvents {
+  color: black;
   font-size: 15px;
   height: calc(100% - 190px);
   overflow: scroll;
   margin: 10px 0;
   margin-top: 10px;
   box-shadow: var(--inset-shadow);
+  background: var(--light);
   border-radius: 0px;
 }
 

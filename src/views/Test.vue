@@ -1,5 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { getUserDetails } from '../functions/readFunctions.js'
 
-<template></template>
+getUserDetails()
+</script>
+
+<template>lajdfnkn</template>
 
 <style scoped></style>

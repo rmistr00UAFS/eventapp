@@ -23,8 +23,29 @@ export async function deleteSavedEvent(userid, eventid) {
   }
 }
 
+// export async function resetPassword(email) {
+//   try {
+//     const response = await fetch('http://localhost/Write/resetpassword.php', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify({ email })
+//     })
+//
+//     const result = await response.json()
+//
+//     if (result) {
+//       getCreatedEvents()
+//     }
+//   } catch (error) {
+//     console.log(error)
+//   }
+// }
+
 export async function submitEvent() {
   globalState.event.userid = globalState.userid
+  globalState.event.categoryid = globalState.selectedCatID
 
   try {
     const response = await fetch('http://localhost/Write/createEvent.php', {
@@ -47,8 +68,9 @@ export async function submitEvent() {
 
 export async function updateCreatedEvent(eventid) {
   // Set the event ID and user ID
-  event.eventid = eventid
-  event.userid = globalState.userid
+  globalState.event.eventid = eventid
+  globalState.event.userid = globalState.userid
+  globalState.event.categoryid = globalState.selectedCatID
 
   try {
     // Wait for the coordinates to be retrieved
