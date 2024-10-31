@@ -1,8 +1,7 @@
 <?php
 include_once("config.php");
 require_once("./functions/read.php");
-
-
+require_once("./functions/write.php");
 
 session_start();
 if (isset($_SESSION['user_id']))
@@ -116,7 +115,7 @@ else
             <div class="row">
                 <?php
 
-
+                createReview($mysqli,1,2,3,"tyhff",3);
 
 
                 $stmt = $mysqli->prepare("SELECT * FROM EVENTS");
