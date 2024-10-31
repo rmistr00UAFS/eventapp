@@ -16,4 +16,11 @@ if ($result) {
  return json_encode($reviews);
 }
 
+function getStarsAvg($mysqli){
+
+    //
+ return 3;
+}
+
+
 ?>

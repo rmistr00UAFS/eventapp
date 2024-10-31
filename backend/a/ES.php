@@ -1,5 +1,7 @@
 <?php
 include_once("config.php");
+require_once("./functions/read.php");
+require_once("./functions/write.php");
 
 session_start();
 if (isset($_SESSION['user_id']))
@@ -13,42 +15,42 @@ else
 }
 // When someone first logs in or creates an account, the DB needs to delete all events that have already happened.
 // This code collects the current date and selects all events that have already happened.
-$currentDate = date('Y-m-d');
-$sql = "SELECT * FROM EVENTS WHERE DATETIME < ?";
-$stmt = $mysqli->prepare($sql);
-$stmt->bind_param('s', $currentDate);
-
-// Once it has those events, it loops through them and deletes any RSVPs there might be tied to those events.
-// It then deletes the event.
-
-if ($stmt->execute())
-{
-
-    $result = $stmt->get_result();
-
-    while ($row = $result->fetch_assoc())
-    {
-      $delete = "DELETE FROM EVENT_STATUS WHERE EVENT_ID = ?";
-      $id = $row['EVENT_ID'];
-      $cool = $mysqli->prepare($delete);
-      $cool->bind_param('i', $id);
-      $cool->execute();
-
-      $deleteRecord = "DELETE FROM EVENTS WHERE EVENT_ID = ?";
-      $wassup = $mysqli->prepare($deleteRecord);
-      $wassup->bind_param('i', $id);
-      $wassup->execute();
-    }
-}
-else
-{
-    echo "Error";
-}
-# Will display errors
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-?>
+// $currentDate = date('Y-m-d');
+// $sql = "SELECT * FROM EVENTS WHERE DATETIME < ?";
+// $stmt = $mysqli->prepare($sql);
+// $stmt->bind_param('s', $currentDate);
+//
+// // Once it has those events, it loops through them and deletes any RSVPs there might be tied to those events.
+// // It then deletes the event.
+//
+// if ($stmt->execute())
+// {
+//
+//     $result = $stmt->get_result();
+//
+//     while ($row = $result->fetch_assoc())
+//     {
+//       $delete = "DELETE FROM EVENT_STATUS WHERE EVENT_ID = ?";
+//       $id = $row['EVENT_ID'];
+//       $cool = $mysqli->prepare($delete);
+//       $cool->bind_param('i', $id);
+//       $cool->execute();
+//
+//       $deleteRecord = "DELETE FROM EVENTS WHERE EVENT_ID = ?";
+//       $wassup = $mysqli->prepare($deleteRecord);
+//       $wassup->bind_param('i', $id);
+//       $wassup->execute();
+//     }
+// }
+// else
+// {
+//     echo "Error";
+// }
+// # Will display errors
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+// ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -74,7 +76,6 @@ error_reporting(E_ALL);
                 </div>
             </div>
         </div>
-
     </header>
     <main class="box2">
         <div>
@@ -103,19 +104,31 @@ error_reporting(E_ALL);
                                 <a class="nav-link" href="FilterDate.php">Filter by Date</a>
                             </li>
                         </ul>
-
                     </div>
                 </div>
             </nav>
         </div>
         <div>
+
+
+
             <div class="row">
                 <?php
-               
+
+                createReview($mysqli,1,2,3,"tyhff",3);
+
+
                 $stmt = $mysqli->prepare("SELECT * FROM EVENTS");
                 $stmt->execute();
                 $result = $stmt->get_result();
-       
+
+
+                echo(reviews($mysqli));
+
+
+
+
+
                 // Array mapping categories to image URLs
                 $category_images = array(
                     "sport" => "sports.png",
@@ -135,7 +148,26 @@ error_reporting(E_ALL);
                     "cardGame" => "cardgame.png"
                 );
 
+                function displayStars($num) {
+                $maxStars = 5; // maximum stars to show
+                $fullStar = "⭐";
+                $emptyStar = "☆";
+
+                    // Make sure the number doesn't exceed the max
+                $num = min($num, $maxStars);
+
+                    // Generate full stars
+                $stars = str_repeat($fullStar, $num);
+
+                    // Add empty stars for the remaining
+                $stars .= str_repeat($emptyStar, $maxStars - $num);
+                    return $stars;
+                }
+
+
+
                 while ($row = $result->fetch_assoc()) {
+
                     echo '<div class="col-lg-4 mb-3">'; // "mb-3" adds margin-bottom for spacing between cards
                     echo '<div class="card">';
                     echo '<h3 class="card-header" style="font-size:35px; color:white">'. htmlspecialchars($row['EVENT_NAME']). '</h3>';
@@ -161,6 +193,7 @@ error_reporting(E_ALL);
 
                     echo '<img src="' . htmlspecialchars($image_url) . '"  class="card-img-top" alt="icon">';
                     echo '<div class="card-body">';
+                    echo  '<div class="stars">' . displayStars(getStarsAvg(2)) . '</div>';
                     echo '</div>';
                     echo '<div class="card">';
                     echo '<ul class="list-group list-group-flush">';
@@ -211,28 +244,42 @@ error_reporting(E_ALL);
 </footer>
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script>
-const app = Vue.createApp({
-    data() {
-        return {
-            currentDate: '', // Store the date string
-            currentTime: '' // Store the time string
-        };
-    },
-    mounted() {
-        // Update date and time when the component is mounted
-        this.updateDateTime();
-        // Set interval to update time every second
-        setInterval(this.updateDateTime, 1000);
-    },
-    methods: {
-        // Method to get the current date and time
-        updateDateTime() {
-            const now = new Date();
-            this.currentDate = now.toLocaleDateString(); // e.g., "10/16/2024"
-            this.currentTime = now.toLocaleTimeString(); // e.g., "9:45:12 PM"
-        }
-    }
-});
 
-app.mount('#vue-footer'); // Mount the Vue app
+ const MyComponent = {
+        props: ['message'],
+        template: `<div><h1>{{ message }}</h1></div>`
+    };
+
+    // Create and mount the Vue app
+    const app = Vue.createApp({
+        components: {
+            MyComponent
+        }
+    });
+    app.mount('#app');
+
+// const app = Vue.createApp({
+//     data() {
+//         return {
+//             currentDate: '', // Store the date string
+//             currentTime: '' // Store the time string
+//         };
+//     },
+//     mounted() {
+//         // Update date and time when the component is mounted
+//         this.updateDateTime();
+//         // Set interval to update time every second
+//         setInterval(this.updateDateTime, 1000);
+//     },
+//     methods: {
+//         // Method to get the current date and time
+//         updateDateTime() {
+//             const now = new Date();
+//             this.currentDate = now.toLocaleDateString(); // e.g., "10/16/2024"
+//             this.currentTime = now.toLocaleTimeString(); // e.g., "9:45:12 PM"
+//         }
+//     }
+// });
+//
+// app.mount('#vue-footer'); // Mount the Vue app
 </script>
