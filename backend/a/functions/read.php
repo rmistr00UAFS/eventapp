@@ -39,8 +39,25 @@ function reviewsByID($mysqli, $eventID){
     return json_encode($reviews);
     }
 
-
 }
 
+function eventByID($mysqli, $eventID){
+    $stmt = $mysqli->prepare("SELECT * FROM `EVENT` WHERE `EVENTID` = ?");
+    $stmt->bind_param("i", $eventID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $reviews = [];
+
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $reviews[] = $row;
+        }
+
+    }
+    return json_encode($reviews);
+    }
+
+}
 
 ?>
