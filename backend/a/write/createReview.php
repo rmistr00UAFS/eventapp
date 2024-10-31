@@ -25,7 +25,7 @@ $stars = intval($dataIN['stars']);
 $host = 'localhost'; // Database host
 $username = 'pmaUser'; // Database username
 $password_db = 'pma'; // Database password
-$dbname = 'event_app_db'; // Database name
+$dbname = 'D'; // Database name
 
 $conn = new mysqli($host, $username, $password_db, $dbname);
 
