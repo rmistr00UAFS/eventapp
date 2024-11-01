@@ -11,6 +11,14 @@ function createReview($mysqli,$reviewID,$userID, $eventID, $comment, $stars){
 }
 
 
+function createReply($mysqli,$reviewID, $replyID, $reviewID, $eventID, $reply){
+    $stmt = $mysqli->prepare("INSERT INTO `REPLY` (`REPLYID`, `REVIEWID`, `USERID`, `REPLY`) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("iiis", $replyID, $reviewID, $eventID, $reply);
+
+
+    $stmt->execute();
+
+}
 
 
 ?>
