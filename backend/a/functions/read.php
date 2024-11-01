@@ -39,7 +39,6 @@ function reviewsByID($mysqli, $eventID){
     return json_encode($reviews);
     }
 
-}
 
 function eventByID($mysqli, $eventID){
     $stmt = $mysqli->prepare("SELECT * FROM `EVENT` WHERE `EVENTID` = ?");
@@ -58,7 +57,6 @@ function eventByID($mysqli, $eventID){
     return json_encode($reviews);
     }
 
-}
 
 
 
