@@ -1,7 +1,7 @@
 <?php
-
+include_once("config.php");
 require_once("./functions/read.php");
-
+require_once("./functions/write.php");
 
 ?>
 
@@ -22,7 +22,8 @@ require_once("./functions/read.php");
 
 
 <?php
-echo "sldknk";
+createReview($mysqli,34, 76, "jdfjj", 341);
+
 ?>
 
 <script>

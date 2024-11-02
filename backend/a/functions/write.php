@@ -1,9 +1,9 @@
 <?php
 
 
-function createReview($mysqli,$reviewID,$userID, $eventID, $comment, $stars){
-    $stmt = $mysqli->prepare("INSERT INTO `REVIEWS` (`REVIEWID`, `USERID`, `EVENTID`, `COMMENT`, `STARS`) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("iiisi", $reviewID, $userID, $eventID, $comment, $stars);
+function createReview($mysqli,$userID, $eventID, $comment, $stars){
+    $stmt = $mysqli->prepare("INSERT INTO `REVIEWS` ( `USERID`, `EVENTID`, `COMMENT`, `STARS`) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("iisi", $userID, $eventID, $comment, $stars);
 
 
     $stmt->execute();
@@ -12,9 +12,9 @@ function createReview($mysqli,$reviewID,$userID, $eventID, $comment, $stars){
 }
 
 
-function createReply($mysqli,$replyID, $reviewID, $eventID, $reply){
-    $stmt = $mysqli->prepare("INSERT INTO `REPLY` (`REPLYID`, `REVIEWID`, `USERID`, `REPLY`) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("iiis", $replyID, $reviewID, $eventID, $reply);
+function createReply($mysqli, $reviewID, $eventID, $reply){
+    $stmt = $mysqli->prepare("INSERT INTO `REPLY` ( `REVIEWID`, `USERID`, `REPLY`) VALUES ( ?, ?, ?)");
+    $stmt->bind_param("iis", $reviewID, $eventID, $reply);
 
 
     $stmt->execute();
