@@ -13,7 +13,7 @@ else
   header("Location: SE.php");
   exit();
 }
-// When someone first logs in or creates an account, the DB needs to delete all events that have already happened.
+// When someone first logs in or creates an account, the DB needs to de lete all events that have already happened.
 // This code collects the current date and selects all events that have already happened.
 // $currentDate = date('Y-m-d');
 // $sql = "SELECT * FROM EVENTS WHERE DATETIME < ?";
@@ -115,18 +115,10 @@ else
             <div class="row">
                 <?php
 
-                createReview($mysqli,1,2,3,"tyhff",3);
-
 
                 $stmt = $mysqli->prepare("SELECT * FROM EVENTS");
                 $stmt->execute();
                 $result = $stmt->get_result();
-
-
-                echo(reviews($mysqli));
-
-
-
 
 
                 // Array mapping categories to image URLs
