@@ -88,6 +88,31 @@ function getReplybyReviewtID($mysqli, $reviewtId){
     return json_encode($comments);
 }
 
+function getUserbyID($mysqli, $userID){
+    $stmt = $mysqli->prepare("SELECT * FROM `USERS` WHERE `USER_ID` = ?");
 
+    // Bind the event ID parameter to the SQL query
+    $stmt->bind_param("i", $userID);
+
+    // Execute the query
+    $stmt->execute();
+
+    // Get the result set from the executed query
+    $result = $stmt->get_result();
+
+    // Initialize an array to hold the comments
+    $comments = [];
+
+    // Check if the result set contains any rows
+    if ($result) {
+        // Fetch associative array of the rows and add them to the comments array
+        while ($row = $result->fetch_assoc()) {
+            $comments[] = $row;
+        }
+    }
+
+    // Return the comments as a JSON-encoded string
+    return json_encode($comments);
+}
 
 ?>
