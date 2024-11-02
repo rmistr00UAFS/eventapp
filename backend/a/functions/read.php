@@ -41,7 +41,7 @@ function reviewsByID($mysqli, $eventID){
 
 
 function eventByID($mysqli, $eventID){
-    $stmt = $mysqli->prepare("SELECT * FROM `EVENT` WHERE `EVENT_ID` = ?");
+    $stmt = $mysqli->prepare("SELECT * FROM `EVENTS` WHERE `EVENT_ID` = ?");
     $stmt->bind_param("i", $eventID);
     $stmt->execute();
     $result = $stmt->get_result();
