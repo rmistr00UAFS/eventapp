@@ -23,7 +23,7 @@ function getStarsAvg($mysqli){
 }
 
 function reviewsByID($mysqli, $eventID){
-    $stmt = $mysqli->prepare("SELECT * FROM `REVIEWS` WHERE `EVENT_ID` = ?");
+    $stmt = $mysqli->prepare("SELECT * FROM `REVIEWS` WHERE `EVENTID` = ?");
     $stmt->bind_param("i", $eventID);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -101,18 +101,18 @@ function getUserbyID($mysqli, $userID){
     $result = $stmt->get_result();
 
     // Initialize an array to hold the comments
-    $comments = [];
+    $user = [];
 
     // Check if the result set contains any rows
     if ($result) {
         // Fetch associative array of the rows and add them to the comments array
         while ($row = $result->fetch_assoc()) {
-            $comments[] = $row;
+            $user[] = $row;
         }
     }
-
+    console.log($user);
     // Return the comments as a JSON-encoded string
-    return json_encode($comments);
+    return json_encode($user);
 }
 
 ?>
