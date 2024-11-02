@@ -2,6 +2,7 @@
 include_once("config.php");
 require_once("./functions/read.php");
 require_once("./functions/write.php");
+require_once("./functions/display.php");
 
 ?>
 
@@ -19,12 +20,47 @@ require_once("./functions/write.php");
 </head>
 
 <body>
-
-
+ <div class="row">
 <?php
-createReview($mysqli,34, 76, "jdfjj", 341);
+
+
+// getUserBy
+
+
+$r=reviews($mysqli);
+
+
+
+
+
+
+// echo "<script>console.log('PHP Output: " . addslashes($userFname) . "');</script>";
+// echo "<script>console.log('PHP Output: " . addslashes($userLname) . "');</script>";
+
+
+while ($row = $r->fetch_assoc()) {
+                    $comment= $row['COMMENT'];
+                    $userid=$row['USERID'];
+                    $stars=$row['STARS'];
+$user=getUserById($mysqli,$userid);
+
+$userFname = $user['F_NAME'];
+$userLname = $user['L_NAME'];
+
+
+echo '<div class=Fname">' . displayStars($stars) . '</div>';
+echo '<div class=Fname">' . $userFname . '</div>';
+echo '<div class="Lname">' . $userLname . '</div>';
+echo '<div class="comment">' . $comment . '</div>';
+
+
+};
+
 
 ?>
+</div>
+
+
 
 <script>
 

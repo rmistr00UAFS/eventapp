@@ -5,15 +5,7 @@ function reviews($mysqli){
 $stmt->execute();
 $result = $stmt->get_result();
 
-$reviews = [];
-
-if ($result) {
-    while ($row = $result->fetch_assoc()) {
-        $reviews[] = $row;
-    }
-
-}
- return json_encode($reviews);
+return $result;
 }
 
 function getStarsAvg($mysqli, $eventID){
@@ -23,7 +15,6 @@ function getStarsAvg($mysqli, $eventID){
     $result = $stmt->get_result();
 
     $reviews = [];
-
     if ($result) {
         while ($row = $result->fetch_assoc()) {
             $reviews[] = intval($row['STARS']);
@@ -31,13 +22,20 @@ function getStarsAvg($mysqli, $eventID){
 
     }
 
+    $avg=0;
+
+    if(count($reviews)>0){
+
+
+
     $sum = array_sum($reviews);
 
-    $count = count($reviews);
+    $c = count($reviews);
 
-    $average = $sum / $count;
+    $avg = $sum / $c;
 
-    return $average;
+    return $avg;
+}
 }
 
 function reviewsByID($mysqli, $eventID){
@@ -128,9 +126,8 @@ function getUserbyID($mysqli, $userID){
             $user[] = $row;
         }
     }
-    console.log($user);
     // Return the comments as a JSON-encoded string
-    return json_encode($user);
+    return $user[0];
 }
 
 ?>
