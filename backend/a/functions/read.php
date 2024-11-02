@@ -16,10 +16,28 @@ if ($result) {
  return json_encode($reviews);
 }
 
-function getStarsAvg($mysqli){
+function getStarsAvg($mysqli, $eventID){
+    $stmt = $mysqli->prepare("SELECT `STARS` FROM `REVIEWS` WHERE `EVENTID` = ?");
+    $stmt->bind_param("i", $eventID);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    //
- return 3;
+    $reviews = [];
+
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $reviews[] = intval($row['STARS']);
+        }
+
+    }
+
+    $sum = array_sum($reviews);
+
+    $count = count($reviews);
+
+    $average = $sum / $count;
+
+    return $average;
 }
 
 function reviewsByID($mysqli, $eventID){
