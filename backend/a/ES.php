@@ -170,9 +170,16 @@ else
 
                     echo '<img src="' . htmlspecialchars($image_url) . '"  class="card-img-top" alt="icon">';
                     echo '<div class="card-body">';
-                    echo  '<div class="stars">' .
-                    displayStars(getStarsAvg($mysqli,$row['EVENT_ID']))
-                    . '</div>';
+                    // echo  '<div class="stars">' .
+                    // displayStars(getStarsAvg($mysqli,$row['EVENT_ID']))
+                    // . '</div>';
+
+                    echo '<a href="test.php?eventID=' . $row['EVENT_ID'] . '" class="button-link">
+                        <div class="stars">' .
+                            displayStars(getStarsAvg($mysqli, $row['EVENT_ID'])) .
+                        '</div>
+                    </a>';
+
                     echo '</div>';
                     echo '<div class="card">';
                     echo '<ul class="list-group list-group-flush">';
