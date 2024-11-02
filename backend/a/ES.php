@@ -2,6 +2,8 @@
 include_once("config.php");
 require_once("./functions/read.php");
 require_once("./functions/write.php");
+require_once("./functions/display.php");
+
 
 session_start();
 if (isset($_SESSION['user_id']))
@@ -140,23 +142,6 @@ else
                     "cardGame" => "cardgame.png"
                 );
 
-                function displayStars($num) {
-                $maxStars = 5; // maximum stars to show
-                $fullStar = "⭐";
-                $emptyStar = "☆";
-
-                    // Make sure the number doesn't exceed the max
-                $num = min($num, $maxStars);
-
-                    // Generate full stars
-                $stars = str_repeat($fullStar, $num);
-
-                    // Add empty stars for the remaining
-                $stars .= str_repeat($emptyStar, $maxStars - $num);
-                    return $stars;
-                }
-
-
 
                 while ($row = $result->fetch_assoc()) {
 
@@ -185,7 +170,9 @@ else
 
                     echo '<img src="' . htmlspecialchars($image_url) . '"  class="card-img-top" alt="icon">';
                     echo '<div class="card-body">';
-                    echo  '<div class="stars">' . displayStars(getStarsAvg(2)) . '</div>';
+                    echo  '<div class="stars">' .
+                    displayStars(getStarsAvg($mysqli,$row['EVENT_ID']))
+                    . '</div>';
                     echo '</div>';
                     echo '<div class="card">';
                     echo '<ul class="list-group list-group-flush">';
