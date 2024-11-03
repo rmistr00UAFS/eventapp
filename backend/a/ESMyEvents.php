@@ -1,5 +1,8 @@
 <?php
 include_once("config.php");
+require_once("./functions/read.php");
+require_once("./functions/write.php");
+require_once("./functions/display.php");
 
 session_start();
 if (isset($_SESSION['user_id']))
@@ -153,8 +156,21 @@ error_reporting(E_ALL);
 
                         echo '<img src="' . htmlspecialchars($image_url) . '"  class="card-img-top" alt="icon">';
                         echo '<div class="card-body">';
+
+                           echo '<a href="./pages/review.php?id=' . $row['EVENT_ID'] . '" class="button-link">
+                    <button
+                    class="btn btn-primary" style="margin-left: 5%;"
+                    >Reviews
+                        <div class="stars">' .
+                            displayStars(getStarsAvg($mysqli, $row['EVENT_ID'])) .
+                        '</div>
+                    </button></a>';
+
+
+
                         echo '</div>';
                         echo '<div class="card">';
+
 
 
                          echo '<button onclick="toggleReviewForm()">leave review</button>';
