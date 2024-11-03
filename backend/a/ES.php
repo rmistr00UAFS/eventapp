@@ -174,11 +174,14 @@ else
                     // displayStars(getStarsAvg($mysqli,$row['EVENT_ID']))
                     // . '</div>';
 
-                    echo '<a href="test.php?eventID=' . $row['EVENT_ID'] . '" class="button-link">
+                    echo '<a href="./pages/review.php?id=' . $row['EVENT_ID'] . '" class="button-link">
+                    <button
+                    class="btn btn-primary" style="margin-left: 5%;"
+                    >Reviews
                         <div class="stars">' .
                             displayStars(getStarsAvg($mysqli, $row['EVENT_ID'])) .
                         '</div>
-                    </a>';
+                    </button></a>';
 
                     echo '</div>';
                     echo '<div class="card">';
