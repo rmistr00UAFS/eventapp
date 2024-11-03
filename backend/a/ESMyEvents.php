@@ -120,6 +120,8 @@ error_reporting(E_ALL);
                         "cardGame" => "cardgame.png"
                     );
 
+                                            echo '<input type="hidden" id="userid" value="'.$user_id.'">';
+
                     
                     while ($row = $result->fetch_assoc()) {
                         echo '<div class="col-lg-4 mb-3">'; // "mb-3" adds margin-bottom for spacing between cards
@@ -147,8 +149,6 @@ error_reporting(E_ALL);
 
 
 
-                        echo '   <input type="hidden" id="eventid" value="'.$row['EVENT_ID'].'">
-            <input type="hidden" id="userid" value="'.$user_id.'">';
 
 
 
@@ -173,16 +173,16 @@ error_reporting(E_ALL);
 
 
 
-                         echo '<button onclick="toggleReviewForm()">leave review</button>';
+                         echo '<button id="reviewFormButton-'.$row['EVENT_ID'].'"  onclick="toggleReviewForm('. $row['EVENT_ID'] . ')">leave review</button>';
 
 
-                        echo '<div id="reviewForm"
+                        echo '<div id="reviewForm-'. $row['EVENT_ID'] . '"
                         style="display:none;"
                         >
 
 
-                         <textarea id="comment" required></textarea>
-    <select id="stars" name="stars" required>
+                         <textarea id="comment-'.$row['EVENT_ID'].'" required></textarea>
+    <select id="stars-'. $row['EVENT_ID'] . '" name="stars" required>
         <option value="1">⭐</option>
         <option value="2">⭐⭐</option>
         <option value="3">⭐⭐⭐</option>
@@ -190,10 +190,10 @@ error_reporting(E_ALL);
         <option value="5">⭐⭐⭐⭐⭐</option>
     </select>
 
-            <button onclick="submitReview()">Submit Review</button>
+            <button onclick="submitReview('.$row['EVENT_ID'].')">Submit Review</button>
 
 
-                    <button onclick="toggleReviewForm()">cancel</button>
+                    <button onclick="toggleReviewForm('. $row['EVENT_ID'] . ')">cancel</button>
 
 
                         </div>';
@@ -249,16 +249,18 @@ error_reporting(E_ALL);
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script>
 
- function toggleReviewForm() {
-            var form = document.getElementById("reviewForm");
+ function toggleReviewForm(eventid) {
+            var form = document.getElementById(`reviewForm-${eventid}`);
             form.style.display = form.style.display === "none" ? "block" : "none";
+
+                var form = document.getElementById(`reviewFormButton-${eventid}`);
+            form.style.display = form.style.display === "none" ? "block" : "none"
         }
 
- function submitReview(){
+ function submitReview(eventid){
         var userid = document.getElementById("userid").value;
-    var eventid = document.getElementById("eventid").value;
-    var comment = document.getElementById("comment").value;
-    var stars = document.getElementById("stars").value;
+    var comment = document.getElementById(`comment-${eventid}`).value;
+    var stars = document.getElementById(`stars-${eventid}`).value;
 
 
 
