@@ -73,6 +73,9 @@ error_reporting(E_ALL);
           </nav>
 </div>
 <div>
+
+
+
         <div class="row">            
                 <?php
                
@@ -138,10 +141,48 @@ error_reporting(E_ALL);
                         } else {
                             $image_url = "sports.png";
                         }
+
+
+
+                        echo '   <input type="hidden" id="eventid" value="'.$row['EVENT_ID'].'">
+            <input type="hidden" id="userid" value="'.$user_id.'">';
+
+
+
+
+
                         echo '<img src="' . htmlspecialchars($image_url) . '"  class="card-img-top" alt="icon">';
                         echo '<div class="card-body">';
                         echo '</div>';
                         echo '<div class="card">';
+
+
+                         echo '<button onclick="toggleReviewForm()">leave review</button>';
+
+
+                        echo '<div id="reviewForm"
+                        style="display:none;"
+                        >
+
+
+                         <textarea id="comment" required></textarea>
+    <select id="stars" name="stars" required>
+        <option value="1">⭐</option>
+        <option value="2">⭐⭐</option>
+        <option value="3">⭐⭐⭐</option>
+        <option value="4">⭐⭐⭐⭐</option>
+        <option value="5">⭐⭐⭐⭐⭐</option>
+    </select>
+
+            <button onclick="submitReview()">Submit Review</button>
+
+
+                    <button onclick="toggleReviewForm()">cancel</button>
+
+
+                        </div>';
+
+
                         echo '<ul class="list-group list-group-flush">';
                         echo '<div class="textAlign" style="font-size:25px">';
                         echo '<li class="list-group-item textAlign"> Description: ' . htmlspecialchars($row['EVENT_DESCR']) . '</li>';
@@ -191,6 +232,39 @@ error_reporting(E_ALL);
 </footer>
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script>
+
+ function toggleReviewForm() {
+            var form = document.getElementById("reviewForm");
+            form.style.display = form.style.display === "none" ? "block" : "none";
+        }
+
+ function submitReview(){
+        var userid = document.getElementById("userid").value;
+    var eventid = document.getElementById("eventid").value;
+    var comment = document.getElementById("comment").value;
+    var stars = document.getElementById("stars").value;
+
+
+
+    let data={userid,eventid,comment,stars}
+
+
+       fetch("./write/review.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    }).then(response => response.text()).then(x=>{
+        console.log(x)
+                    location.reload();
+    })
+
+
+
+            }
+
+
 const app = Vue.createApp({
   data() {
     return {

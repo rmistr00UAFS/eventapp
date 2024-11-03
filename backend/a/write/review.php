@@ -6,15 +6,17 @@ header("Access-Control-Allow-Methods: POST, GET, OPTIONS"); // Allowed methods
 header("Access-Control-Allow-Headers: Content-Type"); // Allowed headers
 header("Content-Type: application/json"); // Return JSON response
 
-
+// Get the JSON input
 $dataIN = json_decode(file_get_contents('php://input'), true);
 
-// echo json_encode($dataIN."rep");
+// echo json_encode($dataIN);
 
-$reviewid = intval($dataIN['reviewid']);
+
+
 $userid = intval($dataIN['userid']);
-$reply=$dataIN['reply'];
-
+$eventid = intval($dataIN['eventid']);
+$comment = strval($dataIN['comment']);
+$stars = intval($dataIN['stars']);
 
 
 
@@ -30,15 +32,13 @@ $mysqli = mysqli_connect($databaseHost, $databaseUsername, $databasePassword, $d
 
 
 
-   $stmt = $mysqli->prepare("INSERT INTO `REPLY` ( `REVIEWID`, `USERID`, `REPLY`) VALUES ( ?, ?, ?)");
-    $stmt->bind_param("iis", $reviewid, $userid, $reply);
+   $stmt = $mysqli->prepare("INSERT INTO `REVIEWS` ( `USERID`, `EVENTID`, `COMMENT`,`STARS`) VALUES ( ?, ?, ?,?)");
+    $stmt->bind_param("iisi", $userid, $eventid, $comment,$stars);
 
 
     $stmt->execute();
 
 
-    echo json_encode("reply added");
-
-
-
+    echo json_encode("review added");
 ?>
+
