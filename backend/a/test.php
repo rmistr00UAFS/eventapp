@@ -24,10 +24,7 @@ require_once("./functions/display.php");
 <?php
 
 
-// getUserBy
-
-
-$r=reviews($mysqli);
+$r=reviewsByID($mysqli,2);
 
 
 
@@ -35,7 +32,6 @@ $r=reviews($mysqli);
 
 
 // echo "<script>console.log('PHP Output: " . addslashes($userFname) . "');</script>";
-// echo "<script>console.log('PHP Output: " . addslashes($userLname) . "');</script>";
 
 
 while ($row = $r->fetch_assoc()) {
