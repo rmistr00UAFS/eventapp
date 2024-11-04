@@ -31,14 +31,33 @@ else
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EventHub</title>
-    <link rel="stylesheet" href="bootstrap-2.css">
+    <link rel="stylesheet" href="../bootstrap-2.css">
 
      <style>
-        #/*replyForm {
-            position:fixed;
-            background:red;
-            top:0;right:0;*/
-        }
+
+     .review{
+         margin:10px;
+         border:1px solid white;
+         border-radius: 10px;
+         padding:10px;
+         width:400px;
+         display:inline-block;
+    }
+
+    .reply{
+        margin:20px;
+    }
+
+    .replies{
+        height:200px;
+        overflow:scroll;
+        border:1px solid black;
+        padding:5px;
+     margin:10px;
+     border-radius:10px;
+    }
+
+
     </style>
 </head>
 
@@ -46,9 +65,10 @@ else
 
 <?php
 
-echo '<a href="http://localhost/a/ES.php" class="button-link">
+echo '<a href="http://localhost/a/ES.php" class="button-link" >
                     <button
-                    class="btn btn-primary" style="margin-left: 5%;"
+                    style="margin:20px;"
+                    class="btn btn-primary home"
                     >HOME
                     </button></a>';
 ?>
@@ -89,15 +109,12 @@ $userLname = $user['L_NAME'];
 
 echo '
 <div class="review">
-<div class=Fname">' . displayStars($stars) . '</div>
-<div class=Fname">' . $userFname . '</div>
-<div class="Lname">' . $userLname . '</div>
+<div class=stars">' . displayStars($stars) . '</div>
+<div class=name card-header">' . $userFname." ".$userLname . '</div>
 <div class="comment">' . $comment . '</div>
 
-</div>
-' ;
 
-
+<div class="replies">';
 
 $replies= getRepliesByReviewID($mysqli, $review['REVIEWID']);
 while ($reply = $replies->fetch_assoc()) {
@@ -108,34 +125,47 @@ $creatorln = $creator['L_NAME'];
 
 
 echo '<div class="reply">
-<div class=Fname">' . $creatorfn . '</div>
-<div class="Lname">' . $creatorln. '</div>
+<div class=name card-header"> Creator ~ '  . $creatorfn." ".$creatorln . '</div>
 <div class="reply-text">'.$reply['REPLY'].'</div>
-<div class="creator-details">
-
-</div>
 </div>';
 }
 
 
 
+echo '</div>';
+
+
+
 if($user_id==$event['CREATOR']){
 
- echo '<button id="replyFormButton-'.$review['REVIEWID'].'"  onclick="toggleReplyForm('.$review['REVIEWID'].')">Reply</button>';
+ echo '<button class="btn btn-primary"
+ id="replyFormButton-'.$review['REVIEWID'].'"  onclick="toggleReplyForm('.$review['REVIEWID'].')">Reply</button>';
 
 
 echo '<div id="replyForm-'.$review['REVIEWID'].'" style="display:none">
-
-
-
         <label for="reply">Reply:</label>
-        <textarea name="reply" id="reply-'.$review['REVIEWID'].'" rows="4" required></textarea>
-        <button onclick="submitReply('.$review['REVIEWID'].')">Submit Reply</button>
-        <button onclick="toggleReplyForm('.$review['REVIEWID'].')">cancel</button>
-
+        <textarea
+        class="form-control-2"
+        name="reply" id="reply-'.$review['REVIEWID'].'" rows="4" required></textarea>
+        <button
+          class="form-control-2"
+        onclick="submitReply('.$review['REVIEWID'].')">Submit Reply</button>
+        <button
+                  class="form-control-2"
+        onclick="toggleReplyForm('.$review['REVIEWID'].')">cancel</button>
 </div>';
 
 };
+
+
+echo '</div>' ;
+
+
+
+
+
+
+
 
 
 };

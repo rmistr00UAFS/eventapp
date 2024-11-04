@@ -170,14 +170,11 @@ else
 
                     echo '<img src="' . htmlspecialchars($image_url) . '"  class="card-img-top" alt="icon">';
                     echo '<div class="card-body">';
-                    // echo  '<div class="stars">' .
-                    // displayStars(getStarsAvg($mysqli,$row['EVENT_ID']))
-                    // . '</div>';
 
                     echo '<a href="./pages/review.php?id=' . $row['EVENT_ID'] . '" class="button-link">
                     <button
                     class="btn btn-primary" style="margin-left: 5%;"
-                    >Reviews
+                    >REVIEWS
                         <div class="stars">' .
                             displayStars(getStarsAvg($mysqli, $row['EVENT_ID'])) .
                         '</div>
@@ -223,52 +220,38 @@ else
 
 </body>
 <footer id="vue-footer">
-    <div style="text-align:center;">
-        <em>&copy; 2024 EventHub </br></em>
-        <em> CS 4003 Software Engineering</em>
-        <p>{{currentDate}} {{currentTime}}</p>
+  <div style="text-align:center;">
+      <em>&copy; 2024 EventHub </br></em>
+      <em> CS 4003 Software Engineering</em>
+      <p>{{currentDate}}   {{currentTime}}</p>
 
-    </div>
-    <script src="ES.js"></script>
+  </div>
+  <script src="ES.js"></script>
 </footer>
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script>
-
- const MyComponent = {
-        props: ['message'],
-        template: `<div><h1>{{ message }}</h1></div>`
+const app = Vue.createApp({
+  data() {
+    return {
+      currentDate: '',  // Store the date string
+      currentTime: ''   // Store the time string
     };
+  },
+  mounted() {
+    // Update date and time when the component is mounted
+    this.updateDateTime();
+    // Set interval to update time every second
+    setInterval(this.updateDateTime, 1000);
+  },
+  methods: {
+    // Method to get the current date and time
+    updateDateTime() {
+      const now = new Date();
+      this.currentDate = now.toLocaleDateString(); // e.g., "10/16/2024"
+      this.currentTime = now.toLocaleTimeString(); // e.g., "9:45:12 PM"
+    }
+  }
+});
 
-    // Create and mount the Vue app
-    const app = Vue.createApp({
-        components: {
-            MyComponent
-        }
-    });
-    app.mount('#app');
-
-// const app = Vue.createApp({
-//     data() {
-//         return {
-//             currentDate: '', // Store the date string
-//             currentTime: '' // Store the time string
-//         };
-//     },
-//     mounted() {
-//         // Update date and time when the component is mounted
-//         this.updateDateTime();
-//         // Set interval to update time every second
-//         setInterval(this.updateDateTime, 1000);
-//     },
-//     methods: {
-//         // Method to get the current date and time
-//         updateDateTime() {
-//             const now = new Date();
-//             this.currentDate = now.toLocaleDateString(); // e.g., "10/16/2024"
-//             this.currentTime = now.toLocaleTimeString(); // e.g., "9:45:12 PM"
-//         }
-//     }
-// });
-//
-// app.mount('#vue-footer'); // Mount the Vue app
+app.mount('#vue-footer'); // Mount the Vue app
 </script>
