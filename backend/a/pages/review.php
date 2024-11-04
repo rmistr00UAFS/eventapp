@@ -66,6 +66,8 @@ echo '<a href="http://localhost/a/ES.php" class="button-link">
 <?php
 
 
+echo '<input type="hidden" id="userid" value="'.$event['CREATOR'].'">';
+
 
 if($eventID>0){
 
@@ -119,19 +121,17 @@ echo '<div class="reply">
 
 if($user_id==$event['CREATOR']){
 
- echo '<button onclick="toggleReplyForm()">Reply</button>';
+ echo '<button id="replyFormButton-'.$review['REVIEWID'].'"  onclick="toggleReplyForm('.$review['REVIEWID'].')">Reply</button>';
 
 
-echo '<div id="replyForm" style="display:none">
+echo '<div id="replyForm-'.$review['REVIEWID'].'" style="display:none">
 
-            <input type="hidden" id="reviewid" value="'.$review['REVIEWID'].'">
-            <input type="hidden" id="userid" value="'.$event['CREATOR'].'">
 
 
         <label for="reply">Reply:</label>
-        <textarea name="reply" id="reply" rows="4" required></textarea>
-        <button onclick="submitReply()">Submit Reply</button>
-        <button onclick="toggleReplyForm()">cancel</button>
+        <textarea name="reply" id="reply-'.$review['REVIEWID'].'" rows="4" required></textarea>
+        <button onclick="submitReply('.$review['REVIEWID'].')">Submit Reply</button>
+        <button onclick="toggleReplyForm('.$review['REVIEWID'].')">cancel</button>
 
 </div>';
 
@@ -155,15 +155,17 @@ echo '<div id="replyForm" style="display:none">
 
 
 <script>
- function toggleReplyForm() {
-            var form = document.getElementById("replyForm");
-            form.style.display = form.style.display === "none" ? "block" : "none";
+ function toggleReplyForm(reviewid) {
+            var form = document.getElementById(`replyForm-${reviewid}`);
+            form.style.display = form.style.display === "none" ? "block" : "none"
+
+              var form = document.getElementById(`replyFormButton-${reviewid}`);
+            form.style.display = form.style.display === "none" ? "block" : "none"
         }
 
-        function submitReply(){
-    var reply = document.getElementById("reply").value;
+        function submitReply(reviewid){
+    var reply = document.getElementById(`reply-${reviewid}`).value;
         var userid = document.getElementById("userid").value;
-    var reviewid = document.getElementById("reviewid").value;
 
 
 
