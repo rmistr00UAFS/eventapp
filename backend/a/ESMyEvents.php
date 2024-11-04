@@ -34,7 +34,7 @@ error_reporting(E_ALL);
 </head>
 <body>
     <header class=".center">
-        <div class="topBtn" style="padding-top: 1%;"> 
+        <div class="topBtn" style="padding-top: 1%;">
           <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" > Account</button>
             <div class="dropdown-content">
@@ -45,7 +45,7 @@ error_reporting(E_ALL);
             </div>
            </div>
         </div>
-        
+
     </header>
     <main class="box2">
         <div >
@@ -70,7 +70,7 @@ error_reporting(E_ALL);
                             <a class="nav-link" href="FilterDate.php">Filter by Date</a>
                     </li>
                 </ul>
-               
+
               </div>
             </div>
           </nav>
@@ -79,28 +79,28 @@ error_reporting(E_ALL);
 
 
 
-        <div class="row">            
+        <div class="row">
                 <?php
-               
+
                     // Querying for all events the user is interested in or going to
                     $stmt = $mysqli->prepare("
 
                     SELECT E.EVENT_ID, E.EVENT_NAME, E.STREET_ADD, E.ZIPCODE, E.DATETIME, R.STATUS_ID, E.CATEGORY, E.EVENT_DESCR
-        
+
                     FROM EVENTS E
-        
+
                     LEFT JOIN EVENT_STATUS R ON E.EVENT_ID = R.EVENT_ID
-        
+
                     WHERE R.USER_ID = ? AND (R.STATUS_ID = 2 OR R.STATUS_ID = 3)
-        
+
                     ORDER BY R.STATUS_ID DESC
-        
+
                             ");
 
                     $stmt->bind_param("i", $user_id);
-                    $stmt->execute();            
+                    $stmt->execute();
                     $result = $stmt->get_result();
-                    
+
                     // Array mapping categories to image URLs
                     $category_images = array(
                         "sport" => "sports.png",
@@ -122,7 +122,7 @@ error_reporting(E_ALL);
 
                                             echo '<input type="hidden" id="userid" value="'.$user_id.'">';
 
-                    
+
                     while ($row = $result->fetch_assoc()) {
                         echo '<div class="col-lg-4 mb-3">'; // "mb-3" adds margin-bottom for spacing between cards
                         echo '<div class="card">';
@@ -173,7 +173,7 @@ error_reporting(E_ALL);
 
 
 
-                         echo '<button id="reviewFormButton-'.$row['EVENT_ID'].'"  onclick="toggleReviewForm('. $row['EVENT_ID'] . ')">leave review</button>';
+                         echo '<button class="btn btn-primary" id="reviewFormButton-'.$row['EVENT_ID'].'"  onclick="toggleReviewForm('. $row['EVENT_ID'] . ')">leave review</button>';
 
 
                         echo '<div id="reviewForm-'. $row['EVENT_ID'] . '"
@@ -181,8 +181,8 @@ error_reporting(E_ALL);
                         >
 
 
-                         <textarea id="comment-'.$row['EVENT_ID'].'" required></textarea>
-    <select id="stars-'. $row['EVENT_ID'] . '" name="stars" required>
+                         <textarea class="col-form-label mt-4" id="comment-'.$row['EVENT_ID'].'" required></textarea>
+    <select class="btn btn-primary dropdown-toggle" id="stars-'. $row['EVENT_ID'] . '" name="stars" required>
         <option value="1">⭐</option>
         <option value="2">⭐⭐</option>
         <option value="3">⭐⭐⭐</option>
@@ -190,10 +190,10 @@ error_reporting(E_ALL);
         <option value="5">⭐⭐⭐⭐⭐</option>
     </select>
 
-            <button onclick="submitReview('.$row['EVENT_ID'].')">Submit Review</button>
+            <button class="btn btn-primary" onclick="submitReview('.$row['EVENT_ID'].')">Submit Review</button>
 
 
-                    <button onclick="toggleReviewForm('. $row['EVENT_ID'] . ')">cancel</button>
+                    <button class="btn btn-primary" onclick="toggleReviewForm('. $row['EVENT_ID'] . ')">cancel</button>
 
 
                         </div>';
@@ -232,17 +232,17 @@ error_reporting(E_ALL);
                 ?>
                 </div>
                 </div>
-                
+
 
     </main>
-    
+
 </body>
 <footer id="vue-footer">
   <div style="text-align:center;">
       <em>&copy; 2024 EventHub </br></em>
       <em> CS 4003 Software Engineering</em>
       <p>{{currentDate}}   {{currentTime}}</p>
-      
+
   </div>
   <script src="ES.js"></script>
 </footer>
@@ -308,6 +308,6 @@ const app = Vue.createApp({
 
 app.mount('#vue-footer'); // Mount the Vue app
 </script>
-               
 
-                       
+
+
