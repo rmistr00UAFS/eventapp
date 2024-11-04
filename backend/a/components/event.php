@@ -1,32 +1,32 @@
 <?php
 class Event {
-    private string $event_ID;
+    private int $event_ID;
     private string $event_name;
     private string $event_descr;
     private string $street_add;
     private string $city;
-    private string $zipcode;
-    private string $creator;
-    private string $category;
-    private string $datetime;
+    private int $zipcode;
+    private int $creator;
+    private int $category;
+    private DateTime $date_time;
     private string $website;
-    private string $latitude;
-    private string $longitude;
+    private float $latitude;
+    private float $longitude;
 
 
     public function __construct(
-        string $event_ID,
+        int $event_ID,
         string $event_name,
         string $event_descr,
         string $street_add,
         string $city,
-        string $zipcode,
-        string $creator,
-        string $category,
-        string $datetime,
+        int $zipcode,
+        int $creator,
+        int $category,
+        DateTime $date_time,
         string $website,
-        string $latitude,
-        string $longitude
+        float $latitude,
+        float $longitude
     ) {
         $this->event_ID = $event_ID;
         $this->event_name = $event_name;
@@ -36,12 +36,11 @@ class Event {
         $this->zipcode = $zipcode;
         $this->creator = $creator;
         $this->category = $category;
-        $this->datetime = $datetime;
+        $this->date_time = $datetime;
         $this->website = $website;
         $this->latitude = $latitude;
         $this->longitude = $longitude;
 
-        displayEventDetails();
     }
 
 
@@ -54,7 +53,7 @@ class Event {
                 <p><strong>Address:</strong> ' . htmlspecialchars($this->street_add) . ', ' . htmlspecialchars($this->city) . ', ' . htmlspecialchars($this->zipcode) . '</p>
                 <p><strong>Creator:</strong> ' . htmlspecialchars($this->creator) . '</p>
                 <p><strong>Category:</strong> ' . htmlspecialchars($this->category) . '</p>
-                <p><strong>Date and Time:</strong> ' . htmlspecialchars($this->datetime) . '</p>
+                <p><strong>Date and Time:</strong> ' . htmlspecialchars($this->date_time) . '</p>
                 <p><strong>Website:</strong> ' . htmlspecialchars($this->website) . '</p>
                 <p><strong>Location:</strong> ' . htmlspecialchars($this->latitude) . ', ' . htmlspecialchars($this->longitude) . '</p>
             </div>
@@ -62,3 +61,5 @@ class Event {
     }
 
 }
+
+?>
