@@ -3,6 +3,7 @@ include_once("../config.php");
 require_once("../functions/read.php");
 require_once("../functions/write.php");
 require_once("../functions/display.php");
+require_once("../components/event.php");
 
 
 $eventID = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -35,7 +36,12 @@ else
 
      <style>
 
+      .reviews{
+        text-align:center;
+    }
+
      .review{
+         text-align:left;
          margin:10px;
          border:1px solid white;
          border-radius: 10px;
@@ -43,6 +49,8 @@ else
          width:400px;
          display:inline-block;
     }
+
+
 
     .reply{
         margin:20px;
@@ -56,6 +64,11 @@ else
      margin:10px;
      border-radius:10px;
     }
+
+    .name{
+    font-size:30px;
+    }
+
 
 
     </style>
@@ -75,7 +88,10 @@ echo '<a href="http://localhost/a/ES.php" class="button-link" >
 
 <div class="event">
 <?php
-        echo '<h1>' . htmlspecialchars($event['EVENT_NAME']) . '</h1>';
+
+$event=eventById($mysqli,$eventID)->fetch_assoc();
+
+eventCard($mysqli,$event);
 ?>
 </div>
 

@@ -1,65 +1,77 @@
 <?php
-class Event {
-    private int $event_ID;
-    private string $event_name;
-    private string $event_descr;
-    private string $street_add;
-    private string $city;
-    private int $zipcode;
-    private int $creator;
-    private int $category;
-    private DateTime $date_time;
-    private string $website;
-    private float $latitude;
-    private float $longitude;
 
 
-    public function __construct(
-        int $event_ID,
-        string $event_name,
-        string $event_descr,
-        string $street_add,
-        string $city,
-        int $zipcode,
-        int $creator,
-        int $category,
-        DateTime $date_time,
-        string $website,
-        float $latitude,
-        float $longitude
-    ) {
-        $this->event_ID = $event_ID;
-        $this->event_name = $event_name;
-        $this->event_descr = $event_descr;
-        $this->street_add = $street_add;
-        $this->city = $city;
-        $this->zipcode = $zipcode;
-        $this->creator = $creator;
-        $this->category = $category;
-        $this->date_time = $datetime;
-        $this->website = $website;
-        $this->latitude = $latitude;
-        $this->longitude = $longitude;
 
-    }
+function eventCard($mysqli,$event){
 
-
-    public function displayEventDetails(): string {
-        return '
-            <div class="event-card">
-                <h2 class="event-name">' . htmlspecialchars($this->event_name) . '</h2>
-                <p><strong>Event ID:</strong> ' . htmlspecialchars($this->event_ID) . '</p>
-                <p><strong>Description:</strong> ' . htmlspecialchars($this->event_descr) . '</p>
-                <p><strong>Address:</strong> ' . htmlspecialchars($this->street_add) . ', ' . htmlspecialchars($this->city) . ', ' . htmlspecialchars($this->zipcode) . '</p>
-                <p><strong>Creator:</strong> ' . htmlspecialchars($this->creator) . '</p>
-                <p><strong>Category:</strong> ' . htmlspecialchars($this->category) . '</p>
-                <p><strong>Date and Time:</strong> ' . htmlspecialchars($this->date_time) . '</p>
-                <p><strong>Website:</strong> ' . htmlspecialchars($this->website) . '</p>
-                <p><strong>Location:</strong> ' . htmlspecialchars($this->latitude) . ', ' . htmlspecialchars($this->longitude) . '</p>
-            </div>
-        ';
-    }
-
+    // echo "teswlksnlwsknts";
+       // echo '<div class="col-lg-4 mb-3">'; // "mb-3" adds margin-bottom for spacing between cards
+                    // echo '<div class="card">';
+                    echo '<h3 class="card-header">'. htmlspecialchars($event['EVENT_NAME']). '</h3>';
+                    // echo '<div class="card-body">';
+                    // echo '</div>'; // Closing the card-body div correctly
+                    // $cat_id = $row['CATEGORY'];
+                    // $testing = "SELECT CATEGORY_NAME FROM CATEGORIES WHERE CATEGORY_ID = ?";
+                    // $wassup = $mysqli->prepare($testing);
+                    // $wassup->bind_param('i', $cat_id);
+                    // $wassup->execute();
+                    // $yippee = $wassup->get_result();
+                    //
+                    // // Finding the category image
+                    // while ($uwu = $yippee->fetch_assoc())
+                    // {
+                    //     $category = $uwu['CATEGORY_NAME'];
+                    // }
+                    // if (array_key_exists($category, $category_images)) {
+                    //     $image_url = $category_images[$category];
+                    // } else {
+                    //     $image_url = "sports.png";  // INSERT DEFAULT IMAGE?????
+                    // }
+                    //
+                    // echo '<img src="' . htmlspecialchars($image_url) . '"  class="card-img-top" alt="icon">';
+                    // echo '<div class="card-body">';
+                    //
+                    echo '
+                    <button
+                    class="btn btn-primary" "
+                    >REVIEWS
+                        <div class="stars">' .
+                            displayStars(getStarsAvg($mysqli, $event['EVENT_ID'])) .
+                        '</div>
+                    </button>';
+                    //
+                    // echo '</div>';
+                    // echo '<div class="card">';
+                    // echo '<ul class="list-group list-group-flush">';
+                    // echo '<div class="textAlign" style="font-size:25px">';
+                    echo '<li class="list-group-item textAlign">' . htmlspecialchars($event['EVENT_DESCR']) . '</li>';
+                    echo '<li class="list-group-item textAlign">' . htmlspecialchars($event['STREET_ADD']) . '</li>';
+                    $date = new DateTime(($event['DATETIME']));
+                    echo '<li class="list-group-item textAlign">' . $date->format('m-d-y H:i A') . '</li>';
+                    echo '<li class="list-group-item textAlign">' . htmlspecialchars($event['ZIPCODE']) . '</li>';
+                    // echo '</div>';
+                    // echo '</ul>';
+                    // echo '<form action="save_RSVP.php" method="POST">
+                    //         <input type="hidden" name="event_id" value="' . $row["EVENT_ID"] . '">
+                    //         <input type="hidden" name="user_id" value="' . $user_id . '">
+                    //         <div style="display: flex; align-items: center;">
+                    //             <label>
+                    //             <input type="radio" name="rsvp" value="3"> Going
+                    //             </label>
+                    //             <label style="margin-left: 5%;">
+                    //             <input type="radio" name="rsvp" value="1"> Not Going
+                    //             </label>
+                    //             <label style="margin-left: 5%;">
+                    //             <input type="radio" name="rsvp" value="2"> Interested
+                    //             </label>
+                    //             <button type="submit" class="btn btn-primary" style="margin-left: 5%;">Submit</button>
+                    //         </div>
+                    //         </form>';
+                    // echo '</div>'; // Closing the card div
+                    // echo '</div>';
+                    // echo '<div class="card-footer">';
+                    // echo '</div>';
+                    // echo '</div>'; // Closing the col-lg-4 div
 }
 
 ?>
