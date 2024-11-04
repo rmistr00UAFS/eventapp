@@ -44,17 +44,6 @@ class Event {
         displayEventDetails();
     }
 
-    public function displayEventDetails(): string {
-        return "Event ID: " . htmlspecialchars($this->event_ID) . "<br>" .
-               "Event Name: " . htmlspecialchars($this->event_name) . "<br>" .
-               "Description: " . htmlspecialchars($this->event_descr) . "<br>" .
-               "Address: " . htmlspecialchars($this->street_add) . ", " . htmlspecialchars($this->city) . ", " . htmlspecialchars($this->zipcode) . "<br>" .
-               "Creator: " . htmlspecialchars($this->creator) . "<br>" .
-               "Category: " . htmlspecialchars($this->category) . "<br>" .
-               "Date and Time: " . htmlspecialchars($this->datetime) . "<br>" .
-               "Website: " . htmlspecialchars($this->website) . "<br>" .
-               "Location: " . htmlspecialchars($this->latitude) . ", " . htmlspecialchars($this->longitude) . "<br>";
-    }
 
     public function displayEventDetails(): string {
         return '
